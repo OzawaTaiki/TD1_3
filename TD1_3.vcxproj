@@ -161,7 +161,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="intVec2.h" />
     <ClInclude Include="PhilliaFunction\Phill.h" />
     <ClInclude Include="piece.h" />
-    <ClInclude Include="stage.h" />
+    <ClInclude Include="playground.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\Checkbox.h" />
