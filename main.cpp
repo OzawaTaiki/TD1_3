@@ -1,3 +1,5 @@
+#include "CursorManager.h"
+
 #include <Novice.h>
 
 const char kWindowTitle[] = "1304_がめちｔぇ";
@@ -27,6 +29,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		CursorManager::UpdateCursorStatus();
 
 
 		///

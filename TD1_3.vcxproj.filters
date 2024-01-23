@@ -41,8 +41,35 @@
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp">
       <Filter>KamataEngine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
+    <ClCompile Include="CSVLoader.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\Phill.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\PhillEasing.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\TCPIP.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="piece.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Button.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Checkbox.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Slider.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI_ToolKit.cpp">
+      <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,10 +145,17 @@
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
     <ClInclude Include="player.h" />
+    <ClInclude Include="CSVLoader.h" />
+    <ClInclude Include="CursorManager.h" />
+    <ClInclude Include="intVec2.h" />
+    <ClInclude Include="PhilliaFunction\Phill.h" />
     <ClInclude Include="piece.h" />
     <ClInclude Include="stage.h" />
-    <ClInclude Include="ResourceManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
+    <ClInclude Include="UI\Button.h" />
+    <ClInclude Include="UI\Checkbox.h" />
+    <ClInclude Include="UI\Slider.h" />
+    <ClInclude Include="UI\UI_ToolKit.h" />
+    <ClInclude Include="UI\UI_ToolKit_Defines.h" />
+    <ClInclude Include="definition.h" />
   </ItemGroup>
 </Project>
