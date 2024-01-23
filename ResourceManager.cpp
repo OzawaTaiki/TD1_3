@@ -50,4 +50,6 @@ void ResourceManager::Unload(const char* _name)
 {
 	int index = _GetIndex(_name);
 	Novice::UnloadTexture(handles[index]);
+	handles.erase(handles.begin() + index);
+	identifiers.erase(identifiers.begin() + index);
 }
