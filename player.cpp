@@ -44,8 +44,6 @@ void Player::MoveDirUpdate()
 		moveDir.y = 1;
 }
 
-
-
 Player::Player()
 {
 	pos = { 64,64 };
@@ -71,9 +69,9 @@ void Player::PosUpdate()
 	pos.y += velocity.y;
 }
 
-void Player::Init()
+void Player::Init(int _stageNo)
 {
-	pos = { 1 * kTileSize + size.x / 2,1 * kTileSize + size.y / 2 };
+	pos = { startPos[_stageNo].x * kTileSize + size.x / 2,startPos[_stageNo].y * kTileSize + size.y / 2 };
 	size = { 40,40 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };

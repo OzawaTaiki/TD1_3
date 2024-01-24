@@ -56,6 +56,9 @@
     <Filter Include="UI\ボタン">
       <UniqueIdentifier>{79ccd508-3d32-4b91-b7d4-62fbc1f79e29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームクラス\箱">
+      <UniqueIdentifier>{7f44b7ce-22d7-4eed-9cd0-aa5a6878bc5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -115,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="piece.cpp">
       <Filter>ゲームクラス\枠%28ピース%29</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="box.cpp">
+      <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h">
       <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>ゲームクラス\箱</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

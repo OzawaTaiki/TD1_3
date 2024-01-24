@@ -13,6 +13,7 @@ public:
 	Vector2 acceleratiion;
 	Vector2 moveDir;
 
+
 	Vector2 vertex[4];
 
 	const float kMoveSpd = 7.0f;
@@ -20,6 +21,19 @@ public:
 
 	bool isAlive;
 	bool isGround;
+
+	intVec2 startPos[10] = {
+		{3,10},
+		{1,12},
+		{1,11},
+		{1,8},
+		{2,6},
+		{2,11},
+		{1,11},
+		{1,2},
+		{1,10},
+		{2,11}
+	};
 
 	int GH;
 
@@ -32,7 +46,7 @@ public:
 
 	Player();
 
-	void Init();
+	void Init(int _stageNo);
 	void Update(const char* _keys, const char* _preKeys);
 	void Draw();
 };
