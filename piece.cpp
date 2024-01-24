@@ -306,18 +306,18 @@ bool Piece::HindranceBlockCheck(const std::vector<std::vector<int>>* _field, int
 
 void Piece::DrawPieceShadow()
 {
-	if (isHave!= -1)
+	if (isHave != -1)
 	{
 		for (int y = 0; y < (*piece)[isHave].size(); y++)
 		{
 			for (int x = 0; x < (*piece)[isHave][y].size(); x++)
 			{
-				if (int((scanX + x) * kTileSize * scale[isHave]) / kTileSize>= 0 &&
-					int((scanX + x) * kTileSize * scale[isHave]) / kTileSize< kStageAreaWidth &&
-					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize>= 0 &&
-					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize< kWindowHeight)
+				if (int((scanX + x) * kTileSize * scale[isHave]) / kTileSize >= 0 &&
+					int((scanX + x) * kTileSize * scale[isHave]) / kTileSize < kStageAreaWidth &&
+					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize >= 0 &&
+					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize < kWindowHeight)
 
-					Novice::DrawBox(int((scanX + x) * kTileSize * scale[isHave]), int( + (scanY + y) * kTileSize * scale[isHave]), int(kTileSize * scale[isHave]) - 1, int(kTileSize * scale[isHave]) - 1, 0, (*piece)[isHave][y][x] == 0 ? 0 : 0xff, kFillModeSolid);
+					Novice::DrawBox(int((scanX + x) * kTileSize * scale[isHave]), int(+(scanY + y) * kTileSize * scale[isHave]), int(kTileSize * scale[isHave]) - 1, int(kTileSize * scale[isHave]) - 1, 0, (*piece)[isHave][y][x] == 0 ? 0 : 0xff, kFillModeSolid);
 			}
 		}
 	}
@@ -343,6 +343,7 @@ void Piece::Init()
 	{
 		pieceSize[i] = { 0,0 };
 		piecePos[i] = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
+		scale[i] = 1.0f;
 
 		for (int j = 0; j < (*piece)[i].size(); j++)
 		{
