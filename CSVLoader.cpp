@@ -136,6 +136,7 @@ int CSV_Loader::LoadFromCSV_s(const char* _path, char _separator)
 		/// pieceの読み込み
 		int elmNum = 0;		rowsCnt = 0;	colsCnt = 0;
 		bool exit = true;
+		piece.clear();
 		while (fgets(bufferLine, sizeof(bufferLine), fp))
 		{
 			// piece[elmNum][][]として新しく作成
