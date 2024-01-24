@@ -19,4 +19,5 @@ void Playground::Init(int _stageNo)
 
 void Playground::Draw()
 {
+
 }
