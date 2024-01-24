@@ -24,6 +24,15 @@ void Playground::Init(int _stageNo)
 	selectStage = _stageNo;
 
 	field = CSV_Loader::GetPointerMapchip();
+	collision = new std::vector<std::vector<int>>(*field);
+
+	for (int y = 0; y < field->size(); y++)
+	{
+		for (int x = 0; x < field->size(); x++)
+		{
+			(*collision)[y][x] = (*field)[y][x];
+		}
+	}
 
 	piece->Init();
 	player->Init();
@@ -31,7 +40,11 @@ void Playground::Init(int _stageNo)
 
 void Playground::Update(const char* _keys, const char* _preKeys)
 {
-	piece->Update(field, player->pos);
+	collision->clear();
+	collision = new std::vector<std::vector<int>>(*field);
+
+
+	piece->Update(field, collision, player->pos);
 	player->Update(_keys, _preKeys);
 }
 
@@ -55,6 +68,8 @@ void Playground::Draw()
 				if ((*field)[y][x] == 3)
 					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 			}
+			Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
+
 		}
 	}
 

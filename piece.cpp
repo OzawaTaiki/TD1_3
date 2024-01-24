@@ -116,7 +116,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				piecePrePos = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
 
 			/// ピースを置けなかったとき
-			if (!isPlayerInside || isHindranceBlockInside) //仮
+			if (isHindranceBlockInside) //仮
 				piecePos[i] = piecePrePos;
 		}
 
@@ -129,6 +129,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				Adjacent(i);
 	}
 }
+
 
 void Piece::Adjacent(int _pieceNum)
 {
@@ -317,6 +318,29 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 	}
 }
 
+void Piece::FieldCollision(std::vector<std::vector<int>>* _collision)
+{
+	for (int i = 0; i < (*piece).size(); i++)
+	{
+		for (int y = 0; y < (*piece)[i].size(); y++)
+		{
+			for (int x = 0; x < (*piece)[i][y].size(); x++)
+			{
+				intVec2 temp = { piecePosInMapchip[i].x + x,piecePosInMapchip[i].y + y };
+
+				if ((*piece)[i][y][x] == 1 &&
+					temp.x >= 0 &&
+					temp.x < kStageAreaWidth / kTileSize &&
+					temp.y >= 0 &&
+					temp.y < kWindowHeight / kTileSize)
+				{
+					(*_collision)[temp.y][temp.x] = 1;
+				}
+			}
+		}
+	}
+}
+
 bool Piece::HindranceBlockCheck(const std::vector<std::vector<int>>* _field, int _x, int _y)
 {
 	if ((*_field)[_y][_x] == 3)	return true;
@@ -377,9 +401,13 @@ void Piece::Init()
 	p2mSub = { 0,0 };
 }
 
-void Piece::Update(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos)
+void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision,const Vector2& _playerPos)
 {
+	adjacentPos.clear();
+	adjacentDir.clear();
+
 	PieceMove(_field, _playerPos);
+	FieldCollision(_collision);
 }
 
 void Piece::Draw()
