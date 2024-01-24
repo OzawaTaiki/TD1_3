@@ -2,6 +2,7 @@
 
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
+#include "definition.h"
 
 void Player::Move(const char* _keys)
 {
@@ -34,7 +35,7 @@ void Player::MoveDirUpdate()
 	moveDir = { 0,0 };
 	if (velocity.x < 0)
 		moveDir.x = -1;
-	else if (velocity.y > 0)
+	else if (velocity.x > 0)
 		moveDir.x = 1;
 
 	if (velocity.y < 0)
@@ -42,6 +43,8 @@ void Player::MoveDirUpdate()
 	else if (velocity.y > 0)
 		moveDir.y = 1;
 }
+
+
 
 Player::Player()
 {
@@ -54,6 +57,11 @@ Player::Player()
 	isAlive = true;
 	isGround = false;
 
+	vertex[0] = { -size.x / 2,-size.y / 2 };
+	vertex[1] = { +size.x / 2 - 1,-size.y / 2 };
+	vertex[2] = { -size.x / 2,+size.y / 2 - 1 };
+	vertex[3] = { +size.x / 2 - 1,+size.y / 2 - 1 };
+
 	GH = Novice::LoadTexture("./img/player.png");
 }
 
@@ -65,7 +73,7 @@ void Player::PosUpdate()
 
 void Player::Init()
 {
-	pos = { 64,64 };
+	pos = { 1 * kTileSize + size.x / 2,1 * kTileSize + size.y / 2 };
 	size = { 40,40 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
@@ -81,11 +89,17 @@ void Player::Update(const char* _keys, const char* _preKeys)
 	Jump(_keys, _preKeys);
 	if (!isGround)
 		Gravity();
-	PosUpdate();
 	MoveDirUpdate();
+
 }
 
 void Player::Draw()
 {
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
+
+	for (int i = 0; i < 4; i++)
+	{
+		Novice::ScreenPrintf(1600, 900 + i * 20, "%.1f,%.1f", pos.x + vertex[i].x, pos.y + vertex[i].y);
+		Novice::ScreenPrintf(1720, 900 + i * 20, "%d,%d", int(pos.x + vertex[i].x) / kTileSize, int(pos.y + vertex[i].y) / kTileSize);
+	}
 }

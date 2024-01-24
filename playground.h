@@ -37,6 +37,7 @@ class Playground
 	int goalTexture;
 	int obstacleTexture;
 
+	void Collision();
 
 public:
 	Playground();
