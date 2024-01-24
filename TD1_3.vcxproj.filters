@@ -56,6 +56,12 @@
     <Filter Include="UI\ボタン">
       <UniqueIdentifier>{79ccd508-3d32-4b91-b7d4-62fbc1f79e29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{c38c6fee-ac8b-4cf1-a6a3-7fef52c049f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="システム\KeyManager">
+      <UniqueIdentifier>{9cc5e55e-0b1a-487a-8c69-adba8c08abf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -115,6 +121,15 @@
     </ClCompile>
     <ClCompile Include="piece.cpp">
       <Filter>ゲームクラス\枠%28ピース%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>ゲームクラス\プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>システム\KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h">
       <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>システム\KeyManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
