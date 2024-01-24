@@ -6,7 +6,7 @@ class Player;
 
 class Playground
 {
-	const int kMaxStage = 3;
+	const int kMaxStage = 1;
 
 	std::vector<std::vector<int>>* field;
 	std::vector<std::vector<int>>* collision;
