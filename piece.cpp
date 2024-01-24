@@ -1,7 +1,6 @@
 ﻿#include "piece.h"
 #include "CSVLoader.h"
 #include "CursorManager.h"
-#include "definition.h"
 #include <Novice.h>
 #include <cassert>
 
@@ -48,6 +47,12 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 
 	else
 	{
+		if (isHave != -1)
+		{
+			int a = 0;
+			a++;
+		}
+
 		for (int i = 0; i < (*piece).size(); i++)
 		{
 			bool isPlayerInside = false;			// ピース内にプレイヤーが入ってるか否か
@@ -102,9 +107,6 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 					/// 操作中の位置にブロックがあるとき
 					if ((*piece)[i][y][x] == 1)
 					{
-						//↓以前のものではここで当たり判定用配列を更新してた
-						//collision_[int((piecePos_[i].y - fieldKeyPos_.y) / kMapchipSize) + y][int((piecePos_[i].x - fieldKeyPos_.x) / kMapchipSize) + x] = 1;
-
 						/// ここまで来ていたらフィールド内に入っているのでスケールを等倍にする
 						scale[i] = kKeyScale[0];
 					}
@@ -138,10 +140,8 @@ void Piece::Adjacent(int _pieceNum)
 	for (int i = _pieceNum + 1; i < piece->size(); i++)
 	{
 		/// ピースのｘ座標が重なっているか（ｙは除外
-		if (piecePosInMapchip[i].x <= piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 &&
-			piecePosInMapchip[i].x >= piecePosInMapchip[_pieceNum].x ||
-			piecePosInMapchip[i].x + pieceSize[i].x - 1 <= piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 &&
-			piecePosInMapchip[i].x + pieceSize[i].x - 1 >= piecePosInMapchip[_pieceNum].x)
+		if (piecePosInMapchip[_pieceNum].x <= piecePosInMapchip[i].x + pieceSize[i].x - 1 &&
+			piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 >= piecePosInMapchip[i].x)
 		{
 			/// 上辺のー１または下辺の＋１に別のピースの下辺または上辺があるか
 			if (piecePosInMapchip[i].y - 1 == piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 ||
@@ -154,10 +154,8 @@ void Piece::Adjacent(int _pieceNum)
 			}
 		}
 		/// ピースのｙ座標が重なっているか（ｘは除外
-		else if (piecePosInMapchip[i].y <= piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 &&
-			piecePosInMapchip[i].y >= piecePosInMapchip[_pieceNum].y ||
-			piecePosInMapchip[i].y + pieceSize[i].y - 1 <= piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 &&
-			piecePosInMapchip[i].y + pieceSize[i].y - 1 >= piecePosInMapchip[_pieceNum].y)
+		else if (piecePosInMapchip[_pieceNum].y <= piecePosInMapchip[i].y + pieceSize[i].y - 1 &&
+			piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 >= piecePosInMapchip[i].y)
 		{
 			/// 左辺ー１または右辺＋１に別のピースの右辺または左辺があるか
 			if (piecePosInMapchip[i].x - 1 == piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 ||
@@ -334,7 +332,8 @@ void Piece::FieldCollision(std::vector<std::vector<int>>* _collision)
 					temp.y >= 0 &&
 					temp.y < kWindowHeight / kTileSize)
 				{
-					(*_collision)[temp.y][temp.x] = 1;
+					if ((*_collision)[temp.y][temp.x] != 1)
+						(*_collision)[temp.y][temp.x] = i + 2;
 				}
 			}
 		}
@@ -364,6 +363,95 @@ void Piece::DrawPieceShadow()
 			}
 		}
 	}
+}
+
+bool Piece::IsInPiece(int _checkX, int _checkY, int _pieceNum)
+{
+	bool isHitEdges[4] = { false,0,0,0 };
+
+	int x = _checkX - piecePosInMapchip[_pieceNum].x;
+	int y = _checkY - piecePosInMapchip[_pieceNum].y;
+
+	if (x < 0 ||
+		y < 0 ||
+		x >= pieceSize[_pieceNum].x ||
+		y >= pieceSize[_pieceNum].y ||
+		(*piece)[_pieceNum][y][x] == 1/*||
+		(*piece)[_pieceNum][y][x] == 2*/
+		)
+		return false;
+
+	for (int dir = 0; dir < 4; dir++)
+	{
+		int move = 0;			//判定移動分
+		bool isExit = false;	//強制退場用フラグ
+		while (!isHitEdges[dir])
+		{
+			switch (dir)
+			{
+			case 0://上
+				if (y - move < 0)
+				{//pieceの端を超えた時
+					isExit = true;
+					break;
+				}
+				if ((*piece)[_pieceNum][y - move][x] != 0)
+				{//走査中にpieceのブロックにあたったとき
+					isHitEdges[0] = true;
+				}
+
+				break;
+			case 1://左
+				if (x - move < 0)
+				{
+					isExit = true;
+					break;
+				}
+				if ((*piece)[_pieceNum][y][x - move] != 0)
+				{
+					isHitEdges[1] = true;
+				}
+				break;
+			case 2://下
+				if (y + move >= (*piece)[_pieceNum].size())
+				{
+					isExit = true;
+					break;
+				}
+				if ((*piece)[_pieceNum][y + move][x] != 0)
+				{
+					isHitEdges[2] = true;
+				}
+				break;
+			case 3://右
+				if (x + move >= (*piece)[_pieceNum][y].size())
+				{
+					isExit = true;
+					break;
+				}
+				if ((*piece)[_pieceNum][y][x + move] != 0)
+				{
+					isHitEdges[3] = true;
+				}
+				break;
+			default:
+				break;
+			}
+			move++;
+			if (isExit)
+				break;
+		}
+		if (!isHitEdges[dir])//中になかったら即抜け
+			return false;
+	}
+
+	return true;
+}
+
+void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum)
+{
+	piecePos[_collidedNum - 2].x += _collisionDir.x * kTileSize;
+	piecePos[_collidedNum - 2].y += _collisionDir.y * kTileSize;
 }
 
 Piece::Piece()
@@ -401,7 +489,7 @@ void Piece::Init()
 	p2mSub = { 0,0 };
 }
 
-void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision,const Vector2& _playerPos)
+void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos)
 {
 	adjacentPos.clear();
 	adjacentDir.clear();
@@ -412,7 +500,7 @@ void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< st
 
 void Piece::Draw()
 {
-	DrawPieceShadow();
+	//DrawPieceShadow();
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
