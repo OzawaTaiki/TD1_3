@@ -328,7 +328,7 @@ Piece::Piece()
 	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
 }
 
-void Piece::Init(int _stageNo)
+void Piece::Init()
 {
 	if (piece != nullptr)		piece->clear();
 

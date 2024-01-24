@@ -1,6 +1,8 @@
 #include "CursorManager.h"
 
 #include <Novice.h>
+#include "playground.h"
+#include "definition.h"
 
 const char kWindowTitle[] = "1304_がめちｔぇ";
 
@@ -8,13 +10,14 @@ const char kWindowTitle[] = "1304_がめちｔぇ";
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
-	Novice::Initialize(kWindowTitle, 1280, 720);
+	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
-
+	Playground* pg = new Playground;
+	pg->Init(0);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -40,6 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		pg->Draw();
 
 
 		///

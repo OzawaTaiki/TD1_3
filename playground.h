@@ -1,5 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
+
+class Piece;
 
 class Playground
 {
@@ -12,10 +14,27 @@ class Playground
 	bool isNext;
 	bool isClear;
 
-	//ƒtƒ@ƒCƒ‹–¼ˆêŠ‡ŠÇ— ‚·‚×‚Ä‚±‚±‚É“ü—Í
-	const char* stageFilePath[64] = {
-		"testStage.csv"
+
+
+	const unsigned int kTileColor_[4] = {
+		0xc5edbeff,
+		0x000000ff,
+		0xff0000ff,
+		0x00ff00ff
 	};
+
+	//ãƒ•ã‚¡ã‚¤ãƒ«åä¸€æ‹¬ç®¡ç† ã™ã¹ã¦ã“ã“ã«å…¥åŠ›
+	const char* stageFilePath[64] = {
+		"./data/testStage.csv"
+	};
+
+	Piece* piece;
+
+	/// ä»®ã®è€…ãŸã¡
+	int blockTexture;
+	int goalTexture;
+	int obstacleTexture;
+
 
 public:
 	Playground();
