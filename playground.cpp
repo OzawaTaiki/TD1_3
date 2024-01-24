@@ -55,18 +55,33 @@ void Playground::Collision()
 
 #pragma endregion
 
+#pragma region	ゴール判定
+
+	if (
+		(*collision)[int(player->pos.y) / kTileSize][int(player->pos.x) / kTileSize] == 2 ||
+		(*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] == 2 ||
+		(*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] == 2 ||
+		(*collision)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] == 2 ||
+		(*collision)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] == 2
+		)
+	{
+		isClear = true;
+	}
+
+#pragma endregion
+
 #pragma region	ピースとの衝突判定
 
 	Vector2 collisionDir = { 0,0 };
 	int collidedNum = -1;
 
-	if (((*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[0].x) / kTileSize] >= 2 ||
-		(*collision)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[2].x) / kTileSize] >= 2) &&
+	if (((*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[0].x) / kTileSize] >= kTileKinds ||
+		(*collision)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[2].x) / kTileSize] >= kTileKinds) &&
 		player->moveDir.x < 0)
 	{
 		collisionDir.x = player->moveDir.x;
 		collidedNum =
-			(*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[0].x) / kTileSize] >= 2 ?
+			(*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[0].x) / kTileSize] >= kTileKinds ?
 			(*collision)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[0].x) / kTileSize] :
 			(*collision)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[2].x) / kTileSize];
 
@@ -78,13 +93,13 @@ void Playground::Collision()
 			player->velocity.x = 0;
 		}
 	}
-	if (((*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[1].x) / kTileSize] >= 2 ||
-		(*collision)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[3].x) / kTileSize] >= 2) &&
+	if (((*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[1].x) / kTileSize] > kTileKinds ||
+		(*collision)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[3].x) / kTileSize] > kTileKinds) &&
 		player->moveDir.x > 0)
 	{
 		collisionDir.x = player->moveDir.x;
 		collidedNum =
-			(*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[1].x) / kTileSize] >= 2 ?
+			(*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[1].x) / kTileSize] > kTileKinds ?
 			(*collision)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[1].x) / kTileSize] :
 			(*collision)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->velocity.x + player->vertex[3].x) / kTileSize];
 
@@ -96,13 +111,13 @@ void Playground::Collision()
 			player->velocity.x = 0;
 		}
 	}
-	if (((*collision)[int(player->pos.y + player->velocity.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] >= 2 ||
-		(*collision)[int(player->pos.y + player->velocity.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] >= 2) &&
+	if (((*collision)[int(player->pos.y + player->velocity.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] > kTileKinds ||
+		(*collision)[int(player->pos.y + player->velocity.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] > kTileKinds) &&
 		player->moveDir.y < 0)
 	{
 		collisionDir.y = player->moveDir.y;
 		collidedNum =
-			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] >= 2 ?
+			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] > kTileKinds ?
 			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] :
 			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize];
 
@@ -114,13 +129,13 @@ void Playground::Collision()
 			player->velocity.y = 0;
 		}
 	}
-	if (((*collision)[int(player->pos.y + player->velocity.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] >= 2 ||
-		(*collision)[int(player->pos.y + player->velocity.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] >= 2) &&
+	if (((*collision)[int(player->pos.y + player->velocity.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] > kTileKinds ||
+		(*collision)[int(player->pos.y + player->velocity.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] > kTileKinds) &&
 		player->moveDir.y > 0)
 	{
 		collisionDir.y = player->moveDir.y;
 		collidedNum =
-			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] >= 2 ?
+			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] > kTileKinds ?
 			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] :
 			(*collision)[int(player->pos.y + player->velocity.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize];
 
@@ -163,12 +178,15 @@ void Playground::Init(int _stageNo)
 		}
 	}
 
+	isClear = false;
+
 	piece->Init();
 	player->Init();
 }
 
 void Playground::Update(const char* _keys, const char* _preKeys)
 {
+
 	collision->clear();
 	collision = new std::vector<std::vector<int>>(*field);
 
@@ -177,6 +195,14 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	player->Update(_keys, _preKeys);
 
 	Collision();
+
+	if (isClear)
+	{
+		selectStage++;
+		if (selectStage >= kMaxStage)
+			selectStage = 0;
+		Init(selectStage);
+	}
 }
 
 void Playground::Draw()

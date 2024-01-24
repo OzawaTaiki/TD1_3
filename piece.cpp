@@ -333,7 +333,7 @@ void Piece::FieldCollision(std::vector<std::vector<int>>* _collision)
 					temp.y < kWindowHeight / kTileSize)
 				{
 					if ((*_collision)[temp.y][temp.x] != 1)
-						(*_collision)[temp.y][temp.x] = i + 2;
+						(*_collision)[temp.y][temp.x] = i + kTileKinds;
 				}
 			}
 		}
@@ -461,8 +461,6 @@ Piece::Piece()
 
 void Piece::Init()
 {
-	if (piece != nullptr)		piece->clear();
-
 	piece = CSV_Loader::GetPointerPiece();
 
 	piecePos.resize(piece->size());
