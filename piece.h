@@ -53,7 +53,7 @@ class Piece
 public:
 	Piece();
 
-	void Init(int _stageNo);
+	void Init();
 	void Update();
 	void Draw();
 
