@@ -1,5 +1,7 @@
 #include "CursorManager.h"
 
+#include "UIM/UI_Manager.h"
+
 #include <Novice.h>
 #include "playground.h"
 #include "definition.h"
@@ -19,6 +21,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Playground* pg = new Playground;
 	pg->Init(0);
 
+	UI_Manager::Init();
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -32,6 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		UI_Manager::Update();
 		CursorManager::UpdateCursorStatus();
 		pg->Update(keys, preKeys);
 
@@ -44,6 +49,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		pg->Draw();
+		UI_Manager::Draw();
 
 
 		///

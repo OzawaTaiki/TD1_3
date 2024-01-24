@@ -1,6 +1,7 @@
 ﻿#include "piece.h"
 #include "CSVLoader.h"
 #include "CursorManager.h"
+#include <PhilliaFunction/Phill.h>
 #include <Novice.h>
 #include <cassert>
 

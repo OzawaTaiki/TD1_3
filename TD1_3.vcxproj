@@ -125,10 +125,8 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="PhilliaFunction\TCPIP.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="playground.cpp" />
-    <ClCompile Include="UI\Button.cpp" />
-    <ClCompile Include="UI\Checkbox.cpp" />
-    <ClCompile Include="UI\Slider.cpp" />
-    <ClCompile Include="UI\UI_ToolKit.cpp" />
+    <ClCompile Include="UIM\Scroll.cpp" />
+    <ClCompile Include="UIM\UI_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
@@ -167,11 +165,9 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="piece.h" />
     <ClInclude Include="playground.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="UI\Button.h" />
-    <ClInclude Include="UI\Checkbox.h" />
-    <ClInclude Include="UI\Slider.h" />
-    <ClInclude Include="UI\UI_ToolKit.h" />
-    <ClInclude Include="UI\UI_ToolKit_Defines.h" />
+    <ClInclude Include="UIM\Scroll.h" />
+    <ClInclude Include="UIM\UI_defines.h" />
+    <ClInclude Include="UIM\UI_Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
