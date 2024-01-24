@@ -1,10 +1,15 @@
 #include "CursorManager.h"
+#include "ResourceManager.h"
+#include "KeyManager.h"
 
 #include <Novice.h>
 #include "playground.h"
 #include "definition.h"
+#include "Tutorial.h"
 
 const char kWindowTitle[] = "1304_がめちｔぇ";
+
+void ResourceRegist();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -17,8 +22,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Playground* pg = new Playground;
+	Tutorial* tutorial = nullptr;
 	pg->Init(0);
 
+	ResourceRegist();
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -27,6 +34,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// キー入力を受け取る
 		memcpy(preKeys, keys, 256);
 		Novice::GetHitKeyStateAll(keys);
+		KeyManager::GetKeyState();
 
 		///
 		/// ↓更新処理ここから
@@ -34,6 +42,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		CursorManager::UpdateCursorStatus();
 		pg->Update(keys, preKeys);
+		
+		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
+			tutorial = new Tutorial();
+
+		if (tutorial) 
+		{
+			tutorial->Update();
+			if (tutorial->Deletable() == 1)
+			{
+				delete tutorial;
+				tutorial = nullptr;
+			}
+		}
 
 		///
 		/// ↑更新処理ここまで
@@ -44,6 +65,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		pg->Draw();
+
+		if (tutorial) tutorial->Draw();
 
 
 		///
@@ -62,4 +85,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの終了
 	Novice::Finalize();
 	return 0;
+}
+
+void ResourceRegist()
+{
+	ResourceManager::Regist("white1x1", "white1x1.png");
+	ResourceManager::Regist("tes1", "./img/tes1.png");
+	ResourceManager::Regist("tes2", "./img/tes2.png");
 }

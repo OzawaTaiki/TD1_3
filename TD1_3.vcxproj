@@ -117,6 +117,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="CSVLoader.cpp" />
     <ClCompile Include="CursorManager.cpp" />
+    <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -129,6 +130,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="UI\Checkbox.cpp" />
     <ClCompile Include="UI\Slider.cpp" />
     <ClCompile Include="UI\UI_ToolKit.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
@@ -158,6 +160,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\input\Input.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
+    <ClInclude Include="KeyManager.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="CSVLoader.h" />
     <ClInclude Include="CursorManager.h" />
@@ -172,6 +175,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="UI\Slider.h" />
     <ClInclude Include="UI\UI_ToolKit.h" />
     <ClInclude Include="UI\UI_ToolKit_Defines.h" />
+    <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
