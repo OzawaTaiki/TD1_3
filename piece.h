@@ -35,13 +35,7 @@ class Piece
 	int scanY;
 
 
-	//ファイル名一括管理 すべてここに入力
-	const char* stageFilePath[64] = {
-		"./data/-_testStage4.csv",
-		"./data/-_testStage2.csv",
-		"./data/-_testStage3.csv",
-		"./data/-_test.csv",
-	};
+	
 
 	int pieceTexture;
 

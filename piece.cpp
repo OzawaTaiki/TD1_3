@@ -332,9 +332,6 @@ void Piece::Init(int _stageNo)
 {
 	if (piece != nullptr)		piece->clear();
 
-
-	CSV_Loader::LoadFromCSV_s(stageFilePath[_stageNo], '\n');
-
 	piece = CSV_Loader::GetPointerPiece();
 
 	piecePos.resize(piece->size());
