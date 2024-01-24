@@ -333,7 +333,7 @@ void Piece::FieldCollision(std::vector<std::vector<int>>* _collision)
 					temp.y < kWindowHeight / kTileSize)
 				{
 					if ((*_collision)[temp.y][temp.x] != 1)
-						(*_collision)[temp.y][temp.x] = i + 2;
+						(*_collision)[temp.y][temp.x] = i + kTileKinds;
 				}
 			}
 		}
@@ -450,8 +450,10 @@ bool Piece::IsInPiece(int _checkX, int _checkY, int _pieceNum)
 
 void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum)
 {
-	piecePos[_collidedNum - 2].x += _collisionDir.x * kTileSize;
-	piecePos[_collidedNum - 2].y += _collisionDir.y * kTileSize;
+	piecePos[_collidedNum - kTileKinds].x += _collisionDir.x * kTileSize;
+	piecePos[_collidedNum - kTileKinds].y += _collisionDir.y * kTileSize;
+
+	moveDir = _collisionDir;
 }
 
 Piece::Piece()
@@ -459,10 +461,13 @@ Piece::Piece()
 	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
 }
 
+void Piece::PiecePosInit(int _x, int _y)
+{
+	piecePos[0] = { float(_x * kTileSize) ,float(_y * kTileSize) };
+}
+
 void Piece::Init()
 {
-	if (piece != nullptr)		piece->clear();
-
 	piece = CSV_Loader::GetPointerPiece();
 
 	piecePos.resize(piece->size());
@@ -487,6 +492,7 @@ void Piece::Init()
 
 	isHave = -1;
 	p2mSub = { 0,0 };
+	moveDir = { 0,0 };
 }
 
 void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos)

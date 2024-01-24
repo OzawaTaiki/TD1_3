@@ -62,6 +62,9 @@
     <Filter Include="システム\KeyManager">
       <UniqueIdentifier>{9cc5e55e-0b1a-487a-8c69-adba8c08abf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ゲームクラス\箱">
+      <UniqueIdentifier>{7f44b7ce-22d7-4eed-9cd0-aa5a6878bc5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -130,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="KeyManager.cpp">
       <Filter>システム\KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="box.cpp">
+      <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>システム\KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="box.h">
+      <Filter>ゲームクラス\箱</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 
 class Piece
 {
+public:
 	std::vector<std::vector<std::vector<int>>>* piece;
 	std::vector<Vector2> piecePos;
 	std::vector<Vector2> pieceSize;
@@ -23,6 +24,8 @@ class Piece
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
+
+	Vector2 moveDir;
 
 	/// piece初期位置
 	const Vector2 kPieceStartKeyPos = { kStageAreaWidth + 50.0f,65.0f };			// pieceの初期基準座標
@@ -52,7 +55,6 @@ class Piece
 	void DrawPieceShadow();
 
 
-public:
 	Piece();
 
 	/// <param name="_checkX">判定する対象のｘ座標</param>
@@ -65,6 +67,7 @@ public:
 	/// <param name="collidedNum">衝突した番号</param>
 	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum);
 
+	void PiecePosInit(int _x, int _y);
 	void Init();
 	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos);
 	void Draw();
