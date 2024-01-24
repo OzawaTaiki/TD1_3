@@ -6,7 +6,7 @@
 #include <cassert>
 
 
-void Piece::PieceMove(const Vector2& _playerPos, const std::vector<std::vector<int>>* _field)
+void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos)
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
@@ -75,8 +75,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const std::vector<std::vector<i
 					/// 操作中のブロックがフィールド内にないとき
 					if (scanX < 0 ||
 						scanY < 0 ||
-						scanX >= kStageAreaWidth ||
-						scanY >= kWindowHeight)
+						scanX >= kStageAreaWidth / kTileSize ||
+						scanY >= kWindowHeight / kTileSize)
 						continue;
 
 
@@ -123,109 +123,55 @@ void Piece::PieceMove(const Vector2& _playerPos, const std::vector<std::vector<i
 		isHave = -1;
 
 		/// ピース隣接関係の処理
-
+		for (int i = 0; i < (*piece).size(); i++)
+			/// ピースがフィールド内に入ってるとき
+			if (scale[i] == kKeyScale[0])
+				Adjacent(i);
 	}
 }
+
 void Piece::Adjacent(int _pieceNum)
 {
 	bool isAdjacent = false;
 
 	for (int i = _pieceNum + 1; i < piece->size(); i++)
 	{
-
+		/// ピースのｘ座標が重なっているか（ｙは除外
 		if (piecePosInMapchip[i].x <= piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 &&
 			piecePosInMapchip[i].x >= piecePosInMapchip[_pieceNum].x ||
 			piecePosInMapchip[i].x + pieceSize[i].x - 1 <= piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 &&
 			piecePosInMapchip[i].x + pieceSize[i].x - 1 >= piecePosInMapchip[_pieceNum].x)
 		{
+			/// 上辺のー１または下辺の＋１に別のピースの下辺または上辺があるか
 			if (piecePosInMapchip[i].y - 1 == piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 ||
 				piecePosInMapchip[i].y + pieceSize[i].y - 1 == piecePosInMapchip[_pieceNum].y - 1)
 			{
+				/// 隣接している
 				Novice::ScreenPrintf(1500, 800, "x");
 				AdjacentPos(_pieceNum, i, 'x');
 				isAdjacent = true;
 			}
 		}
+		/// ピースのｙ座標が重なっているか（ｘは除外
 		else if (piecePosInMapchip[i].y <= piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 &&
 			piecePosInMapchip[i].y >= piecePosInMapchip[_pieceNum].y ||
 			piecePosInMapchip[i].y + pieceSize[i].y - 1 <= piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 &&
 			piecePosInMapchip[i].y + pieceSize[i].y - 1 >= piecePosInMapchip[_pieceNum].y)
 		{
+			/// 左辺ー１または右辺＋１に別のピースの右辺または左辺があるか
 			if (piecePosInMapchip[i].x - 1 == piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 ||
 				piecePosInMapchip[i].x + pieceSize[i].x - 1 == piecePosInMapchip[_pieceNum].x - 1)
 			{
+				/// 隣接している
 				Novice::ScreenPrintf(1500, 800, "y");
 				AdjacentPos(_pieceNum, i, 'y');
 				isAdjacent = true;
 			}
 		}
+		/// 隣接してるとき
 		if (isAdjacent)
 		{
 			AdjacentPieceDelete(_pieceNum, i);
-			break;
-		}
-	}
-}
-
-void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
-{
-	for (int i = 0; i < adjacentDir.size(); i++)
-	{
-		int count1 = 1;
-		int count2 = 1;
-		int temp1;
-		int temp2;
-
-		switch (adjacentDir[i])
-		{
-		case 'x':
-
-			temp1 = adjacentPos[i].x - piecePosInMapchip[_pieceNum1].x;
-			temp2 = adjacentPos[i].x - piecePosInMapchip[_pieceNum2].x;
-
-			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
-			{
-				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
-					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
-				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][0][temp2 + count2++] = 2;
-				}
-			}
-			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
-			{
-				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
-					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
-				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = 2;
-				}
-			}
-			break;
-		case 'y':
-			temp1 = adjacentPos[i].y - piecePosInMapchip[_pieceNum1].y;
-			temp2 = adjacentPos[i].y - piecePosInMapchip[_pieceNum2].y;
-
-			if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
-			{
-				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
-					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
-				{
-					(*piece)[_pieceNum1][temp1 + count1++][0] = 2;
-					(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = 2;
-				}
-			}
-			else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
-			{
-				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
-					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
-				{
-					(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = 2;
-					(*piece)[_pieceNum2][temp2 + count2++][0] = 2;
-				}
-			}
-			break;
-		default:
 			break;
 		}
 	}
@@ -237,8 +183,10 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 	switch (_dir)
 	{
 	case 'x':
+		/// 二つのピースのｘ座標を比較
 		if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
 		{
+			/// ｙ座標比較
 			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x,piecePosInMapchip[_pieceNum2].y - 1 });
 			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
@@ -288,11 +236,82 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 	}
 	for (int i = 0; i < adjacentPos.size(); i++)
 	{
+		/// 同じデータが含まれていた時でーた消す
 		if (adjacentPos.back().x == adjacentPos[i].x &&
 			adjacentPos.back().y == adjacentPos[i].y &&
 			adjacentPos.size() - 1 != i)
 		{
 			adjacentPos.pop_back();
+			break;
+		}
+	}
+}
+
+void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
+{
+	for (int i = 0; i < adjacentDir.size(); i++)
+	{
+		int count1 = 1;
+		int count2 = 1;
+		int temp1;
+		int temp2;
+
+		switch (adjacentDir[i])
+		{
+		case 'x':
+
+			temp1 = adjacentPos[i].x - piecePosInMapchip[_pieceNum1].x;
+			temp2 = adjacentPos[i].x - piecePosInMapchip[_pieceNum2].x;
+
+			/// ｙ座標比較
+			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
+			{
+				/// ピースの端一個手前まで
+				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
+					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
+				{
+					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = 2;
+					(*piece)[_pieceNum2][0][temp2 + count2++] = 2;
+				}
+			}
+			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
+			{
+				/// ピースの端一個手前まで
+				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
+					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
+				{
+					(*piece)[_pieceNum1][0][temp1 + count1++] = 2;
+					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = 2;
+				}
+			}
+			break;
+		case 'y':
+			temp1 = adjacentPos[i].y - piecePosInMapchip[_pieceNum1].y;
+			temp2 = adjacentPos[i].y - piecePosInMapchip[_pieceNum2].y;
+
+			/// ｘ座標比較
+			if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
+			{
+				/// ピースの端一個手前まで
+				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
+					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
+				{
+					(*piece)[_pieceNum1][temp1 + count1++][0] = 2;
+					(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = 2;
+				}
+			}
+			else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
+			{
+				/// ピースの端一個手前まで
+				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
+					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
+				{
+					(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = 2;
+					(*piece)[_pieceNum2][temp2 + count2++][0] = 2;
+				}
+			}
+			break;
+		default:
 			break;
 		}
 	}
@@ -358,9 +377,9 @@ void Piece::Init()
 	p2mSub = { 0,0 };
 }
 
-void Piece::Update()
+void Piece::Update(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos)
 {
-
+	PieceMove(_field, _playerPos);
 }
 
 void Piece::Draw()

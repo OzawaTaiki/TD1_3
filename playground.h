@@ -2,6 +2,7 @@
 #include <vector>
 
 class Piece;
+class Player;
 
 class Playground
 {
@@ -29,6 +30,7 @@ class Playground
 	};
 
 	Piece* piece;
+	Player* player;
 
 	/// 仮の者たち
 	int blockTexture;
@@ -40,6 +42,6 @@ public:
 	Playground();
 
 	void Init(int _stageNo);
-
+	void Update(const char* _keys, const char* _preKeys);
 	void Draw();
 };
