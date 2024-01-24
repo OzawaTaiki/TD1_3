@@ -6,6 +6,14 @@
 void Box::Gravity()
 {
 	velocity.y += acceleraion.y;
+	moveDir.y = 1;
+}
+
+bool Box::CanMove(std::vector< std::vector<int>>* _collision, const Vector2& _dir)
+{
+	if ((*_collision)[posInMapchip.y + (int)_dir.y][posInMapchip.x + (int)_dir.x] != 0)
+		return false;
+	return true;
 }
 
 void Box::PosUpdate()
@@ -19,24 +27,27 @@ void Box::PosUpdate()
 
 void Box::CollisionWithField(std::vector<std::vector<int>>* _collision)
 {
+	if (((*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x - size.x / 2) / kTileSize] != 0 /*||
 	if (((*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x - size.x / 2) / kTileSize] == 1 ||
-		(*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x - size.x / 2) / kTileSize] == 2) &&
+		(*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x - size.x / 2) / kTileSize] == 2*/) &&
 		velocity.x < 0)
 	{
 		pos.x = (int(pos.x + velocity.x - size.x / 2) / kTileSize + 1) * kTileSize + size.x / 2;
 		velocity.x = 0;
 	}
 
+	if (((*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x + size.x / 2 - 1) / kTileSize] != 0/* ||
 	if (((*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x + size.x / 2 - 1) / kTileSize] == 1 ||
-		(*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x + size.x / 2 - 1) / kTileSize] == 2) &&
+		(*_collision)[int(pos.y - size.y / 2) / kTileSize][int(pos.x + velocity.x + size.x / 2 - 1) / kTileSize] == 2*/) &&
 		velocity.x > 0)
 	{
 		pos.x = (int(pos.x + velocity.x + size.x / 2 - 1) / kTileSize) * kTileSize - size.x / 2;
 		velocity.x = 0;
 	}
 
+	if (((*_collision)[int(pos.y + velocity.y + size.y / 2 - 1) / kTileSize][int(pos.x) / kTileSize] != 0 /*||
 	if (((*_collision)[int(pos.y + velocity.y + size.y / 2 - 1) / kTileSize][int(pos.x) / kTileSize] == 1 ||
-		(*_collision)[int(pos.y + velocity.y + size.y / 2 - 1) / kTileSize][int(pos.x) / kTileSize] == 2) &&
+		(*_collision)[int(pos.y + velocity.y + size.y / 2 - 1) / kTileSize][int(pos.x) / kTileSize] == 2*/) &&
 		velocity.y > 0)
 	{
 		pos.y = (int(pos.y + velocity.y + size.y / 2) / kTileSize) * kTileSize - size.y / 2;
@@ -56,7 +67,7 @@ Box::Box(int _x, int _y)
 	GH = Novice::LoadTexture("white1x1.png");
 }
 
-void Box::CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo,bool& _isGround)
+void Box::CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround)
 {
 	Vector2 localpPos = { _pos.x + _velo.x,_pos.y + _velo.y };
 
@@ -75,6 +86,7 @@ void Box::CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _vel
 		else if (_pos.x < pos.x)
 		{
 			velocity.x += kTileSize;
+			moveDir.x = 1;
 			_pos.x = pos.x - size.x / 2.0f - _size.x / 2.0f;
 			_velo.x = 0;
 		}
@@ -82,6 +94,7 @@ void Box::CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _vel
 		else if (_pos.x > pos.x)
 		{
 			velocity.x -= kTileSize;
+			moveDir.x = -1;
 			_pos.x = pos.x + size.x / 2.0f + _size.x / 2.0f;
 			_velo.x = 0;
 		}
@@ -91,6 +104,7 @@ void Box::CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _vel
 void Box::Update()
 {
 	velocity.x = 0;
+	moveDir = { 0,0 };
 	Gravity();
 	//CollisionWithField(_collision);
 	//PosUpdate();

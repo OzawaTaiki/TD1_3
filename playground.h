@@ -7,7 +7,7 @@ class Box;
 
 class Playground
 {
-	const int kMaxStage = 1;
+	const int kMaxStage = 10;
 
 	std::vector<std::vector<int>>* field;
 	std::vector<std::vector<int>>* collision;
@@ -27,7 +27,16 @@ class Playground
 
 	//ファイル名一括管理 すべてここに入力
 	const char* stageFilePath[64] = {
-		"./data/testStage.csv"
+		"./data/stage1.csv",
+		"./data/stage2.csv",
+		"./data/stage3.csv",
+		"./data/stage4.csv",
+		"./data/stage5.csv",
+		"./data/stage6.csv",
+		"./data/stage7.csv",
+		"./data/stage8.csv",
+		"./data/stage9.csv",
+		"./data/stage10.csv"
 	};
 
 	Piece* piece;
@@ -41,8 +50,9 @@ class Playground
 	int obstacleTexture;
 
 	void CollisionWithPlayer();
-	void CollisionWithBox();
 	void PiecePlayerCollision();
+	void BoxPieceCollision();
+	void BoxBoxCollision();
 
 	void GoalCheck();
 
