@@ -14,8 +14,47 @@
     <Filter Include="KamataEngine\Adapter">
       <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ResourceManager">
+    <Filter Include="ゲームクラス">
+      <UniqueIdentifier>{03c930ac-10e8-4f99-8a01-4a8762c41026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ゲームクラス\プレイヤー">
+      <UniqueIdentifier>{0e966e5d-b88a-473b-bbec-067a32cd2204}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ゲームクラス\PlayGround">
+      <UniqueIdentifier>{33ba277a-46a7-496d-8235-48f3de4e916e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ゲームクラス\枠%28ピース%29">
+      <UniqueIdentifier>{101e9258-96ab-40f6-8c2f-48d9bb27c391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhilliaFunction">
+      <UniqueIdentifier>{835a4662-45b0-4b3f-8dc2-b094b48646bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{5aa2ffb0-fd0b-4567-b812-c4a5d23d4361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="システム">
+      <UniqueIdentifier>{d2e819cd-bb17-435f-baf7-c924dcc2a4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="システム\CursorManager">
+      <UniqueIdentifier>{b8f6e16b-11c6-4949-9c9e-eff968dde4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="システム\ResourceManager">
       <UniqueIdentifier>{b3ca8ccf-f1c6-42e3-9a71-741ff29d6bb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="システム\CSV-Loader">
+      <UniqueIdentifier>{95f4ebb7-43c0-4203-baf9-fa369854b365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Definitions">
+      <UniqueIdentifier>{8f1207ee-92fc-45ca-9a55-6ae3f3324b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\チェックボックス">
+      <UniqueIdentifier>{c391f40c-8ce1-43e4-ac1b-848c6bd18fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\スクロールボックス">
+      <UniqueIdentifier>{0d8b7648-992f-48bb-af2e-ea943a4c4179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\ボタン">
+      <UniqueIdentifier>{79ccd508-3d32-4b91-b7d4-62fbc1f79e29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,38 +80,41 @@
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp">
       <Filter>KamataEngine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="CSVLoader.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="CursorManager.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="PhilliaFunction\Phill.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="PhilliaFunction\PhillEasing.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="PhilliaFunction\TCPIP.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="piece.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Button.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>UI\ボタン</Filter>
     </ClCompile>
     <ClCompile Include="UI\Checkbox.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>UI\チェックボックス</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Slider.cpp">
-      <Filter>KamataEngine</Filter>
+    <ClCompile Include="CSVLoader.cpp">
+      <Filter>システム\CSV-Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>システム\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\Phill.cpp">
+      <Filter>PhilliaFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\PhillEasing.cpp">
+      <Filter>PhilliaFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="PhilliaFunction\TCPIP.cpp">
+      <Filter>PhilliaFunction</Filter>
     </ClCompile>
     <ClCompile Include="UI\UI_ToolKit.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Slider.cpp">
+      <Filter>UI\スクロールボックス</Filter>
     </ClCompile>
     <ClCompile Include="playground.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>ゲームクラス\PlayGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorManager.cpp">
+      <Filter>システム\CursorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="piece.cpp">
+      <Filter>ゲームクラス\枠%28ピース%29</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,26 +181,63 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\3d\SpotLight.h">
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
-    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h" />
-    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h" />
-    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector3.h" />
-    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h">
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
-    <ClInclude Include="player.h" />
-    <ClInclude Include="CSVLoader.h" />
-    <ClInclude Include="CursorManager.h" />
-    <ClInclude Include="intVec2.h" />
-    <ClInclude Include="PhilliaFunction\Phill.h" />
-    <ClInclude Include="piece.h" />
-    <ClInclude Include="UI\Button.h" />
-    <ClInclude Include="UI\Checkbox.h" />
-    <ClInclude Include="UI\Slider.h" />
-    <ClInclude Include="UI\UI_ToolKit.h" />
-    <ClInclude Include="UI\UI_ToolKit_Defines.h" />
-    <ClInclude Include="definition.h" />
-    <ClInclude Include="playground.h" />
+    <ClInclude Include="ResourceManager.h">
+      <Filter>システム\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Button.h">
+      <Filter>UI\ボタン</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Checkbox.h">
+      <Filter>UI\チェックボックス</Filter>
+    </ClInclude>
+    <ClInclude Include="definition.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="CSVLoader.h">
+      <Filter>システム\CSV-Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorManager.h">
+      <Filter>システム\CursorManager</Filter>
+    </ClInclude>
+    <ClInclude Include="intVec2.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="PhilliaFunction\Phill.h">
+      <Filter>PhilliaFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="piece.h">
+      <Filter>ゲームクラス\枠%28ピース%29</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>ゲームクラス\プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="playground.h">
+      <Filter>ゲームクラス\PlayGround</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Slider.h">
+      <Filter>UI\スクロールボックス</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI_ToolKit.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI_ToolKit_Defines.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector3.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h">
+      <Filter>Definitions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
