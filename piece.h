@@ -33,13 +33,10 @@ class Piece
 
 	int scanX;
 	int scanY;
-
-
 	
-
 	int pieceTexture;
 
-	void PieceMove(const Vector2& _playerPos, const std::vector< std::vector<int>>* _field);
+	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos);
 	//void PieceMove(const Vector2& _playerPos, const Vector2& _playerSize);
 
 	bool HindranceBlockCheck(const std::vector< std::vector<int>>* _field,int _x,int _y);
@@ -54,7 +51,7 @@ public:
 	Piece();
 
 	void Init();
-	void Update();
+	void Update(const std::vector< std::vector<int>>* _field,const Vector2& _playerPos);
 	void Draw();
 
 };

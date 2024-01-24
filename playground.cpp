@@ -4,11 +4,14 @@
 #include "CSVLoader.h"
 #include <Novice.h>
 #include "definition.h"
+
 #include "piece.h"
+#include "player.h"
 
 Playground::Playground()
 {
 	piece = new Piece;
+	player = new Player;
 
 	blockTexture = Novice::LoadTexture("./img/block.png");
 	goalTexture = Novice::LoadTexture("./img/goal.png");
@@ -23,6 +26,13 @@ void Playground::Init(int _stageNo)
 	field = CSV_Loader::GetPointerMapchip();
 
 	piece->Init();
+	player->Init();
+}
+
+void Playground::Update(const char* _keys, const char* _preKeys)
+{
+	piece->Update(field, player->pos);
+	player->Update(_keys, _preKeys);
 }
 
 void Playground::Draw()
@@ -49,4 +59,5 @@ void Playground::Draw()
 	}
 
 	piece->Draw();
+	player->Draw();
 }

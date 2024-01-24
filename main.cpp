@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		CursorManager::UpdateCursorStatus();
-
+		pg->Update(keys, preKeys);
 
 		///
 		/// ↑更新処理ここまで

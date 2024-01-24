@@ -118,6 +118,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="CSVLoader.cpp" />
     <ClCompile Include="CursorManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="PhilliaFunction\Phill.cpp" />
     <ClCompile Include="PhilliaFunction\PhillEasing.cpp" />
