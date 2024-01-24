@@ -44,8 +44,6 @@ void Player::MoveDirUpdate()
 		moveDir.y = 1;
 }
 
-
-
 Player::Player()
 {
 	pos = { 64,64 };

@@ -450,8 +450,8 @@ bool Piece::IsInPiece(int _checkX, int _checkY, int _pieceNum)
 
 void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum)
 {
-	piecePos[_collidedNum - 2].x += _collisionDir.x * kTileSize;
-	piecePos[_collidedNum - 2].y += _collisionDir.y * kTileSize;
+	piecePos[_collidedNum - kTileKinds].x += _collisionDir.x * kTileSize;
+	piecePos[_collidedNum - kTileKinds].y += _collisionDir.y * kTileSize;
 }
 
 Piece::Piece()

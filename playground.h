@@ -3,6 +3,7 @@
 
 class Piece;
 class Player;
+class Box;
 
 class Playground
 {
@@ -31,13 +32,19 @@ class Playground
 
 	Piece* piece;
 	Player* player;
+	std::vector<Box*> box;
+
 
 	/// 仮の者たち
 	int blockTexture;
 	int goalTexture;
 	int obstacleTexture;
 
-	void Collision();
+	void CollisionWithPlayer();
+	void CollisionWithBox();
+	void PiecePlayerCollision();
+
+	void GoalCheck();
 
 public:
 	Playground();
