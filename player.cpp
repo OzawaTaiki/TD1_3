@@ -95,9 +95,9 @@ void Player::Draw()
 {
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		Novice::ScreenPrintf(1600, 900 + i * 20, "%.1f,%.1f", pos.x + vertex[i].x, pos.y + vertex[i].y);
 		Novice::ScreenPrintf(1720, 900 + i * 20, "%d,%d", int(pos.x + vertex[i].x) / kTileSize, int(pos.y + vertex[i].y) / kTileSize);
-	}
+	}*/
 }

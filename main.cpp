@@ -90,6 +90,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 void ResourceRegist()
 {
 	ResourceManager::Regist("white1x1", "white1x1.png");
-	ResourceManager::Regist("tes1", "./img/tes1.png");
-	ResourceManager::Regist("tes2", "./img/tes2.png");
+	ResourceManager::Regist("rule1", "./img/rule1.png");
+	ResourceManager::Regist("rule2", "./img/rule2.png");
 }

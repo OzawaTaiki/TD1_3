@@ -26,8 +26,8 @@ Tutorial::Tutorial()
 	deletable = 0;
 
 	whiteHandle = ResourceManager::Handle("white1x1");
-	handle[Page1] = ResourceManager::Handle("tes1");
-	handle[Page2] = ResourceManager::Handle("tes2");
+	handle[Page1] = ResourceManager::Handle("rule1");
+	handle[Page2] = ResourceManager::Handle("rule2");
 }
 
 void Tutorial::Update()

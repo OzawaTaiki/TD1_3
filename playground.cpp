@@ -359,7 +359,7 @@ void Playground::Draw()
 				if ((*field)[y][x] == 3)
 					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 			}
-			Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
+			//Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
 
 		}
 	}
