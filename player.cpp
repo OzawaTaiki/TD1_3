@@ -4,21 +4,30 @@
 #include <Novice.h>
 #include "definition.h"
 
-void Player::Move(const char* _keys)
+void Player::Move(const char* _keys, const char* _preKeys)
 {
 	int moveX = 0;
-
-	if (_keys[DIK_A])
-		moveX = -1;
-	if (_keys[DIK_D])
-		moveX = 1;
+	if (_keys[DIK_LSHIFT])
+	{
+		if (_keys[DIK_A] && !_preKeys[DIK_A])
+			moveX = -1;
+		if (_keys[DIK_D] && !_preKeys[DIK_D])
+			moveX = 1;
+	}
+	else
+	{
+		if (_keys[DIK_A])
+			moveX = -1;
+		if (_keys[DIK_D])
+			moveX = 1;
+	}
 
 	velocity.x = moveX * kMoveSpd;
 }
 
 void Player::Jump(const char* _keys, const char* _preKeys)
 {
-	if (_keys[DIK_W] && !_preKeys[DIK_W] && isGround)
+	if ((_keys[DIK_W] && !_preKeys[DIK_W] || _keys[DIK_SPACE] && !_preKeys[DIK_SPACE]) && isGround)
 	{
 		velocity.y = kJumpVelocity;
 		isGround = false;
@@ -40,7 +49,7 @@ void Player::MoveDirUpdate()
 
 	if (velocity.y < 0)
 		moveDir.y = -1;
-	else if (velocity.y > 0)
+	else if (velocity.y > 0.5f)
 		moveDir.y = 1;
 }
 
@@ -56,17 +65,21 @@ Player::Player()
 	isGround = false;
 
 	vertex[0] = { -size.x / 2,-size.y / 2 };
-	vertex[1] = { +size.x / 2 - 1,-size.y / 2 };
-	vertex[2] = { -size.x / 2,+size.y / 2 - 1 };
-	vertex[3] = { +size.x / 2 - 1,+size.y / 2 - 1 };
+	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
+	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
+	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
 	GH = Novice::LoadTexture("./img/player.png");
 }
 
 void Player::PosUpdate()
 {
-	pos.x += velocity.x;
-	pos.y += velocity.y;
+	if (!isAddVelo)
+	{
+		pos.x += velocity.x;
+		pos.y += velocity.y;
+		isAddVelo = true;
+	}
 }
 
 void Player::Init(int _stageNo)
@@ -83,12 +96,13 @@ void Player::Init(int _stageNo)
 
 void Player::Update(const char* _keys, const char* _preKeys)
 {
-	Move(_keys);
-	Jump(_keys, _preKeys);
-	if (!isGround)
-		Gravity();
-	MoveDirUpdate();
+	isOnBox = false;
+	isAddVelo = false;
 
+	Move(_keys, _preKeys);
+	Jump(_keys, _preKeys);
+	Gravity();
+	MoveDirUpdate();
 }
 
 void Player::Draw()
