@@ -17,14 +17,16 @@ public:
 	Vector2 vertex[4];
 
 	const float kMoveSpd = 7.0f;
-	const float kJumpVelocity = -15.0f;
+	const float kJumpVelocity = -12.0f;//12.0
 
 	bool isAlive;
 	bool isGround;
+	bool isOnBox;
+	bool isAddVelo;
 
 	intVec2 startPos[10] = {
 		{3,10},
-		{1,12},
+		{2,12},
 		{1,11},
 		{1,8},
 		{2,8},
@@ -37,7 +39,7 @@ public:
 
 	int GH;
 
-	void Move(const char* _keys);
+	void Move(const char* _keys , const char* _preKeys);
 	void Jump(const char* _keys, const char* _preKeys);
 	void Gravity();
 	void PosUpdate();
