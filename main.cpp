@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
-	pg->Init(2);
+	pg->Init(8);
 
 	ResourceRegist();
 	// ウィンドウの×ボタンが押されるまでループ

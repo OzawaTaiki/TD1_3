@@ -9,22 +9,21 @@ void Box::Gravity()
 	moveDir.y = 1;
 }
 
-bool Box::CanMove(std::vector< std::vector<int>>* _collision, const Vector2& _dir)
+bool Box::CanMove(std::vector< std::vector<int>>* _field, const Vector2& _dir)
 {
-	if ((*_collision)[posInMapchip.y + (int)_dir.y][posInMapchip.x + (int)_dir.x] == AIR)
+	if ((*_field)[posInMapchip.y + (int)_dir.y][posInMapchip.x + (int)_dir.x] == AIR)
 		return true;
 	return false;
 }
 
 void Box::PosUpdate()
 {
-	if (!idAddVelo)
+	if (!isdAddVelo)
 	{
 		pos.x += velocity.x;
 		pos.y += velocity.y;
-		idAddVelo = true;
+		isdAddVelo = true;
 	}
-
 
 	posInMapchip.x = (int)pos.x / kTileSize;
 	posInMapchip.y = (int)pos.y / kTileSize;
@@ -59,14 +58,14 @@ Box::Box(int _x, int _y)
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
-	idAddVelo = false;
+	isdAddVelo = false;
 
 	GH = Novice::LoadTexture("white1x1.png");
 }
 
 void Box::Update()
 {
-	idAddVelo = false;
+	isdAddVelo = false;
 	velocity.x = 0;
 	Gravity();
 	MoveDirUpdate();
@@ -74,8 +73,9 @@ void Box::Update()
 	//PosUpdate();
 }
 
-void Box::Draw()
+void Box::Draw(int _num)
 {
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, 0xc03030ff, PhillDrawMode::DrawMode_Center);
+	Novice::ScreenPrintf(int(pos.x), int(pos.y), "%d", _num);
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }

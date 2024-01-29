@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <Vector2.h>
 
 class Piece;
 class Player;
@@ -51,6 +52,9 @@ class Playground
 
 	bool frameSlow = false;
 
+	bool isFill(const Vector2& _pos, const Vector2* _vertex);
+
+
 	void GoalCheck();
 	void SpineHitCheck();
 
@@ -60,7 +64,7 @@ class Playground
 
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
-	//void CollisionBoxWithBox();		//box		box
+	void CollisionBoxWithBox();		//box		box
 
 	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();
