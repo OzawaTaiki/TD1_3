@@ -1,6 +1,7 @@
 #include "CursorManager.h"
 #include "ResourceManager.h"
 #include "KeyManager.h"
+#include "StageSelect.h"
 
 #include <Novice.h>
 #include "playground.h"
@@ -23,6 +24,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
+	StageSelect* stageSel = nullptr;
 	pg->Init(0);
 
 	ResourceRegist();
@@ -46,6 +48,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
 			tutorial = new Tutorial();
 
+		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
+		{
+			stageSel = new StageSelect();
+		}
+
 		if (tutorial) 
 		{
 			tutorial->Update();
@@ -54,6 +61,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				delete tutorial;
 				tutorial = nullptr;
 			}
+		}
+
+		if (stageSel)
+		{
+			stageSel->Update();
 		}
 
 		///
@@ -67,6 +79,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		pg->Draw();
 
 		if (tutorial) tutorial->Draw();
+		if (stageSel) stageSel->Draw();
 
 
 		///
