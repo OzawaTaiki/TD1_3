@@ -61,7 +61,7 @@ void StageSelect::Draw()
 	
 
 	// !DEBUG
-	Novice::ScreenPrintf(cur.x - 30, cur.y-12, "(%4d,%4d)", cur.x, cur.y);
+	Novice::ScreenPrintf(cur.x - 30, cur.y-15, "(%4d,%4d)", cur.x, cur.y);
 }
 
 void StageSelect::Calculation()
