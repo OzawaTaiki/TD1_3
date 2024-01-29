@@ -65,6 +65,9 @@
     <Filter Include="ゲームクラス\箱">
       <UniqueIdentifier>{7f44b7ce-22d7-4eed-9cd0-aa5a6878bc5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="システム\JSON-Loader">
+      <UniqueIdentifier>{733f5431-f5bf-4d55-8286-a5f606cbd4e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="box.cpp">
       <Filter>ゲームクラス\箱</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON-Loader\json.cpp">
+      <Filter>システム\JSON-Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="box.h">
       <Filter>ゲームクラス\箱</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON-Loader\json.h">
+      <Filter>システム\JSON-Loader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
