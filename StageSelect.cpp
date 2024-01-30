@@ -6,12 +6,13 @@
 
 StageSelect::StageSelect()
 {
-	Calculation();
 	json = JSON_Manager::GetJSON("stageSelect");
 
 	elementSize = atoi((*json)["elementSize"].c_str());
 	targetElmSize = atoi((*json)["targElementSize"].c_str());
 	elementMargin = atoi((*json)["elementMargin"].c_str());
+
+	Calculation();
 
 	frameCount_turn = 0;
 	constantT_turn = 0.0f;
@@ -74,6 +75,6 @@ void StageSelect::Draw()
 void StageSelect::Calculation()
 {
 	// 基準点を算出する
-	elementStandard.x = (1920 - (elementSize * 5 + elementMargin * 4)) / 2;
-	elementStandard.y = (1080 - (elementSize * 3 + elementMargin * 2)) / 2;
+	elementStandard.x = (1920 - (elementSize * 5 + elementMargin * 4)) / 2 + elementSize / 2;
+	elementStandard.y = (1080 - (elementSize * 3 + elementMargin * 2)) / 2 + elementSize / 2;
 }

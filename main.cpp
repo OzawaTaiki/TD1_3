@@ -29,6 +29,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	pg->Init(8);
 	StageSelect* stageSel = nullptr;
 
+	JSONLoad();
 	ResourceRegist();
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
