@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CursorManager.h"
+#include "JSON-Loader/json.h"
 
 enum ForCursorStatus
 {
@@ -19,10 +20,12 @@ struct StageSelectElement
 class StageSelect
 {
 private:
+	JsonL*	json;
 	const	int		targetFrame_turn	= 40;
-	const	int		elementSize			= 196;
-	const	int		targetElmSize		= 256;
-	const	int		elementMargin		= 96;
+
+	int		elementSize;
+	int		targetElmSize;
+	int		elementMargin;
 	const	Size	srcSize				= Size(1, 1);
 
 	StageSelectElement elements[3][5];

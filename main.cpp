@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "KeyManager.h"
 #include "StageSelect.h"
+#include "JSON-Loader/JSON-Manager.h"
 
 #include <Novice.h>
 #include "playground.h"
@@ -11,6 +12,7 @@
 const char kWindowTitle[] = "1304_がめちｔぇ";
 
 void ResourceRegist();
+void JSONLoad();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -105,4 +107,9 @@ void ResourceRegist()
 	ResourceManager::Regist("white1x1", "white1x1.png");
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
+}
+
+void JSONLoad()
+{
+	JSON_Manager::LoadJSON("stageSelect", "./data/stageSelect.json");
 }

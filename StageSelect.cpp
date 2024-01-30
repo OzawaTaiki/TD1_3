@@ -2,10 +2,17 @@
 #include "StageSelect.h"
 #include "ResourceManager.h"
 #include <Novice.h>
+#include "JSON-Loader/JSON-Manager.h"
 
 StageSelect::StageSelect()
 {
 	Calculation();
+	json = JSON_Manager::GetJSON("stageSelect");
+
+	elementSize = atoi((*json)["elementSize"].c_str());
+	targetElmSize = atoi((*json)["targElementSize"].c_str());
+	elementMargin = atoi((*json)["elementMargin"].c_str());
+
 	frameCount_turn = 0;
 	constantT_turn = 0.0f;
 	easedT_turn = 0.0f;
