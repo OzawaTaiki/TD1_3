@@ -16,8 +16,7 @@ public:
 	{
 		auto it = data.find(key);
 		if (it != data.end()) return it->second;
-		
-		return {};
+		else return {};
 	}
 	
 	std::unordered_map<std::string, std::string>* rowData = &data;

@@ -1,6 +1,8 @@
 #include "CursorManager.h"
 #include "ResourceManager.h"
 #include "KeyManager.h"
+#include "StageSelect.h"
+#include "JSON-Loader/JSON-Manager.h"
 
 #include <Novice.h>
 #include "playground.h"
@@ -10,6 +12,7 @@
 const char kWindowTitle[] = "1304_がめちｔぇ";
 
 void ResourceRegist();
+void JSONLoad();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -24,7 +27,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
 	pg->Init(8);
+	StageSelect* stageSel = nullptr;
 
+	JSONLoad();
 	ResourceRegist();
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -46,6 +51,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
 			tutorial = new Tutorial();
 
+		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
+		{
+			stageSel = new StageSelect();
+		}
+
 		if (tutorial) 
 		{
 			tutorial->Update();
@@ -54,6 +64,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				delete tutorial;
 				tutorial = nullptr;
 			}
+		}
+
+		if (stageSel)
+		{
+			stageSel->Update();
 		}
 
 		///
@@ -67,6 +82,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		pg->Draw();
 
 		if (tutorial) tutorial->Draw();
+		if (stageSel) stageSel->Draw();
 
 
 		///
@@ -92,4 +108,9 @@ void ResourceRegist()
 	ResourceManager::Regist("white1x1", "white1x1.png");
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
+}
+
+void JSONLoad()
+{
+	JSON_Manager::LoadJSON("stageSelect", "./data/stageSelect.json");
 }

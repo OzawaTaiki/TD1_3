@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "json.h"
-#include <unordered_map>
+#include <vector>
 #include <string>
 
 class JSON_Manager
@@ -10,5 +10,6 @@ public:
 	static	JsonL*	GetJSON(const char* _jsonName);
 
 private:
-	static	std::unordered_map<std::string, JsonL> jsonMap;
+	static	std::vector<std::string> jsonNames;
+	static	std::vector<JsonL> Jsons;
 };

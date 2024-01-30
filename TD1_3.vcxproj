@@ -135,6 +135,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="UI\UI_ToolKit.cpp" />
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="StageSelect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
@@ -183,6 +184,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="UI\UI_ToolKit.h" />
     <ClInclude Include="UI\UI_ToolKit_Defines.h" />
     <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
