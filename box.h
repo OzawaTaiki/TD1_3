@@ -4,6 +4,7 @@
 #include "intVec2.h"
 #include <vector>
 
+
 class Box
 {
 public:
@@ -14,16 +15,20 @@ public:
 	Vector2 acceleraion;
 	Vector2 moveDir;
 
+	Vector2 vertex[4];
+
 	int GH;
 
+	bool isdAddVelo;
 
 	Box(int _x, int _y);
 
 	void Gravity();
-	bool CanMove(std::vector< std::vector<int>>* _collision,const Vector2& _dir);
+	bool CanMove(std::vector< std::vector<int>>* _field, const Vector2& _dir);
 	void PosUpdate();
-	void CollisionWithField(std::vector< std::vector<int>>* _collision);
-	void CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround);//playgroundに移動予定
+	void MoveDirUpdate();
+	//void CollisionWithField(std::vector< std::vector<int>>* _collision);
+	//void CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround);//playgroundに移動予定
 	void Update();
-	void Draw();
+	void Draw(int _num);
 };

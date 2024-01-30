@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <Vector2.h>
 
 class Piece;
 class Player;
@@ -49,12 +50,31 @@ class Playground
 	int goalTexture;
 	int obstacleTexture;
 
-	void CollisionWithPlayer();
-	void PiecePlayerCollision();
-	void BoxPieceCollision();
-	void BoxBoxCollision();
+	bool frameSlow = false;
+
+	bool isFill(const Vector2& _pos, const Vector2* _vertex);
+
 
 	void GoalCheck();
+	void SpineHitCheck();
+
+	void CollisionWithPlayer();			//player	field
+	void CollisionPlayerWithBox();		//player	box
+	void CollisionPlayerWithPiece();	//player	piece
+
+	void CollisionWithBox();			//box		field
+	void CollisionPieceWithBox();		//box		piece
+	void CollisionBoxWithBox();		//box		box
+
+	/// お邪魔との判定とりたい関数 piece field
+	void CollisionWithPiece();
+
+	void CollisionReset();
+
+	/*void PiecePlayerCollision();
+	void BoxPieceCollision();
+	void BoxBoxCollision();*/
+
 
 public:
 	Playground();

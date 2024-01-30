@@ -138,7 +138,7 @@
       <Filter>KamataEngine</Filter>
     </ClCompile>
     <ClCompile Include="box.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>ゲームクラス\箱</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

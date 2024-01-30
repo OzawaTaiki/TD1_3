@@ -5,6 +5,8 @@
 #include "intVec2.h"
 #include "definition.h"
 
+class Box;
+
 class Piece
 {
 public:
@@ -24,6 +26,9 @@ public:
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
+	Vector2 velocity;
+	const float kMoveSpd = 8.0f;
+	intVec2 moveCnt;
 
 	Vector2 moveDir;
 
@@ -33,14 +38,15 @@ public:
 
 	int isHave;								// piece所持フラグ -1:もってない 0~:番号のピース所持
 
-
+	int runX;
+	int runY;
 
 	int scanX;
 	int scanY;
 
 	int pieceTexture;
 
-	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos);
+	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box);
 	//void PieceMove(const Vector2& _playerPos, const Vector2& _playerSize);
 
 
@@ -52,24 +58,34 @@ public:
 
 	void FieldCollision(std::vector< std::vector<int>>* _collision);
 
+	/// <summary>
+	/// ピクセル単位での衝突判定
+	/// </summary>
+	/// <param name="_vertex">vertex配列</param>
+	/// <returns>当たったピースの番号  or 当たらなかった:-1</returns>
+	int PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
+	int PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
+	//int PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
 	void DrawPieceShadow();
 
+	void VelocityControl();
 
 	Piece();
+
 
 	/// <param name="_checkX">判定する対象のｘ座標</param>
 	/// <param name="_checkY">判定する対象のｙ座標</param>
 	/// <param name="_pieceNum">判定するピースの番号 0~</param>
 	/// <returns></returns>
-	bool IsInPiece(int _checkX, int _checkY, int _pieceNum);
+	bool IsInPiece(const Vector2& _pos, int _pieceNum);
 
 	/// <param name="collisionDir">ぶつかった向き -1,0,1 片方０ </param>
 	/// <param name="collidedNum">衝突した番号</param>
-	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum);
+	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity);
 
 	void PiecePosInit(int _x, int _y);
 	void Init();
-	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos);
+	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box);
 	void Draw();
 
 };
