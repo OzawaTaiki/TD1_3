@@ -1,6 +1,12 @@
 {
-    "bgcolor" : "0x121212ff",
-    "elementSize" : 196,
+    "bgcolor" : "ff66aaff",
+    "elementWidth" : 196,
+    "elementHeight" : 196,
     "elementMargin" : 96,
-    "targElementSize" : 256
+    "targElementWidth" : 384,
+    "targElementHeight" : 216,
+    "srcWidth" : 1920,
+    "srcHeight" : 1080,
+    "targFrame_turn" : 20,
+    "targThmbAlpha":255
 }

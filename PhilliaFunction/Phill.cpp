@@ -15,9 +15,9 @@ void Phill::Init()
 	callCnt = 0;
 }
 
-bool Phill::isDebugMode = false;
 #ifdef _DEBUG
 
+bool Phill::isDebugMode = false;
 void Phill::SetDebugMode(DebugMode mode)
 {
 	switch (mode)
@@ -133,10 +133,10 @@ void Phill::DrawQuadPlus(
 	{
 		// 4頂点の確認
 		Novice::DrawQuad(
-			_x + leftTop[0] - 5, _y + leftTop[1] - 5,
-			_x + leftTop[0] + 5, _y + leftTop[1] - 5,
-			_x + leftTop[0] - 5, _y + leftTop[1] + 5,
-			_x + leftTop[0] + 5, _y + leftTop[1] + 5,
+			_x + leftTop[0] - 3, _y + leftTop[1] - 3,
+			_x + leftTop[0] + 3, _y + leftTop[1] - 3,
+			_x + leftTop[0] - 3, _y + leftTop[1] + 3,
+			_x + leftTop[0] + 3, _y + leftTop[1] + 3,
 			0, 0,
 			10, 10,
 			kWhiteCircleHandle,
@@ -144,10 +144,10 @@ void Phill::DrawQuadPlus(
 		);
 
 		Novice::DrawQuad(
-			_x + rightTop[0] - 5, _y + rightTop[1] - 5,
-			_x + rightTop[0] + 5, _y + rightTop[1] - 5,
-			_x + rightTop[0] - 5, _y + rightTop[1] + 5,
-			_x + rightTop[0] + 5, _y + rightTop[1] + 5,
+			_x + rightTop[0] - 3, _y + rightTop[1] - 3,
+			_x + rightTop[0] + 3, _y + rightTop[1] - 3,
+			_x + rightTop[0] - 3, _y + rightTop[1] + 3,
+			_x + rightTop[0] + 3, _y + rightTop[1] + 3,
 			0, 0,
 			10, 10,
 			kWhiteCircleHandle,
@@ -155,10 +155,10 @@ void Phill::DrawQuadPlus(
 		);
 
 		Novice::DrawQuad(
-			_x + leftBottom[0] - 5, _y + leftBottom[1] - 5,
-			_x + leftBottom[0] + 5, _y + leftBottom[1] - 5,
-			_x + leftBottom[0] - 5, _y + leftBottom[1] + 5,
-			_x + leftBottom[0] + 5, _y + leftBottom[1] + 5,
+			_x + leftBottom[0] - 3, _y + leftBottom[1] - 3,
+			_x + leftBottom[0] + 3, _y + leftBottom[1] - 3,
+			_x + leftBottom[0] - 3, _y + leftBottom[1] + 3,
+			_x + leftBottom[0] + 3, _y + leftBottom[1] + 3,
 			0, 0,
 			10, 10,
 			kWhiteCircleHandle,
@@ -166,10 +166,10 @@ void Phill::DrawQuadPlus(
 		);
 
 		Novice::DrawQuad(
-			_x + rightBottom[0] - 5, _y + rightBottom[1] - 5,
-			_x + rightBottom[0] + 5, _y + rightBottom[1] - 5,
-			_x + rightBottom[0] - 5, _y + rightBottom[1] + 5,
-			_x + rightBottom[0] + 5, _y + rightBottom[1] + 5,
+			_x + rightBottom[0] - 3, _y + rightBottom[1] - 3,
+			_x + rightBottom[0] + 3, _y + rightBottom[1] - 3,
+			_x + rightBottom[0] - 3, _y + rightBottom[1] + 3,
+			_x + rightBottom[0] + 3, _y + rightBottom[1] + 3,
 			0, 0,
 			10, 10,
 			kWhiteCircleHandle,
@@ -182,7 +182,10 @@ void Phill::DrawQuadPlus(
 		// Novice::DrawEllipse(_x + rightBottom[0], _y + rightBottom[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
 
 		// 中心点の確認
-		Novice::DrawEllipse(_x, _y, 5, 5, 0.0f, 0xff0000ff, kFillModeSolid);
+		Novice::DrawEllipse(_x, _y, 3, 3, 0.0f, 0xff0000ff, kFillModeSolid);
+
+		// 中心点の確認(文字)
+		Novice::ScreenPrintf(_x + leftTop[0] - 10, _y + leftTop[1] - 17, "(%4d, %4d)", _x, _y);
 	}
 }
 

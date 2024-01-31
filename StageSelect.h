@@ -12,37 +12,46 @@ enum ForCursorStatus
 
 struct StageSelectElement
 {
-	Transform pos;
-	Size size;
+	Transform		pos;
+	Size			size;
+	int				alpha;
 	ForCursorStatus fcStatus;
 };
 
 class StageSelect
 {
 private:
-	JsonL*	json;
-	const	int		targetFrame_turn	= 40;
+	const char* jsonName = "stageSelect";
 
-	int		elementSize;
-	int		targetElmSize;
+	JsonL*		json;
+
+	Size	srcSize;
+	Size	elementSize;
+	Size	targetElmSize;
+	int		targetFrame_turn;
+	int		thumbTargetAlpha;
 	int		elementMargin;
-	const	Size	srcSize				= Size(1, 1);
+
+	unsigned int bgColor;
 
 	StageSelectElement elements[3][5];
 
 	int		ssElementHandle;
+	int		ssThumbHandle;
 
 	//int		frameCount_current;
-	int		frameCount_turn;
+	int		frameCount_turn[3][5];
 	
-	float	constantT_turn;
-	float	easedT_turn;
+	float	constantT_turn[3][5];
+	float	easedT_turn[3][5];
 
 	Transform elementStandard = { 192,92 };
 	Transform cur;
 
-
+	void	EasingHover(int _row, int _col);
+	void    LoadFromJSON();
 	void	Calculation();
+	void	Init();
 public:
 	StageSelect();
 
