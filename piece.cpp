@@ -25,7 +25,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				p2mSub.y = (piecePos[i].y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
-				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 && !IsInPiece(_playerPos, i))
+				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
 				{
 					piecePrePos = piecePos[i];
 
@@ -76,7 +76,11 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 						scanY < 0 ||
 						scanX >= kStageAreaWidth / kTileSize ||
 						scanY >= kWindowHeight / kTileSize)
+					{
+						if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+							(*piece)[i][y][x] = 1;
 						continue;
+					}
 
 
 					/*******************
@@ -87,7 +91,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 						isHindranceBlockInside = HindranceBlockCheck(_field, scanX, scanY);
 
 					/// プレイヤーと操作中のブロックが重なってるとき
-					if (isHave!=-1&&
+					if (isHave != -1 &&
 						scanX == int(_playerPos.x) / kTileSize &&
 						scanY == int(_playerPos.y) / kTileSize)
 					{

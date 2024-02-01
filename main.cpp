@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
-	pg->Init(8);
+	pg->Init(4);
 
 	ResourceRegist();
 	// ウィンドウの×ボタンが押されるまでループ
@@ -39,6 +39,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+
+		if (keys[DIK_1]) pg->Init(0);
+		if (keys[DIK_2]) pg->Init(1);
+		if (keys[DIK_3]) pg->Init(2);
+		if (keys[DIK_4]) pg->Init(3);
+		if (keys[DIK_5]) pg->Init(4);
+		if (keys[DIK_6]) pg->Init(5);
+		if (keys[DIK_7]) pg->Init(6);
+		if (keys[DIK_8]) pg->Init(7);
+		if (keys[DIK_9]) pg->Init(8);
+		if (keys[DIK_0]) pg->Init(9);
 
 		CursorManager::UpdateCursorStatus();
 		pg->Update(keys, preKeys);
