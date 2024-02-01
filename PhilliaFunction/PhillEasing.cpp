@@ -2,6 +2,12 @@
 #include <corecrt_math_defines.h>
 #include <corecrt_math.h>
 
+float Phill::ConstantT(int _targetFrame, int currentFrame)
+{
+	float result = float(currentFrame) / float(_targetFrame);
+	return result;
+}
+
 float Phill::EaseInQuart(float _constant)
 {
 	_constant = LimitConstant(_constant);

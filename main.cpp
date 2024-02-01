@@ -32,6 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	JSONLoad();
 	ResourceRegist();
+	int wndModeCnt = 0;
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -55,6 +56,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
 		{
 			stageSel = new StageSelect();
+		}
+
+		if (keys[DIK_F11] && !preKeys[DIK_F11])
+		{
+			if (wndModeCnt == 0)
+				Novice::SetWindowMode(WindowMode::kFullscreen);
+			else Novice::SetWindowMode(WindowMode::kWindowed);
+			wndModeCnt++;
+			wndModeCnt %= 2;
 		}
 
 		if (tutorial) 
@@ -120,6 +130,17 @@ void ResourceRegist()
 	ResourceManager::Regist("white1x1", "white1x1.png");
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
+
+	for (int i = 0; i < 1; i++)
+	{
+		char path[] = "./img/thumbnails/stg";
+		char result[128]{};
+		char name[32]{};
+		sprintf_s(result, "%s%d%s", path, i, ".png");
+		sprintf_s(name, "thmb_stg%d", i);
+
+		ResourceManager::Regist(name, result);
+	}
 }
 
 void JSONLoad()

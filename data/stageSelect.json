@@ -1,6 +1,16 @@
 {
-    "bgcolor" : "0x121212ff",
-    "elementSize" : 196,
+    "bgcolor" : "ff4477ff",
+    "elementWidth" : 196,
+    "elementHeight" : 196,
     "elementMargin" : 96,
-    "targElementSize" : 256
+    "targElementWidth" : 384,
+    "targElementHeight" : 216,
+    "srcWidth" : 1920,
+    "srcHeight" : 1080,
+    "targFrame_turn" : 6,
+    "targThmbAlpha":255,
+    "intervalFrame_jump" : 10,
+    "targetFrame_jump" : 4,
+    "frameOffset_jump" : 60,
+    "targetTheta_jump" : 60
 }
