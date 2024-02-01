@@ -13,7 +13,15 @@ StageSelect::StageSelect()
 
 	Calculation();
 
-	cur = Transform(0, 0);
+	cur					= Transform(0, 0);
+	frameBuffer_jump	= 0;
+	elmCnt_jump			= 0;
+	constantT_jump		= 0.0f;
+	easedT_jump			= 0.0f;
+	targetTheta_jump	= 0.0f;
+	ssElementHandle		= ResourceManager::Handle("white1x1");
+	ssThumbHandle		= ResourceManager::Handle("thmb_stg0");
+
 	for (int row = 0; row < 3; row++)
 	{
 		for (int col = 0; col < 5; col++)
@@ -29,8 +37,6 @@ StageSelect::StageSelect()
 			elements[row][col].fcStatus		= FCS_NONE;
 		}
 	}
-	ssElementHandle = ResourceManager::Handle("white1x1");
-	ssThumbHandle = ResourceManager::Handle("thmb_stg0");
 
 }
 
@@ -40,10 +46,10 @@ void StageSelect::Init()
 	{
 		for (int col = 0; col < 5; col++)
 		{
-			elements[row][col].pos.x = elementStandard.x + (elementSize.width + elementMargin) * col;
-			elements[row][col].pos.y = elementStandard.y + (elementSize.height + elementMargin) * row;
-			elements[row][col].size.width = elementSize.width;
-			elements[row][col].size.height = elementSize.height;
+			elements[row][col].pos.x		= elementStandard.x + (elementSize.width + elementMargin) * col;
+			elements[row][col].pos.y		= elementStandard.y + (elementSize.height + elementMargin) * row;
+			elements[row][col].size.width	= elementSize.width;
+			elements[row][col].size.height	= elementSize.height;
 		}
 	}
 }
@@ -84,12 +90,30 @@ void StageSelect::Update()
 			default:
 				break;
 			}
+
+			// 要素ジャンプ
+			if (frameCount_current > frameOffset_jump)
+			{
+				// フレームカウントの一時保存
+				if (frameBuffer_jump == 0) frameBuffer_jump = frameCount_current;
+				frameCount_jump = frameCount_current - frameBuffer_jump;
+				if (frameCount_jump == targetFrame_jump)
+				{
+					frameBuffer_jump = 0;
+					elmCnt_jump++;
+					elmCnt_jump %= 15;
+				}
+			}
+			frameCount_current++;
 		}
 	}
 
 	if (cur.x < 0) cur.x = 0;
 	if (cur.y < 0) cur.y = 0;
 
+
+
+	// ホットリロード
 	if (KeyManager::GetKeys(DIK_F5) && !KeyManager::GetPreKeys(DIK_F5))
 	{
 		JSON_Manager::ReloadJSON(jsonName);
@@ -104,7 +128,7 @@ void StageSelect::Draw()
 	// 背景
 	Novice::DrawBox(0, 0, 1920, 1080, 0.0f, bgColor, kFillModeSolid);
 
-	// サイズ確認用
+	// 要素
 	for (int row = 0; row < 3; row++)
 	{
 		for (int col = 0; col < 5; col++)
@@ -131,8 +155,10 @@ void StageSelect::Draw()
 			);
 		}
 	}
+
 	// !DEBUG
 	Novice::ScreenPrintf(cur.x - 30, cur.y-15, "(%4d,%4d)", cur.x, cur.y);
+	Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
 }
 
 void StageSelect::EasingHover(int _row, int _col)
@@ -154,9 +180,13 @@ void StageSelect::LoadFromJSON()
 	srcSize.height			= atoi((*json)["srcHeight"].c_str());
 	thumbTargetAlpha		= atoi((*json)["targThmbAlpha"].c_str());
 
-	targetFrame_turn = atoi((*json)["targFrame_turn"].c_str());
-	elementMargin = atoi((*json)["elementMargin"].c_str());
-	bgColor = UINT(strtoll((*json)["bgcolor"].c_str(), nullptr, 16));
+	frameOffset_jump		= atoi((*json)["frameOffset_jump"].c_str());
+	IntervalFrame_jump		= atoi((*json)["intervalFrame_jump"].c_str());
+	targetFrame_jump		= atoi((*json)["targetFrame_jump"].c_str());
+
+	targetFrame_turn		= atoi((*json)["targFrame_turn"].c_str());
+	elementMargin			= atoi((*json)["elementMargin"].c_str());
+	bgColor					= UINT(strtoll((*json)["bgcolor"].c_str(), nullptr, 16));
 }
 
 void StageSelect::Calculation()
