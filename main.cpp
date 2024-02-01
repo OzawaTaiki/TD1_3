@@ -40,6 +40,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		CursorManager::UpdateCursorStatus();
+		pg->Update(keys, preKeys);
+
+		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
+			tutorial = new Tutorial();
+
+		if (tutorial)
+		{
+			tutorial->Update();
+			if (tutorial->Deletable() == 1)
+			{
+				delete tutorial;
+				tutorial = nullptr;
+			}
+		}
+
+#ifdef _DEBUG
 		if (keys[DIK_1]) pg->Init(0);
 		if (keys[DIK_2]) pg->Init(1);
 		if (keys[DIK_3]) pg->Init(2);
@@ -50,22 +67,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_8]) pg->Init(7);
 		if (keys[DIK_9]) pg->Init(8);
 		if (keys[DIK_0]) pg->Init(9);
-
-		CursorManager::UpdateCursorStatus();
-		pg->Update(keys, preKeys);
-		
-		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
-			tutorial = new Tutorial();
-
-		if (tutorial) 
-		{
-			tutorial->Update();
-			if (tutorial->Deletable() == 1)
-			{
-				delete tutorial;
-				tutorial = nullptr;
-			}
-		}
+#endif // _DEBUG
 
 		///
 		/// ↑更新処理ここまで
