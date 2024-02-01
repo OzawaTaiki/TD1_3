@@ -39,7 +39,7 @@ void Box::MoveDirUpdate()
 
 	if (velocity.y < 0)
 		moveDir.y = -1;
-	else if (velocity.y > 0)
+	else if (velocity.y > 1)
 		moveDir.y = 1;
 }
 
@@ -71,7 +71,6 @@ void Box::Clamp()
 		pos.y += velocity.y;
 		isLockedY = true;
 	}
-
 }
 
 
@@ -84,10 +83,6 @@ Box::Box(int _x, int _y)
 
 	pos = { posInMapchip.x * kTileSize + size.x / 2.0f ,posInMapchip.y * kTileSize + size.y / 2.0f };
 
-	vertex[0] = { -size.x / 2,-size.y / 2 };
-	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
-	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
-	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 	isDraw = true;
 	isOnPlayer = false;
 	isOnBox = -1;
@@ -101,15 +96,21 @@ void Box::Update()
 {
 	if (!isDraw)
 		return;
+
+	vertex[0] = { -size.x / 2,-size.y / 2 };
+	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
+	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
+	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
+
 	isdAddVelo = false;
 	isOnPlayer = false; 
 	isOnBox = -1;
 	isLockedX = false;
 	isLockedY = false;
 	velocity.x = 0;
+	MoveDirUpdate();
 	Gravity();
 	Clamp();
-	MoveDirUpdate();
 	//CollisionWithField(_collision);
 	//PosUpdate();
 }
@@ -118,7 +119,7 @@ void Box::Draw(int _num)
 {
 	if (!isDraw)
 		return;
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, 0xc03030ff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, 0xc03030ff, PhillDrawMode::DrawMode_Center);
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);

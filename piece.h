@@ -65,10 +65,10 @@ public:
 	/// <returns>当たったピースの番号  or 当たらなかった:-1</returns>
 	int PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
 	int PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
-	//int PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir);
+
 	void DrawPieceShadow();
 
-	void VelocityControl();
+	void VelocityControl();//使ってない
 
 	Piece();
 

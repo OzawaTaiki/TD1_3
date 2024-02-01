@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <Vector2.h>
+#include "intVec2.h"
 
 class Piece;
 class Player;
@@ -12,6 +13,9 @@ class Playground
 
 	std::vector<std::vector<int>>* field;
 	std::vector<std::vector<int>>* collision;
+
+	std::vector<intVec2> hindrancePos;
+	Vector2 hindranceVertex[4];
 
 	int selectStage;
 	bool isNext;

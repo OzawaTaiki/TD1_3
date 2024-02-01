@@ -426,7 +426,7 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir)
 {
 	int hitPieceNum = -1;
-	Vector2 localPos = _pos;
+	//Vector2 localPos = _pos;
 
 	Vector2 o2pSub[4];
 
@@ -453,49 +453,49 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 				isContinue[k] = true;
 		}
 
-		if ((isContinue[0] || isContinue[1]) && moveDir.y < 0)
-			/// 上向き
-			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
-			{
-				_collisionDir.y = -1;
-				localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
-				runY = int(o2pSub[1].y) / kTileSize;
-				hitPieceNum = i;
-			}
-		if ((isContinue[2] || isContinue[3]) && moveDir.y > 0)
-			/// 下向き
-			if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
-			{
-				_collisionDir.y = 1;
-				localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
-				runY = int(o2pSub[2].y) / kTileSize;
-				hitPieceNum = i;
-			}
-		if ((isContinue[0] || isContinue[2]) && moveDir.x < 0)
-			/// 左向き
-			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
-			{
-				_collisionDir.x = -1;
-				localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
-				runX = int(o2pSub[2].x) / kTileSize;
-				hitPieceNum = i;
-			}
-		if ((isContinue[1] || isContinue[3]) && moveDir.x > 0)
-			/// 右向き
-			if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
-			{
-				_collisionDir.x = 1;
-				localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
-				runX = int(o2pSub[1].x) / kTileSize;
-				hitPieceNum = i;
-			}
+		/// 上向き
+		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
+			isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+			&& moveDir.y > 0)
+		{
+			_collisionDir.y = -1;
+			//localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
+			runY = int(o2pSub[1].y) / kTileSize;
+			hitPieceNum = i;
+		}
+		/// 下向き
+		if ((isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 ||
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) &&
+			moveDir.y < 0)
+		{
+			_collisionDir.y = 1;
+			//localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
+			runY = int(o2pSub[2].y) / kTileSize;
+			hitPieceNum = i;
+		}
+		/// 左向き
+		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
+			isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+			&& moveDir.x > 0)
+		{
+			_collisionDir.x = -1;
+			//localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
+			runX = int(o2pSub[2].x) / kTileSize;
+			hitPieceNum = i;
+		}
+		/// 右向き
+		if ((isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 ||
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) && moveDir.x < 0)
+		{
+			_collisionDir.x = 1;
+			//localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
+			runX = int(o2pSub[1].x) / kTileSize;
+			hitPieceNum = i;
+		}
 	}
 	return hitPieceNum;
 }
+
 
 void Piece::DrawPieceShadow()
 {
@@ -532,10 +532,9 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 
 	if (o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
-		base.x < 0 ||
-		base.y < 0 ||
-		base.x >= pieceSize[_pieceNum].x ||
-		base.y >= pieceSize[_pieceNum].y)
+		o2pSub.x >= pieceSize[_pieceNum].x * kTileSize ||
+		o2pSub.y >= pieceSize[_pieceNum].y * kTileSize ||
+		(*piece)[_pieceNum][base.y][base.x] == 1)
 		return false;
 
 	for (int dir = 0; dir < 4; dir++)
@@ -702,7 +701,7 @@ void Piece::Draw()
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		Novice::ScreenPrintf(0, 0 + i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
+		Novice::ScreenPrintf(int(piecePos[i].x), int(piecePos[i].y) + i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
 		//Novice::ScreenPrintf(0, 1020 + i * 20, "%.1f,%.1f", pieceSize[i].x, pieceSize[i].y);
 		//Novice::ScreenPrintf(900, 900 + i * 20, "%d,%d", piecePosInMapchip[i].x, piecePosInMapchip[i].y);
 
