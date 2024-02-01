@@ -9,8 +9,8 @@
     "srcHeight" : 1080,
     "targFrame_turn" : 6,
     "targThmbAlpha":255,
-    "intervalFrame_jump" : 10,
-    "targetFrame_jump" : 4,
+    "intervalFrame_jump" : 40,
+    "targetFrame_jump" : 30,
     "frameOffset_jump" : 60,
     "targetTheta_jump" : 60
 }

@@ -23,7 +23,7 @@ class StageSelect
 private:
     const char* jsonName = "stageSelect";
 
-    JsonL*		json;
+    JsonL*	json;
 
     Size	srcSize;                            // 画像解像度 (px)
     Size	elementSize;                        // 通常時の要素サイズ (px)
@@ -35,6 +35,8 @@ private:
 
     int		IntervalFrame_jump;					// 要素のジャンプ間隔(f)
     int     targetFrame_jump;                   // 目標 要素のジャンプにかかるフレーム数
+    int     isInterval;                         // インターバルかどうか
+    float   theta_jump[3][5];                   // ジャンプ角度
 
     unsigned int bgColor;                       // 背景色 (画像に差し替え予定)
 

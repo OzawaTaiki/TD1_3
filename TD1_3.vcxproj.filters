@@ -146,6 +146,15 @@
     <ClCompile Include="JSON-Loader\json.cpp">
       <Filter>システム\JSON-Loader</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelect.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON-Loader\JSON-Manager.cpp">
+      <Filter>システム\JSON-Loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -281,5 +290,13 @@
     <ClInclude Include="JSON-Loader\json.h">
       <Filter>システム\JSON-Loader</Filter>
     </ClInclude>
+    <ClInclude Include="StageSelect.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="JSON-Loader\JSON-Manager.h">
+      <Filter>システム\JSON-Loader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

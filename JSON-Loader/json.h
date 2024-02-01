@@ -18,7 +18,6 @@ public:
 		if (it != data.end()) return it->second;
 		else return {};
 	}
-	
 	std::unordered_map<std::string, std::string>* rowData = &data;
 
 	JsonL(const char* _path);
