@@ -36,6 +36,22 @@ struct SliderData
 
 
 };
+struct ScrollBox
+{
+	Transform	position;
+	Size		size;
+	int			y_pre;
+	int			y_bottom;
+	int			y_top;
+	bool		isHover;
+	bool		isPressed;
+	bool		isPressing;
+};
+struct ScrollBar
+{
+	Transform	position;
+	Size		size;
+};
 
 enum Component
 {
