@@ -49,7 +49,7 @@ StageSelect::StageSelect()
 void StageSelect::ScrollCalc()
 {
     float   scrT = scrollBar->GetValue();
-    int     lerpValue = 1080 - (elementSize.height + elementMargin) * 15 - 20;
+    int     lerpValue = 1080 - (elementSize.height + elementMargin) * 15 - scrollMarginTop*2;
     for (int index = 0; index < 15; index++)
     {
         elements[index].pos.x = elementStandard.x + elementSize.width / 2;
@@ -219,13 +219,14 @@ void StageSelect::LoadFromJSON()
     scrollboxMargin         = atoi((*json)["scrollboxMargin"].c_str());
     scrollbarPosition.x     = atoi((*json)["scrollbarX"].c_str());
     scrollbarPosition.y     = atoi((*json)["scrollbarY"].c_str());
+    scrollMarginTop         = atoi((*json)["scrollMarginTop"].c_str());
 }
 
 void StageSelect::Calculation()
 {
     // 基準点を算出する
     elementStandard.x = scrollbarPosition.x - elementSize.width - scrollBarSize.width / 2;
-    elementStandard.y = elementSize.height / 2 + 5;
+    elementStandard.y = elementSize.height / 2 + scrollMarginTop;
 
     // スクロールバー初期化
     scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2

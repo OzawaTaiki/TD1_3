@@ -44,6 +44,7 @@ private:
     Size    scrollboxSize;                      // スクロールボックスのサイズ
     int     scrollboxMargin;
     Transform scrollbarPosition;
+    int     scrollMarginTop;                    // スクロール要素 上マージン
 
     unsigned int bgColor;                       // 背景色 (画像に差し替え予定)
 
