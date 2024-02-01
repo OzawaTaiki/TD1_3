@@ -18,6 +18,7 @@ public:
 
 	const float kMoveSpd = 7.0f;
 	const float kJumpVelocity = -12.0f;//12.0
+	const float kMaxVeloY = 15.0f;
 
 	bool isAlive;
 	bool isGround;
@@ -44,6 +45,7 @@ public:
 	void Gravity();
 	void PosUpdate();
 	void MoveDirUpdate();
+	void Clamp();
 
 
 	Player();

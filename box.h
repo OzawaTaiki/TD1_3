@@ -17,8 +17,15 @@ public:
 
 	Vector2 vertex[4];
 
-	int GH;
 
+	const float kMaxVeloY = 15.0f;
+	int GH;
+	int isOnBox;
+
+	bool isOnPlayer;
+	bool isLockedX;
+	bool isLockedY;
+	bool isDraw;
 	bool isdAddVelo;
 
 	Box(int _x, int _y);
@@ -27,6 +34,8 @@ public:
 	bool CanMove(std::vector< std::vector<int>>* _field, const Vector2& _dir);
 	void PosUpdate();
 	void MoveDirUpdate();
+	void Clamp();
+
 	//void CollisionWithField(std::vector< std::vector<int>>* _collision);
 	//void CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround);//playgroundに移動予定
 	void Update();
