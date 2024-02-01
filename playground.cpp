@@ -168,13 +168,11 @@ void Playground::CollisionPlayerWithBox()
 					box[i]->pos.x += box[i]->velocity.x;
 					box[i]->moveDir.x = player->moveDir.x;
 
-					//CollisionBoxWithBox();
 				}
 				else if (player->moveDir.y > 0 && player->pos.y - box[i]->pos.y < -box[i]->size.y / 2)
 				{
 					player->pos.y = box[i]->pos.y - (box[i]->size.y / 2 * player->moveDir.y) - (player->size.y / 2 * player->moveDir.y);
 					box[i]->velocity.y = player->velocity.y;
-					//player->isGround = true;
 				}
 				box[i]->Clamp();
 				CollisionWithBox();
@@ -276,8 +274,6 @@ void Playground::CollisionPlayerWithPiece()
 			{
 				piece->MoveOnCollision(collisionDir, collidedNum + kTileKinds, box[collidedBoxNum]->velocity);
 
-				//while (collidedBoxNum != -1)
-				//{
 				if (collisionDir.x < 0)
 					box[collidedBoxNum]->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[collidedBoxNum]->vertex[1].x + 1;
 				if (collisionDir.x > 0)
@@ -285,10 +281,10 @@ void Playground::CollisionPlayerWithPiece()
 				if (collisionDir.y < 0)
 					box[collidedBoxNum]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[collidedBoxNum]->vertex[2].y + 1;
 				if (collisionDir.y > 0)
+				{
 					box[collidedBoxNum]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + box[collidedBoxNum]->vertex[0].y - 1;
-
-
-				//}
+					//player->isGround = true;
+				}
 			}
 		}
 	}
@@ -366,7 +362,7 @@ void Playground::CollisionPieceWithBox()
 					check.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
-				
+
 				if (!isFill(check, box[i]->vertex))
 				{
 					box[i]->pos = check;
@@ -437,7 +433,7 @@ void Playground::CollisionBoxWithBox()
 void Playground::CollisionWithPiece()
 {
 	Vector2 hindCheckPos;
-	Vector2 collisionDir;
+	Vector2 collisionDir = { 0,0 };
 
 	for (int i = 0; i < hindrancePos.size(); i++)
 	{
@@ -449,9 +445,9 @@ void Playground::CollisionWithPiece()
 		if (collidedNum != -1)
 		{
 			if (collisionDir.x < 0)
-				piece->piecePos[i].x = hindCheckPos.x * kTileSize - piece->pieceSize[i].x * kTileSize;
+				piece->piecePos[i].x = hindCheckPos.x - piece->pieceSize[i].x * kTileSize;
 			if (collisionDir.x > 0)
-				piece->piecePos[i].x = hindCheckPos.x * kTileSize + piece->pieceSize[i].x * kTileSize;
+				piece->piecePos[i].x = hindCheckPos.x + piece->pieceSize[i].x * kTileSize;
 
 		}
 	}
@@ -523,10 +519,10 @@ Playground::Playground()
 	goalTexture = Novice::LoadTexture("./img/goal.png");
 	obstacleTexture = Novice::LoadTexture("./img/obstacleBlock.png");
 
-	hindranceVertex[0] = { -kTileSize / 2,-kTileSize / 2 };
-	hindranceVertex[1] = { kTileSize / 2,-kTileSize / 2 };
-	hindranceVertex[2] = { -kTileSize / 2, kTileSize / 2 };
-	hindranceVertex[3] = { kTileSize / 2, kTileSize / 2 };
+	hindranceVertex[0] = { 0,0 };
+	hindranceVertex[1] = { kTileSize,0 };
+	hindranceVertex[2] = { 0,kTileSize };
+	hindranceVertex[3] = { kTileSize,kTileSize };
 }
 
 void Playground::Init(int _stageNo)
@@ -546,8 +542,9 @@ void Playground::Init(int _stageNo)
 		{
 			if ((*field)[y][x] == BOX)
 			{
-				box.push_back(new Box(x, y));
 				(*field)[y][x] = 0;
+				if (box.empty())
+					box.push_back(new Box(x, y));
 			}
 			else if ((*field)[y][x] == HINDRANCE)
 			{

@@ -532,10 +532,9 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 
 	if (o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
-		base.x < 0 ||
-		base.y < 0 ||
-		base.x >= pieceSize[_pieceNum].x ||
-		base.y >= pieceSize[_pieceNum].y)
+		o2pSub.x >= pieceSize[_pieceNum].x * kTileSize ||
+		o2pSub.y >= pieceSize[_pieceNum].y * kTileSize ||
+		(*piece)[_pieceNum][base.y][base.x] == 1)
 		return false;
 
 	for (int dir = 0; dir < 4; dir++)
