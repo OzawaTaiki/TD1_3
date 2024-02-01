@@ -39,7 +39,7 @@ void Box::MoveDirUpdate()
 
 	if (velocity.y < 0)
 		moveDir.y = -1;
-	else if (velocity.y > 0)
+	else if (velocity.y > 1)
 		moveDir.y = 1;
 }
 
@@ -107,9 +107,9 @@ void Box::Update()
 	isLockedX = false;
 	isLockedY = false;
 	velocity.x = 0;
+	MoveDirUpdate();
 	Gravity();
 	Clamp();
-	MoveDirUpdate();
 	//CollisionWithField(_collision);
 	//PosUpdate();
 }
