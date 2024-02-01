@@ -27,7 +27,7 @@ void Player::Move(const char* _keys, const char* _preKeys)
 
 void Player::Jump(const char* _keys, const char* _preKeys)
 {
-	if ((_keys[DIK_W] && !_preKeys[DIK_W] || _keys[DIK_SPACE] && !_preKeys[DIK_SPACE]) && isGround)
+	if ((_keys[DIK_W] /*&& !_preKeys[DIK_W]*/ || _keys[DIK_SPACE] && !_preKeys[DIK_SPACE]) && isGround)
 	{
 		velocity.y = kJumpVelocity;
 		isGround = false;
@@ -51,6 +51,24 @@ void Player::MoveDirUpdate()
 		moveDir.y = -1;
 	else if (velocity.y > 0.5f)
 		moveDir.y = 1;
+}
+
+void Player::Clamp()
+{
+	if (pos.x + velocity.x < size.x / 2)
+		velocity.x = size.x / 2 - pos.x;
+	if (pos.x + velocity.x >= kStageAreaWidth - size.x / 2)
+		velocity.x = pos.x - (kStageAreaWidth - size.x / 2);
+	if (pos.y + velocity.y < size.y / 2)
+		velocity.y = size.y / 2 - pos.y;
+	if (pos.y + velocity.y >= kStageAreaHeight - size.y / 2)
+	{
+		velocity.y = 0;
+		isAlive = false;
+	}
+
+	if (velocity.y > kMaxVeloY)
+		velocity.y = kMaxVeloY;
 }
 
 Player::Player()
@@ -102,6 +120,7 @@ void Player::Update(const char* _keys, const char* _preKeys)
 	Move(_keys, _preKeys);
 	Jump(_keys, _preKeys);
 	Gravity();
+	Clamp();
 	MoveDirUpdate();
 }
 
@@ -109,6 +128,7 @@ void Player::Draw()
 {
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
+	Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)
 	{
 		Novice::ScreenPrintf(1600, 900 + i * 20, "%.1f,%.1f", pos.x + vertex[i].x, pos.y + vertex[i].y);

@@ -64,7 +64,7 @@ class Playground
 
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
-	void CollisionBoxWithBox();		//box		box
+	void CollisionBoxWithBox();			//box		box
 
 	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();

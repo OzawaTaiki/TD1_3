@@ -25,7 +25,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				p2mSub.y = (piecePos[i].y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
-				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 && !IsInPiece(_playerPos, i))
+				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
 				{
 					piecePrePos = piecePos[i];
 
@@ -76,7 +76,11 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 						scanY < 0 ||
 						scanX >= kStageAreaWidth / kTileSize ||
 						scanY >= kWindowHeight / kTileSize)
+					{
+						if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+							(*piece)[i][y][x] = 1;
 						continue;
+					}
 
 
 					/*******************
@@ -87,7 +91,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 						isHindranceBlockInside = HindranceBlockCheck(_field, scanX, scanY);
 
 					/// プレイヤーと操作中のブロックが重なってるとき
-					if (isHave!=-1&&
+					if (isHave != -1 &&
 						scanX == int(_playerPos.x) / kTileSize &&
 						scanY == int(_playerPos.y) / kTileSize)
 					{
@@ -449,7 +453,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 				isContinue[k] = true;
 		}
 
-		if (isContinue[0] && isContinue[1])
+		if ((isContinue[0] || isContinue[1]) && moveDir.y < 0)
 			/// 上向き
 			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
 				(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
@@ -459,7 +463,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 				runY = int(o2pSub[1].y) / kTileSize;
 				hitPieceNum = i;
 			}
-		if (isContinue[2] && isContinue[3])
+		if ((isContinue[2] || isContinue[3]) && moveDir.y > 0)
 			/// 下向き
 			if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
 				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
@@ -469,7 +473,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 				runY = int(o2pSub[2].y) / kTileSize;
 				hitPieceNum = i;
 			}
-		if (isContinue[0] && isContinue[2])
+		if ((isContinue[0] || isContinue[2]) && moveDir.x < 0)
 			/// 左向き
 			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
 				(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
@@ -479,7 +483,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 				runX = int(o2pSub[2].x) / kTileSize;
 				hitPieceNum = i;
 			}
-		if (isContinue[1] && isContinue[3])
+		if ((isContinue[1] || isContinue[3]) && moveDir.x > 0)
 			/// 右向き
 			if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
 				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)

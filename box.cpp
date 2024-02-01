@@ -43,6 +43,37 @@ void Box::MoveDirUpdate()
 		moveDir.y = 1;
 }
 
+void Box::Clamp()
+{
+	if (pos.x + velocity.x < size.x / 2 || pos.x + velocity.x >= kStageAreaWidth - size.x / 2)
+	{
+		if (pos.x + velocity.x < size.x / 2)
+			velocity.x = size.x / 2 - pos.x;
+		else if (pos.x + velocity.x >= kStageAreaWidth - size.x / 2)
+			velocity.x = (kStageAreaWidth - size.x / 2) - pos.x;
+
+		pos.x += velocity.x;
+		isLockedX = true;
+	}
+
+	if (pos.y + velocity.y < size.y / 2 || pos.y + velocity.y >= kStageAreaHeight - size.y / 2)
+	{
+		if (pos.y + velocity.y < size.y / 2)
+			velocity.y = size.y / 2 - pos.y;
+		else if (pos.y + velocity.y >= kStageAreaHeight - size.y / 2)
+		{
+			isDraw = false;
+			velocity.y = 0;
+		}
+
+		if (velocity.y > kMaxVeloY)
+			velocity.y = kMaxVeloY;
+		pos.y += velocity.y;
+		isLockedY = true;
+	}
+
+}
+
 
 Box::Box(int _x, int _y)
 {
@@ -57,17 +88,27 @@ Box::Box(int _x, int _y)
 	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
-
+	isDraw = true;
+	isOnPlayer = false;
+	isOnBox = -1;
 	isdAddVelo = false;
-
+	isLockedX = false;
+	isLockedY = false;
 	GH = Novice::LoadTexture("white1x1.png");
 }
 
 void Box::Update()
 {
+	if (!isDraw)
+		return;
 	isdAddVelo = false;
+	isOnPlayer = false; 
+	isOnBox = -1;
+	isLockedX = false;
+	isLockedY = false;
 	velocity.x = 0;
 	Gravity();
+	Clamp();
 	MoveDirUpdate();
 	//CollisionWithField(_collision);
 	//PosUpdate();
@@ -75,7 +116,10 @@ void Box::Update()
 
 void Box::Draw(int _num)
 {
+	if (!isDraw)
+		return;
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, 0xc03030ff, PhillDrawMode::DrawMode_Center);
-	Novice::ScreenPrintf(int(pos.x), int(pos.y), "%d", _num);
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }
