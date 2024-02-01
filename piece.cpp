@@ -25,7 +25,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				p2mSub.y = (piecePos[i].y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
-				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 && !IsInPiece(_playerPos, i))
+				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
 				{
 					piecePrePos = piecePos[i];
 
