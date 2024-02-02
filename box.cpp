@@ -82,7 +82,7 @@ Box::Box(int _x, int _y)
 	acceleraion = { 0,0.5f };
 
 	pos = { posInMapchip.x * kTileSize + size.x / 2.0f ,posInMapchip.y * kTileSize + size.y / 2.0f };
-
+	color = 0xc03030ff;
 	isDraw = true;
 	isOnPlayer = false;
 	isOnBox = -1;
@@ -119,7 +119,7 @@ void Box::Draw(int _num)
 {
 	if (!isDraw)
 		return;
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, 0xc03030ff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, color, PhillDrawMode::DrawMode_Center);
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);

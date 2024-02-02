@@ -21,7 +21,9 @@ class Playground
 	bool isNext;
 	bool isClear;
 
-
+	bool plbo;
+	bool plpi;
+	bool pibo;
 
 	const unsigned int kTileColor_[4] = {
 		0xc5edbeff,
