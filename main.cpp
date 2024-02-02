@@ -47,8 +47,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-
 		CursorManager::UpdateCursorStatus();
+
+		SceneManager::Update();
+
+		// TODO: シーンマネージャにまとめる
 		pg->Update(keys, preKeys);
 
 		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
@@ -56,7 +59,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
 		{
-			stageSel = new StageSelect();
+			// シーンをセレクト画面に変更
+			SceneManager::ChangeRequest(Scenes::SC_StageSelect);
 		}
 
 		if (keys[DIK_F11] && !preKeys[DIK_F11])
@@ -102,11 +106,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (tutorial) tutorial->Draw();
 
+		SceneManager::Draw();
 
 		///
 		/// ↑描画処理ここまで
 		///
 
+		// ゲームループの最後に配置してください↓
 		SceneManager::ChangeScene();
 
 		// フレームの終了
