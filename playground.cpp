@@ -580,14 +580,23 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 
 		/// 衝突判定たち
 		CollisionWithPlayer();
-		CollisionWithBox();
-		//CollisionBoxWithBox();
 		CollisionPlayerWithBox();
+		CollisionWithBox();
 		CollisionPlayerWithPiece();
+		CollisionWithPiece();///みかん
 		CollisionPieceWithBox();
 		CollisionPlayerWithBox();
 		CollisionPlayerWithPiece();
-		CollisionWithPiece();
+
+		//CollisionWithPlayer();
+		//CollisionWithBox();
+		////CollisionBoxWithBox();
+		//CollisionPlayerWithBox();
+		//CollisionPlayerWithPiece();
+		//CollisionPieceWithBox();
+		//CollisionPlayerWithBox();
+		//CollisionPlayerWithPiece();
+		//CollisionWithPiece();
 	}
 
 
