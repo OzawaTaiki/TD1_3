@@ -369,12 +369,10 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			o2pSub[k].x = _pos.x + _vertex[k].x - piecePos[i].x;
 			o2pSub[k].y = _pos.y + _vertex[k].y - piecePos[i].y;
 
-			if (o2pSub[k].x < 0 ||
-				o2pSub[k].y < 0 ||
-				int(o2pSub[k].x) / kTileSize < 0 ||
-				int(o2pSub[k].y) / kTileSize < 0 ||
-				int(o2pSub[k].x) / kTileSize >= pieceSize[i].x ||
-				int(o2pSub[k].y) / kTileSize >= pieceSize[i].y)
+			if (!(o2pSub[k].x > 0 &&
+				o2pSub[k].y > 0 &&
+				o2pSub[k].x < pieceSize[i].x * kTileSize &&
+				o2pSub[k].y < pieceSize[i].y * kTileSize))
 				isExit = true;
 		}
 		if (isExit)

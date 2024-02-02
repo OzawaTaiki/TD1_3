@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
 
-	pg->Init(0);
+	pg->Init(1);
 	StageSelect* stageSel = nullptr;
 
 	JSONLoad();
