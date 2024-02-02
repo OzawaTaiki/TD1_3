@@ -1,13 +1,18 @@
 ﻿#include "SceneManager.h"
+#include "KeyManager.h"
+
+#include <Novice.h>
 
 int		SceneManager::existChangeRequest;		// シーン変更の要求が存在するか
 int		SceneManager::isEndDraw;				// 描画処理が終了したかどうか
 Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
+char*	SceneManager::preKeys;
+char*	SceneManager::keys;
 
 int* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
-int* SceneManager::game;
+Playground* SceneManager::game;
 
 void SceneManager::ChangeRequest(Scenes _nextScene)
 {
@@ -17,27 +22,47 @@ void SceneManager::ChangeRequest(Scenes _nextScene)
 
 void SceneManager::Init()
 {
+	Scenes initialScene = SC_Game;
 	existChangeRequest	= 0;
 	isEndDraw			= 0;
-	scene_current		= SC_StageSelect;
+	scene_current		= initialScene;
 	scene_next			= scene_current;
-	title				= nullptr;
-	stageSelect			= nullptr;
-	game				= nullptr;
+	title				= initialScene == SC_Title ? new int : nullptr;
+	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
+	game				= initialScene == SC_Game ? new Playground() : nullptr;
+	if (game) game->Init(0);
 }
 
 void SceneManager::Update()
 {
+	keys = KeyManager::GetKeysPtr();
+	preKeys = KeyManager::GetpreKeysPtr();
+
+
 	switch (scene_current)
 	{
 	case SC_Title:
 		//if (title) title->Update();
 		break;
+
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Update();
 		break;
+
 	case SC_Game:
-		//if (game) game->Update();
+		// DEBUG: ステージを数字キーで変更
+#ifdef _DEBUG
+		if (KeyManager::GetKeys(DIK_1)) game->Init(0);
+		if (KeyManager::GetKeys(DIK_2)) game->Init(1);
+		if (KeyManager::GetKeys(DIK_3)) game->Init(2);
+		if (KeyManager::GetKeys(DIK_4)) game->Init(3);
+		if (KeyManager::GetKeys(DIK_5)) game->Init(4);
+		if (KeyManager::GetKeys(DIK_6)) game->Init(5);
+		if (KeyManager::GetKeys(DIK_7)) game->Init(6);
+		if (KeyManager::GetKeys(DIK_8)) game->Init(7);
+		if (KeyManager::GetKeys(DIK_9)) game->Init(8);
+#endif // _DEBUG
+		if (game) game->Update(keys, preKeys);
 		break;
 
 	default:
@@ -56,7 +81,7 @@ void SceneManager::Draw()
 		if (stageSelect) stageSelect->Draw();
 		break;
 	case SC_Game:
-		//if (game) game->Draw();
+		if (game) game->Draw();
 		break;
 
 	default:
@@ -102,7 +127,8 @@ void SceneManager::ChangeScene()
 				stageSelect = new StageSelect();
 				break;
 			case SC_Game:
-				//game = new Game();
+				game = new Playground();
+				game->Init(0);
 				break;
 			default:
 				break;

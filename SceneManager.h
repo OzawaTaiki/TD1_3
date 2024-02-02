@@ -1,6 +1,7 @@
 ﻿#pragma once
 // シーンクラス
 #include "StageSelect.h"
+#include "playground.h"
 
 enum Scenes
 {
@@ -22,7 +23,10 @@ private:
     // TODO: 型を変更してください
     static	int*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
-    static	int*	game;					// ゲームシーン
+    static	Playground*	game;				// ゲームシーン
+
+    static  char*   preKeys;
+    static  char*   keys;
 
 public:
     /// <summary>
