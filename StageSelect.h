@@ -74,6 +74,7 @@ private:
     void	Calculation();
     void	Init();
     void    ScrollCalc();
+
 public:
     StageSelect();
     ~StageSelect();

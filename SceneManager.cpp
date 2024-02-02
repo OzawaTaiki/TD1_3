@@ -15,6 +15,17 @@ void SceneManager::ChangeRequest(Scenes _nextScene)
 	scene_next = _nextScene;
 }
 
+void SceneManager::Init()
+{
+	existChangeRequest	= 0;
+	isEndDraw			= 0;
+	scene_current		= SC_StageSelect;
+	scene_next			= scene_current;
+	title				= nullptr;
+	stageSelect			= nullptr;
+	game				= nullptr;
+}
+
 void SceneManager::Update()
 {
 	switch (scene_current)
@@ -51,6 +62,7 @@ void SceneManager::Draw()
 	default:
 		break;
 	}
+	isEndDraw = 1;
 }
 
 void SceneManager::ChangeScene()
@@ -96,5 +108,6 @@ void SceneManager::ChangeScene()
 				break;
 			}
 		}
+		existChangeRequest = 0;
 	}
 }

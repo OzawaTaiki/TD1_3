@@ -1,4 +1,5 @@
 ﻿#pragma once
+// シーンクラス
 #include "StageSelect.h"
 
 enum Scenes
@@ -20,7 +21,7 @@ private:
 
     // TODO: 型を変更してください
     static	int*	title;					// タイトルシーン
-    static	StageSelect*	stageSelect;			// ステージセレクトシーン
+    static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	int*	game;					// ゲームシーン
 
 public:
@@ -31,10 +32,15 @@ public:
     /// <param name="_nextScene">次のシーン</param>
     static  void	ChangeRequest(Scenes _nextScene);
 
+    // 初期化処理
+    static  void    Init();
+
     // 更新処理
     static  void	Update();
+
     // 描画処理
     static  void	Draw();
+
     // ゲームループの最後に配置してください。※シーンチェンジ要求はChangeRequest関数を使用して下さい。
     static  void	ChangeScene();
 

@@ -1,7 +1,6 @@
 #include "CursorManager.h"
 #include "ResourceManager.h"
 #include "KeyManager.h"
-#include "StageSelect.h"
 #include "JSON-Loader/JSON-Manager.h"
 #include "SceneManager.h"
 
@@ -29,10 +28,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Tutorial* tutorial = nullptr;
 
 	pg->Init(0);
-	StageSelect* stageSel = nullptr;
 
 	JSONLoad();
 	ResourceRegist();
+	SceneManager::Init();
 	int wndModeCnt = 0;
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -57,7 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
 			tutorial = new Tutorial();
 
-		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
+		if (keys[DIK_0] && !preKeys[DIK_0])
 		{
 			// シーンをセレクト画面に変更
 			SceneManager::ChangeRequest(Scenes::SC_StageSelect);
