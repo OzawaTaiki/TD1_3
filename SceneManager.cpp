@@ -6,7 +6,7 @@ Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
 
 int*	SceneManager::title;
-int*	SceneManager::stageSelect;
+StageSelect*	SceneManager::stageSelect;
 int*	SceneManager::game;
 
 void SceneManager::ChangeRequest(Scenes _nextScene)
@@ -19,13 +19,13 @@ void SceneManager::Update()
 {
     switch (scene_current)
     {
-    case Title:
+    case SC_Title:
         //if (title) title->Update();
         break;
-    case StageSelect:
-        //if (stageSelect) stageSelect->Update();
+    case SC_StageSelect:
+        if (stageSelect) stageSelect->Update();
         break;
-    case Game:
+    case SC_Game:
         //if (game) game->Update();
         break;
 
@@ -38,13 +38,13 @@ void SceneManager::Draw()
 {
     switch (scene_current)
     {
-    case Title:
+    case SC_Title:
         //if (title) title->Draw();
         break;
-    case StageSelect:
-        //if (stageSelect) stageSelect->Draw();
+    case SC_StageSelect:
+        if (stageSelect) stageSelect->Draw();
         break;
-    case Game:
+    case SC_Game:
         //if (game) game->Draw();
         break;
 
@@ -64,15 +64,15 @@ void SceneManager::ChangeScene()
             // シーンチェンジの演出があれば記述
             switch (scene_current)
             {
-            case Title:
+            case SC_Title:
                 delete title;
                 title = nullptr;
                 break;
-            case StageSelect:
+            case SC_StageSelect:
                 delete stageSelect;
                 stageSelect = nullptr;
                 break;
-            case Game:
+            case SC_Game:
                 delete game;
                 game = nullptr;
                 break;
@@ -83,13 +83,13 @@ void SceneManager::ChangeScene()
             // インスタンスの作成
             switch (scene_next)
             {
-            case Title:
+            case SC_Title:
                 //title = new Title();
                 break;
-            case StageSelect:
+            case SC_StageSelect:
                 //stageSelect = new StageSelect();
                 break;
-            case Game:
+            case SC_Game:
                 //game = new Game();
                 break;
             default:

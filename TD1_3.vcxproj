@@ -132,7 +132,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="UI\Button.cpp" />
     <ClCompile Include="UI\Checkbox.cpp" />
     <ClCompile Include="UI\Scroll.cpp" />
-    <ClCompile Include="UI\Slider.cpp" />
     <ClCompile Include="UI\UI_Manager.cpp" />
     <ClCompile Include="UI\UI_ToolKit.cpp" />
     <ClCompile Include="Tutorial.cpp" />
@@ -183,7 +182,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\Checkbox.h" />
     <ClInclude Include="UI\Scroll.h" />
-    <ClInclude Include="UI\Slider.h" />
     <ClInclude Include="UI\UI_Manager.h" />
     <ClInclude Include="UI\UI_ToolKit.h" />
     <ClInclude Include="UI\UI_ToolKit_Defines.h" />

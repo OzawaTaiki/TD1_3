@@ -3,6 +3,7 @@
 #include "KeyManager.h"
 #include "StageSelect.h"
 #include "JSON-Loader/JSON-Manager.h"
+#include "SceneManager.h"
 
 #include <Novice.h>
 #include "playground.h"
@@ -88,10 +89,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_8]) pg->Init(7);
 		if (keys[DIK_9]) pg->Init(8);
 #endif // _DEBUG
-		if (stageSel)
-		{
-			stageSel->Update();
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -104,12 +101,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		pg->Draw();
 
 		if (tutorial) tutorial->Draw();
-		if (stageSel) stageSel->Draw();
 
 
 		///
 		/// ↑描画処理ここまで
 		///
+
+		SceneManager::ChangeScene();
 
 		// フレームの終了
 		Novice::EndFrame();
