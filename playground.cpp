@@ -538,13 +538,19 @@ Playground::Playground()
 	hindranceVertex[3] = { kTileSize,kTileSize };
 	
 	/// - - - ナイトウが勝手に実装 はじめ - - - ///
-	scrSpr.srcPos = Transform(0, 0);
-	scrSpr.srcSize = Size(1, 1);
-	scrSpr.trgSize = Size(14, 54);
-	scrSpr.textureHandle = ResourceManager::Handle("white1x1");
+	json_scr				= JSON_Manager::GetJSON("scroll");
+	scrSpr.srcPos			= Transform(0, 0);
+	scrSpr.srcSize			= Size(1, 1);
+	scrSpr.trgSize			= Size(14, 54);
+	scrSpr.textureHandle	= ResourceManager::Handle("white1x1");
 
-	scrollBar = new Scroller(&scrSpr);
+	scrollBar				= new Scroller(&scrSpr);
 	LoadFromJSON();
+	// スクロールバー初期化
+	scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2
+	scrollBar->SetBoxSize(scrollboxSize);
+	scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
+
 	/// - - - ナイトウが勝手に実装 おわり - - - ///
 }
 
@@ -588,6 +594,9 @@ void Playground::Init(int _stageNo)
 
 void Playground::Update(const char* _keys, const char* _preKeys)
 {
+	// ナイトウが勝手に追加
+	scrollBar->UpdateStatus();
+
 	/// ctrl + enter でコマ送りモード
 	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LCONTROL])
 		frameSlow = frameSlow ? false : true;
@@ -662,4 +671,6 @@ void Playground::Draw()
 	player->Draw();
 
 	Novice::DrawBox(0, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);
+	// ナイトウが勝手に追加
+	scrollBar->Draw();
 }
