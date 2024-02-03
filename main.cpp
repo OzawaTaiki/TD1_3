@@ -1,8 +1,8 @@
 #include "CursorManager.h"
 #include "ResourceManager.h"
 #include "KeyManager.h"
-#include "StageSelect.h"
 #include "JSON-Loader/JSON-Manager.h"
+#include "SceneManager.h"
 
 #include <Novice.h>
 #include "playground.h"
@@ -24,14 +24,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	Playground* pg = new Playground;
 	Tutorial* tutorial = nullptr;
-
-	pg->Init(0);
-	StageSelect* stageSel = nullptr;
 
 	JSONLoad();
 	ResourceRegist();
+	SceneManager::Init();
 	int wndModeCnt = 0;
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -46,16 +43,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-
 		CursorManager::UpdateCursorStatus();
-		pg->Update(keys, preKeys);
 
+		SceneManager::Update();
+
+		// TODO: シーンマネージャにまとめる
 		if (keys[DIK_TAB] && !preKeys[DIK_TAB] && !tutorial)
 			tutorial = new Tutorial();
 
-		if (keys[DIK_0] && !preKeys[DIK_0] && !stageSel)
+		if (keys[DIK_0] && !preKeys[DIK_0])
 		{
-			stageSel = new StageSelect();
+			// シーンをセレクト画面に変更
+			SceneManager::ChangeRequest(Scenes::SC_StageSelect);
 		}
 
 		if (keys[DIK_F11] && !preKeys[DIK_F11])
@@ -77,22 +76,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-#ifdef _DEBUG
-		if (keys[DIK_1]) pg->Init(0);
-		if (keys[DIK_2]) pg->Init(1);
-		if (keys[DIK_3]) pg->Init(2);
-		if (keys[DIK_4]) pg->Init(3);
-		if (keys[DIK_5]) pg->Init(4);
-		if (keys[DIK_6]) pg->Init(5);
-		if (keys[DIK_7]) pg->Init(6);
-		if (keys[DIK_8]) pg->Init(7);
-		if (keys[DIK_9]) pg->Init(8);
-#endif // _DEBUG
-		if (stageSel)
-		{
-			stageSel->Update();
-		}
-
 		///
 		/// ↑更新処理ここまで
 		///
@@ -101,15 +84,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		pg->Draw();
-
 		if (tutorial) tutorial->Draw();
-		if (stageSel) stageSel->Draw();
 
+		SceneManager::Draw();
 
 		///
 		/// ↑描画処理ここまで
 		///
+
+		// ゲームループの最後に配置してください↓
+		SceneManager::ChangeScene();
 
 		// フレームの終了
 		Novice::EndFrame();

@@ -7,192 +7,229 @@
 
 StageSelect::StageSelect()
 {
-	json = JSON_Manager::GetJSON(jsonName);
+    json = JSON_Manager::GetJSON(jsonName);
 
-	LoadFromJSON();
+    LoadFromJSON();
 
-	Calculation();
+    UI_Manager::Init();
 
-	cur					= Transform(0, 0);
-	frameBuffer_jump	= 0;
-	elmCnt_jump			= 0;
-	constantT_jump		= 0.0f;
-	easedT_jump			= 0.0f;
-	targetTheta_jump	= 0.0f;
-	ssElementHandle		= ResourceManager::Handle("white1x1");
-	ssThumbHandle		= ResourceManager::Handle("thmb_stg0");
+    scrSpr.srcPos           = Transform(0, 0);
+    scrSpr.srcSize          = Size(1, 1);
+    scrSpr.trgSize          = Size(14,54);
+    scrSpr.textureHandle    = ResourceManager::Handle("white1x1");
 
-	for (int row = 0; row < 3; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			frameCount_turn[row][col]		= 0;
-			constantT_turn[row][col]		= 0.0f;
-			easedT_turn[row][col]			= 0.0f;
-			elements[row][col].pos.x		= elementStandard.x + (elementSize.width + elementMargin) * col;
-			elements[row][col].pos.y		= elementStandard.y + (elementSize.height + elementMargin) * row;
-			elements[row][col].size.width	= elementSize.width;
-			elements[row][col].size.height	= elementSize.height;
-			elements[row][col].alpha		= 0;
-			elements[row][col].fcStatus		= FCS_NONE;
-		}
-	}
+    scrollBar               = new Scroller(&scrSpr);
+    
+    cur					    = Transform(0, 0);
+    frameBuffer_jump	    = 0;
+    elmCnt_jump			    = 0;
+    constantT_jump		    = 0.0f;
+    easedT_jump			    = 0.0f;
+    targetTheta_jump	    = 0.0f;
+    ssElementHandle		    = ResourceManager::Handle("white1x1");
+    isInterval			    = 0;
 
+    Calculation();
+
+    for (int index = 0; index < 15; index++)
+    {
+        frameCount_turn[index]		= 0;
+        constantT_turn[index]		= 0.0f;
+        easedT_turn[index]			= 0.0f;
+        theta_jump[index]			= 0.0f;
+        elements[index].pos.x       = elementStandard.x + elementSize.width / 2;
+        elements[index].pos.y       = elementStandard.y + (elementSize.height + elementMargin) * index;
+        elements[index].size.width	= elementSize.width;
+        elements[index].size.height	= elementSize.height;
+        elements[index].alpha		= 0;
+        elements[index].fcStatus	= FCS_NONE;
+    }
+}
+
+void StageSelect::ScrollCalc()
+{
+    float   scrT = scrollBar->GetValue();
+    int     lerpValue = 1080 - (elementSize.height + elementMargin) * 15 - scrollMarginTop*2;
+    for (int index = 0; index < 15; index++)
+    {
+        elements[index].pos.x = elementStandard.x + elementSize.width / 2;
+        elements[index].pos.y = elementStandard.y + (elementSize.height + elementMargin) * index + int(lerpValue * scrT);
+        elements[index].size.width = elementSize.width;
+        elements[index].size.height = elementSize.height;
+    }
+}
+
+StageSelect::~StageSelect()
+{
+    delete scrollBar;
+    scrollBar = nullptr;
 }
 
 void StageSelect::Init()
 {
-	for (int row = 0; row < 3; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			elements[row][col].pos.x		= elementStandard.x + (elementSize.width + elementMargin) * col;
-			elements[row][col].pos.y		= elementStandard.y + (elementSize.height + elementMargin) * row;
-			elements[row][col].size.width	= elementSize.width;
-			elements[row][col].size.height	= elementSize.height;
-		}
-	}
+    // 初期位置の算出
+    for (int index = 0; index < 15; index++)
+    {
+        elements[index].pos.x       = elementStandard.x + elementSize.width / 2;
+        elements[index].pos.y		= elementStandard.y + (elementSize.height + elementMargin) * index;
+        elements[index].size.width	= elementSize.width;
+        elements[index].size.height	= elementSize.height;
+    }
 }
 
 void StageSelect::Update()
 {
-	CursorManager::GetCursorPos(&cur);
+    CursorManager::GetCursorPos(&cur);
+    scrollBar->UpdateStatus();
+    ScrollCalc();
+    for (int index = 0; index < 15; index++)
+    {
+        // 押印
+        if (CursorManager::Pressing(&elements[index].pos, &elements[index].size) == 1)
+        {
+            elements[index].fcStatus = FCS_PRESS;
+        }
+        // ホバー
+        else if (CursorManager::Hover(&elements[index].pos, &elements[index].size) == 1)
+        {
+            elements[index].fcStatus = FCS_HOVER;
+        }
+        // unpoint
+        else elements[index].fcStatus = FCS_NONE;
+        
+        // それぞれの状態時の操作
+        switch (elements[index].fcStatus)
+        {
+        case FCS_HOVER:
+            EasingHover(index); // イージング
+            if (frameCount_turn[index] < targetFrame_turn)
+                frameCount_turn[index]++;
+        case FCS_PRESS:
+            break;
+        case FCS_NONE:
+            EasingHover(index);
+            if (frameCount_turn[index] > 0) frameCount_turn[index]--;
+        default:
+            break;
+        }
+    }
 
-	for (int row = 0; row < 3; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			// 押印
-			if (CursorManager::Pressing(&elements[row][col].pos, &elements[row][col].size) == 1)
-			{
-				elements[row][col].fcStatus = FCS_PRESS;
-			}
-			// ホバー
-			else if (CursorManager::Hover(&elements[row][col].pos, &elements[row][col].size) == 1)
-			{
-				elements[row][col].fcStatus = FCS_HOVER;
-			}
-			// unpoint
-			else elements[row][col].fcStatus = FCS_NONE;
-		
-			// それぞれの状態時の操作
-			switch (elements[row][col].fcStatus)
-			{
-			case FCS_HOVER:
-				EasingHover(row, col); // イージング
-				if (frameCount_turn[row][col] < targetFrame_turn)
-					frameCount_turn[row][col]++;
-			case FCS_PRESS:
-				break;
-			case FCS_NONE:
-				EasingHover(row, col);
-				if (frameCount_turn[row][col] > 0) frameCount_turn[row][col]--;
-			default:
-				break;
-			}
+    // 要素ジャンプ
+    if (frameCount_current > frameOffset_jump)
+    {
+        // フレームカウントの一時保存
+        if (frameBuffer_jump == 0) frameBuffer_jump = frameCount_current;
+        frameCount_jump = frameCount_current - frameBuffer_jump;
 
-			// 要素ジャンプ
-			if (frameCount_current > frameOffset_jump)
-			{
-				// フレームカウントの一時保存
-				if (frameBuffer_jump == 0) frameBuffer_jump = frameCount_current;
-				frameCount_jump = frameCount_current - frameBuffer_jump;
-				if (frameCount_jump == targetFrame_jump)
-				{
-					frameBuffer_jump = 0;
-					elmCnt_jump++;
-					elmCnt_jump %= 15;
-				}
-			}
-			frameCount_current++;
-		}
-	}
+        if (isInterval == 0)
+        {
+            if (frameCount_jump == targetFrame_jump / 2)
+            {
+                theta_jump[elmCnt_jump] = -0.1f * float(3.1415926535);
+            }
+            if (frameCount_jump == targetFrame_jump)
+            {
+                theta_jump[elmCnt_jump] = 0.0f;
+            }
+        }
 
-	if (cur.x < 0) cur.x = 0;
-	if (cur.y < 0) cur.y = 0;
+        if (frameCount_jump == targetFrame_jump && isInterval == 0)
+        {
+            isInterval = 1;
+            frameBuffer_jump = 0;
+        }
+        if (frameCount_jump == IntervalFrame_jump && isInterval == 1)
+        {
+            elmCnt_jump++;
+            elmCnt_jump %= 15;
+            frameBuffer_jump = 0;
+            isInterval = 0;
+        }
+    }
+    frameCount_current++;
 
+    if (cur.x < 0) cur.x = 0;
+    if (cur.y < 0) cur.y = 0;
 
-
-	// ホットリロード
-	if (KeyManager::GetKeys(DIK_F5) && !KeyManager::GetPreKeys(DIK_F5))
-	{
-		JSON_Manager::ReloadJSON(jsonName);
-		LoadFromJSON();
-		Calculation();
-		Init();
-	}
+    // ホットリロード
+    if (KeyManager::GetKeys(DIK_F5) && !KeyManager::GetPreKeys(DIK_F5))
+    {
+        JSON_Manager::ReloadJSON(jsonName);
+        LoadFromJSON();
+        Calculation();
+        Init();
+    }
 }
 
 void StageSelect::Draw()
 {
-	// 背景
-	Novice::DrawBox(0, 0, 1920, 1080, 0.0f, bgColor, kFillModeSolid);
+    // 背景
+    Novice::DrawBox(0, 0, 1920, 1080, 0.0f, bgColor, kFillModeSolid);
 
-	// 要素
-	for (int row = 0; row < 3; row++)
-	{
-		for (int col = 0; col < 5; col++)
-		{
-			Phill::DrawQuadPlus(
-				elements[row][col].pos.x, elements[row][col].pos.y,
-				elements[row][col].size.width, elements[row][col].size.height,
-				1.0f, 1.0f, 0.0f,
-				0, 0,
-				srcSize.width, srcSize.height,
-				ssElementHandle,
-				0xffffffff,
-				DrawMode_Center
-			);
-			Phill::DrawQuadPlus(
-				elements[row][col].pos.x, elements[row][col].pos.y,
-				elements[row][col].size.width, elements[row][col].size.height,
-				1.0f, 1.0f, 0.0f,
-				0, 0,
-				srcSize.width, srcSize.height,
-				ssThumbHandle,
-				0xffffff00+elements[row][col].alpha,
-				DrawMode_Center
-			);
-		}
-	}
+    // スクロールバー
+    //Novice::DrawBox(1920 - );
 
-	// !DEBUG
-	Novice::ScreenPrintf(cur.x - 30, cur.y-15, "(%4d,%4d)", cur.x, cur.y);
-	Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
+    // 要素
+    for (int index = 0; index < 15; index++)
+    {
+        Phill::DrawQuadPlus(
+            elements[index].pos.x, elements[index].pos.y,
+            elements[index].size.width, elements[index].size.height,
+            1.0f, 1.0f, theta_jump[index],
+            0, 0,
+            srcSize.width, srcSize.height,
+            ssElementHandle,
+            0xffffffff,
+            DrawMode_Center
+        );
+    }
+
+    // !DEBUG
+    Novice::ScreenPrintf(cur.x - 30, cur.y-15, "(%4d,%4d)", cur.x, cur.y);
+    Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
+
+    scrollBar->Draw();
 }
 
-void StageSelect::EasingHover(int _row, int _col)
+void StageSelect::EasingHover(int _index)
 {
-	constantT_turn[_row][_col]			= Phill::ConstantT(targetFrame_turn, frameCount_turn[_row][_col]);
-	easedT_turn[_row][_col]				= Phill::EaseOutQuart(constantT_turn[_row][_col]);
-	elements[_row][_col].size.width		= Phill::Lerp(elementSize.width, targetElmSize.width, easedT_turn[_row][_col]);
-	elements[_row][_col].size.height	= Phill::Lerp(elementSize.height, targetElmSize.height, easedT_turn[_row][_col]);
-	elements[_row][_col].alpha			= Phill::Lerp(0, thumbTargetAlpha, constantT_turn[_row][_col]);
+    constantT_turn[_index]			= Phill::ConstantT(targetFrame_turn, frameCount_turn[_index]);
+    easedT_turn[_index]				= Phill::EaseOutQuart(constantT_turn[_index]);
 }
 
 void StageSelect::LoadFromJSON()
 {
-	elementSize.width		= atoi((*json)["elementWidth"].c_str());
-	elementSize.height		= atoi((*json)["elementHeight"].c_str());
-	targetElmSize.width		= atoi((*json)["targElementWidth"].c_str());
-	targetElmSize.height	= atoi((*json)["targElementHeight"].c_str());
-	srcSize.width			= atoi((*json)["srcWidth"].c_str());
-	srcSize.height			= atoi((*json)["srcHeight"].c_str());
-	thumbTargetAlpha		= atoi((*json)["targThmbAlpha"].c_str());
+    elementSize.width		= atoi((*json)["elementWidth"].c_str());
+    elementSize.height		= atoi((*json)["elementHeight"].c_str());
+    srcSize.width			= atoi((*json)["srcWidth"].c_str());
+    srcSize.height			= atoi((*json)["srcHeight"].c_str());
 
-	frameOffset_jump		= atoi((*json)["frameOffset_jump"].c_str());
-	IntervalFrame_jump		= atoi((*json)["intervalFrame_jump"].c_str());
-	targetFrame_jump		= atoi((*json)["targetFrame_jump"].c_str());
+    frameOffset_jump		= atoi((*json)["frameOffset_jump"].c_str());
+    IntervalFrame_jump		= atoi((*json)["intervalFrame_jump"].c_str());
+    targetFrame_jump		= atoi((*json)["targetFrame_jump"].c_str());
 
-	targetFrame_turn		= atoi((*json)["targFrame_turn"].c_str());
-	elementMargin			= atoi((*json)["elementMargin"].c_str());
-	bgColor					= UINT(strtoll((*json)["bgcolor"].c_str(), nullptr, 16));
+    targetFrame_turn		= atoi((*json)["targFrame_turn"].c_str());
+    elementMargin			= atoi((*json)["elementMargin"].c_str());
+    bgColor					= UINT(strtoll((*json)["bgcolor"].c_str(), nullptr, 16));
+
+    scrollBarSize.width     = atoi((*json)["scrollbarWidth"].c_str());
+    scrollBarSize.height    = atoi((*json)["scrollbarHeight"].c_str());
+    scrollboxSize.width     = atoi((*json)["scrollboxWidth"].c_str());
+    scrollboxSize.height    = atoi((*json)["scrollboxHeight"].c_str());
+    scrollboxMargin         = atoi((*json)["scrollboxMargin"].c_str());
+    scrollbarPosition.x     = atoi((*json)["scrollbarX"].c_str());
+    scrollbarPosition.y     = atoi((*json)["scrollbarY"].c_str());
+    scrollMarginTop         = atoi((*json)["scrollMarginTop"].c_str());
 }
 
 void StageSelect::Calculation()
 {
+    // 基準点を算出する
+    elementStandard.x = scrollbarPosition.x - elementSize.width - scrollBarSize.width / 2;
+    elementStandard.y = elementSize.height / 2 + scrollMarginTop;
 
-	// 基準点を算出する
-	elementStandard.x = (1920 - (elementSize.width * 5 + elementMargin * 4)) / 2 + elementSize.width / 2;
-	elementStandard.y = (1080 - (elementSize.height * 3 + elementMargin * 2)) / 2 + elementSize.height / 2;
+    // スクロールバー初期化
+    scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2
+    scrollBar->SetBoxSize(scrollboxSize);
+    scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
 }

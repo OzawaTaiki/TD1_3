@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="StageSelect">
+    <Position X="0.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>BAYAAYBEAAAIAhAIEQAAQAEFQEAAAAQACCICAgkEACY=</HashCode>
+      <FileName>StageSelect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="StageSelectElement">
+    <Position X="3.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAIAAAIAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>StageSelect.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ForCursorStatus">
+    <Position X="3.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAEAAAAAgAAA=</HashCode>
+      <FileName>StageSelect.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>
