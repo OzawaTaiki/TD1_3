@@ -23,8 +23,10 @@ class StageSelect
 {
 private:
     const char* jsonName = "stageSelect";
+    const char* jsonName_scr = "scroll";
 
     JsonL*	json;
+    JsonL*	json_scr;
 
     SpriteData  scrSpr;                         // スクロールデータ
     Scroller*   scrollBar;                      // スクロールバー実体

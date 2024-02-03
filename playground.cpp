@@ -510,6 +510,18 @@ void Playground::SpineHitCheck()
 	}
 }
 
+void Playground::LoadFromJSON()
+{
+	scrollBarSize.width = atoi((*json_scr)["barWidth"].c_str());
+	scrollBarSize.height = atoi((*json_scr)["barHeight"].c_str());
+	scrollboxSize.width = atoi((*json_scr)["boxWidth"].c_str());
+	scrollboxSize.height = atoi((*json_scr)["boxHeight"].c_str());
+	scrollboxMargin = atoi((*json_scr)["boxMargin"].c_str());
+	scrollbarPosition.x = atoi((*json_scr)["barX"].c_str());
+	scrollbarPosition.y = atoi((*json_scr)["barY"].c_str());
+	scrollMarginTop = atoi((*json_scr)["MarginTop"].c_str());
+}
+
 Playground::Playground()
 {
 	piece = new Piece;
@@ -523,6 +535,8 @@ Playground::Playground()
 	hindranceVertex[1] = { kTileSize,0 };
 	hindranceVertex[2] = { 0,kTileSize };
 	hindranceVertex[3] = { kTileSize,kTileSize };
+
+	LoadFromJSON();
 }
 
 void Playground::Init(int _stageNo)

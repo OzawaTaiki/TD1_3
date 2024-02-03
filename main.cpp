@@ -130,4 +130,5 @@ void ResourceRegist()
 void JSONLoad()
 {
 	JSON_Manager::LoadJSON("stageSelect", "./data/stageSelect.json");
+	JSON_Manager::LoadJSON("scroll", "./data/scroll.json");
 }
