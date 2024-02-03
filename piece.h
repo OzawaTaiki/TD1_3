@@ -11,43 +11,44 @@ class Piece
 {
 public:
 	std::vector<std::vector<std::vector<int>>>* piece;
-	std::vector<Vector2> piecePos;
-	std::vector<Vector2> pieceSize;
-	std::vector<intVec2> piecePosInMapchip;
+	std::vector<Vector2> pos;
+	std::vector<Vector2> size;
+	std::vector<intVec2> piecePosInMapchip;// 消す予定
 	std::vector<float> scale;
-
+	
 	const float kKeyScale[2] = {
-		1.0f,0.75f
+		1.0f,0.6f
 	};
 
 	/// 隣接部関連
+	const Vector2 kAdjacencyCheckSize = { 16,16 };
+	std::vector<std::vector<Vector2>> adjacencyCheckVertex;
 	std::vector<intVec2> adjacentPos;		//ピースが隣接してるときの左or上の座標
 	std::vector<char> adjacentDir;
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
 	Vector2 velocity;
-	const float kMoveSpd = 8.0f;
-	intVec2 moveCnt;
 
 	Vector2 moveDir;
+	Vector2 mapchipKeyPos;
 
 	/// piece初期位置
 	const Vector2 kPieceStartKeyPos = { kStageAreaWidth + 50.0f,65.0f };			// pieceの初期基準座標
-	const Vector2 kPieceStartMargin = { 0.0f,260.0f };				// pieceの初期位置間隔
+	const Vector2 kPieceStartMargin = { 0.0f,260.0f };								// pieceの初期位置間隔
 
 	int isHave;								// piece所持フラグ -1:もってない 0~:番号のピース所持
 
 	int runX;
 	int runY;
-
 	int scanX;
 	int scanY;
 
 	int pieceTexture;
 
+	bool isLockedY;
+
 	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box);
-	//void PieceMove(const Vector2& _playerPos, const Vector2& _playerSize);
 
 
 	bool HindranceBlockCheck(const std::vector< std::vector<int>>* _field, int _x, int _y);
@@ -68,7 +69,6 @@ public:
 
 	void DrawPieceShadow();
 
-	void VelocityControl();//使ってない
 
 	Piece();
 
@@ -85,7 +85,7 @@ public:
 
 	void PiecePosInit(int _x, int _y);
 	void Init();
-	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box);
+	void Update(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, const std::vector<Box*> _box);
 	void Draw();
 
 };

@@ -21,7 +21,9 @@ class Playground
 	bool isNext;
 	bool isClear;
 
-
+	bool plbo;
+	bool plpi;
+	bool pibo;
 
 	const unsigned int kTileColor_[4] = {
 		0xc5edbeff,
@@ -68,7 +70,7 @@ class Playground
 
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
-	void CollisionBoxWithBox();			//box		box
+	//void CollisionBoxWithBox();			//box		box
 
 	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();

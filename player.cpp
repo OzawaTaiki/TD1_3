@@ -49,7 +49,7 @@ void Player::MoveDirUpdate()
 
 	if (velocity.y < 0)
 		moveDir.y = -1;
-	else if (velocity.y > 0.5f)
+	else if (velocity.y > 0)
 		moveDir.y = 1;
 }
 
@@ -102,8 +102,7 @@ void Player::PosUpdate()
 
 void Player::Init(int _stageNo)
 {
-	pos = { startPos[_stageNo].x * kTileSize + size.x / 2,startPos[_stageNo].y * kTileSize + size.y / 2 };
-	size = { 40,40 };
+	pos = { float(startPos[_stageNo].x * kTileSize + kTileSize / 2),float(startPos[_stageNo].y * kTileSize + kTileSize / 2) };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };

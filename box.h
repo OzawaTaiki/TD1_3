@@ -21,6 +21,7 @@ public:
 	const float kMaxVeloY = 15.0f;
 	int GH;
 	int isOnBox;
+	unsigned int color;
 
 	bool isOnPlayer;
 	bool isLockedX;
