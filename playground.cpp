@@ -523,6 +523,13 @@ void Playground::LoadFromJSON()
 	scrollMarginTop = atoi((*json_scr)["MarginTop"].c_str());
 }
 
+void Playground::ScrollCalculation()
+{
+	float value = scrollBar->GetValue();
+	increaseY_scroll = int(value * (-512));
+	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
+}
+
 Playground::Playground()
 {
 	piece = new Piece;
@@ -594,8 +601,9 @@ void Playground::Init(int _stageNo)
 
 void Playground::Update(const char* _keys, const char* _preKeys)
 {
-	// ナイトウが勝手に追加
+	// ナイトウが勝手に追加 (二行)
 	scrollBar->UpdateStatus();
+	ScrollCalculation();
 
 	/// ctrl + enter でコマ送りモード
 	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LCONTROL])

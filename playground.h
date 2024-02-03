@@ -62,6 +62,7 @@ class Playground
 	int			scrollboxMargin;
 	Transform	scrollbarPosition;
 	int			scrollMarginTop;        // スクロール要素 上マージン
+	int			increaseY_scroll;		// スクロールによるy増加分（マイナス値へ変化する）
 
 	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 
@@ -97,6 +98,7 @@ class Playground
 
 
 	void LoadFromJSON();
+	void ScrollCalculation();
 public:
 	Playground();
 
