@@ -527,8 +527,8 @@ void Playground::Init(int _stageNo)
 			if ((*field)[y][x] == BOX)
 			{
 				(*field)[y][x] = 0;
-				//if (box.empty())
-					//box.push_back(new Box(x, y));
+				if (box.empty())
+					box.push_back(new Box(x, y));
 			}
 			else if ((*field)[y][x] == HINDRANCE)
 			{

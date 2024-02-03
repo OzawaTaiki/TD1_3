@@ -643,29 +643,6 @@ void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, cons
 	moveDir.y = _collisionDir.y;
 }
 
-
-void Piece::VelocityControl()
-{
-	if (velocity.x != 0)
-	{
-		moveCnt.x++;
-		if (kTileSize == velocity.x * moveCnt.x)
-		{
-			velocity.x = 0;
-			moveCnt.x = 0;
-		}
-	}
-	if (velocity.y != 0)
-	{
-		moveCnt.y++;
-		if (kTileSize == velocity.y * moveCnt.y)
-		{
-			velocity.y = 0;
-			moveCnt.y = 0;
-		}
-	}
-}
-
 Piece::Piece()
 {
 	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
@@ -703,7 +680,6 @@ void Piece::Init()
 	isHave = -1;
 	p2mSub = { 0,0 };
 	velocity = { 0,0 };
-	moveCnt = { 0,0 };
 	moveDir = { 0,0 };
 	isLockedY = false;
 }

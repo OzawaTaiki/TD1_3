@@ -28,7 +28,6 @@ public:
 	Vector2 piecePrePos;					// pieceの前の座標
 	Vector2 velocity;
 	const float kMoveSpd = 8.0f;
-	intVec2 moveCnt;
 
 	Vector2 moveDir;
 
@@ -69,7 +68,6 @@ public:
 
 	void DrawPieceShadow();
 
-	void VelocityControl();//使ってない
 
 	Piece();
 
