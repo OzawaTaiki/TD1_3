@@ -8,6 +8,7 @@
 #include "piece.h"
 #include "player.h"
 #include "box.h"
+#include "ResourceManager.h"
 
 
 void Playground::CollisionWithPlayer()
@@ -535,8 +536,16 @@ Playground::Playground()
 	hindranceVertex[1] = { kTileSize,0 };
 	hindranceVertex[2] = { 0,kTileSize };
 	hindranceVertex[3] = { kTileSize,kTileSize };
+	
+	/// - - - ナイトウが勝手に実装 はじめ - - - ///
+	scrSpr.srcPos = Transform(0, 0);
+	scrSpr.srcSize = Size(1, 1);
+	scrSpr.trgSize = Size(14, 54);
+	scrSpr.textureHandle = ResourceManager::Handle("white1x1");
 
+	scrollBar = new Scroller(&scrSpr);
 	LoadFromJSON();
+	/// - - - ナイトウが勝手に実装 おわり - - - ///
 }
 
 void Playground::Init(int _stageNo)
