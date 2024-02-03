@@ -68,6 +68,18 @@
     <Filter Include="システム\JSON-Loader">
       <UniqueIdentifier>{733f5431-f5bf-4d55-8286-a5f606cbd4e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="シーン">
+      <UniqueIdentifier>{1af5d8f1-e8cb-421f-841b-374ce646c906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーン\.Manager">
+      <UniqueIdentifier>{1301822e-ba59-4aee-932f-4ce0a1e74869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーン\シーンクラス">
+      <UniqueIdentifier>{68d792db-be35-4602-bd3d-f085c380ce82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーン\シーンクラス\StageSelect">
+      <UniqueIdentifier>{8f62346a-6a4c-49f2-8651-2707976d6a63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -116,9 +128,6 @@
     <ClCompile Include="UI\UI_ToolKit.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Slider.cpp">
-      <Filter>UI\スクロールボックス</Filter>
-    </ClCompile>
     <ClCompile Include="playground.cpp">
       <Filter>ゲームクラス\PlayGround</Filter>
     </ClCompile>
@@ -145,6 +154,21 @@
     </ClCompile>
     <ClCompile Include="JSON-Loader\json.cpp">
       <Filter>システム\JSON-Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON-Loader\JSON-Manager.cpp">
+      <Filter>システム\JSON-Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI_Manager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Scroll.cpp">
+      <Filter>UI\スクロールボックス</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>シーン\.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelect.cpp">
+      <Filter>シーン\シーンクラス\StageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,9 +272,6 @@
     <ClInclude Include="playground.h">
       <Filter>ゲームクラス\PlayGround</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Slider.h">
-      <Filter>UI\スクロールボックス</Filter>
-    </ClInclude>
     <ClInclude Include="UI\UI_ToolKit.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -281,5 +302,23 @@
     <ClInclude Include="JSON-Loader\json.h">
       <Filter>システム\JSON-Loader</Filter>
     </ClInclude>
+    <ClInclude Include="JSON-Loader\JSON-Manager.h">
+      <Filter>システム\JSON-Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Scroll.h">
+      <Filter>UI\スクロールボックス</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI_Manager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>シーン\.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelect.h">
+      <Filter>シーン\シーンクラス\StageSelect</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

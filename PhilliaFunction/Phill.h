@@ -2,7 +2,7 @@
 
 #ifndef PHILL_H
 #define PHILL_H
-
+#define _WINSOCKAPI_
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
@@ -19,23 +19,33 @@ enum PhillDrawMode
 	DrawMode_Center
 };
 
+
 /// <summary>
 /// PhilliaFunction
 /// </summary>
 class Phill {
-public:
 
+// デバッグ機能
 #ifdef _DEBUG
+public:
 	static	void	SetDebugMode(DebugMode _mode);
 	static	void	ToggleDebugMode();
-	bool isDebug();
+	static	bool	isDebug();
 #endif // _DEBUG
 
-	static	void	Init();
 
+
+public:
+
+
+	/// ################################ 描画系 ################################ ///
+
+
+	static	void	Init();
+	
 	static	void	Rotate(int& _x, int& _y, float _theta);
 
-	/// @param _mode 基準点モード ("center" or "leftTop")
+	/// @param _mode 基準点の指定
 	static	void	DrawQuadPlus(
 		int _x, int _y, 
 		int _horizontal, int _vertical,
@@ -48,18 +58,23 @@ public:
 		PhillDrawMode _drawMode
 	);
 
+	// 直線を引きます。ぴーん
 	static	void DrawPeenLine(int _x, int _y, int _horizon, int _vertical);
 
 	/// イージング関数
+	static	float	ConstantT(int _targetFrame, int currentFrame);
+	template <typename T>
+	static	T		Lerp(T _begin, T _target, float _t) { return T(float(_target) * _t + float(_begin) * (1.0f - _t)); }
 
-#define PHILL_EASE
 	static	float	EaseInQuart(float _constant);
 	static	float	EaseOutQuart(float _constant);
 	static	float	EaseInOutQuart(float _constant);
 	static	float	EaseOutBounce(float _constant);
 	static	float	EaseInElastic(float _constant);
 
-	/// ネットワーク
+
+	/// ############################## ネットワーク系 ############################## ///
+
 
 	static	int		InitWSA(WSADATA* _wsaData);
 	static	SOCKET	InitSocket(sockaddr_in* _addr, u_short _port);
@@ -67,10 +82,13 @@ public:
 	static	int		Listen(SOCKET* _socket, int _backlog);
 	static	SOCKET	WaitAccept(SOCKET* _listen, sockaddr* _client, int* _clientLen);
 
+	/// ################################## 雑多 ################################## ///
 
+	static	unsigned int GetRandColor();
+
+	static	void	shuffle(int* arr, int len);
 
 private:
-
 	static	bool	isDebugMode;
 
 	static	float	LimitConstant(float _constant);

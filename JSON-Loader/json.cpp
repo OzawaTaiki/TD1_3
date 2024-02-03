@@ -125,11 +125,11 @@ void JsonL::Load(const char* _path)
 
 
 			if (buffer[i] == '\0' || buffer[i] == '\n') // 行末時
-
 				break;
 		}
 		if (isInt == 1) data[key] = ciValue;
 		else if (isInt == 2) data[key] = cValue;
 	}
 	
+	fclose(fp);
 }
