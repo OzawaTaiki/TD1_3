@@ -40,11 +40,12 @@ public:
 
 	int runX;
 	int runY;
-
 	int scanX;
 	int scanY;
 
 	int pieceTexture;
+
+	bool isLockedY;
 
 	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box);
 	//void PieceMove(const Vector2& _playerPos, const Vector2& _playerSize);
