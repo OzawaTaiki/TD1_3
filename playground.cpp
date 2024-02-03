@@ -525,8 +525,9 @@ void Playground::LoadFromJSON()
 
 void Playground::ScrollCalculation()
 {
+	// ナイトウが追加
 	float value = scrollBar->GetValue();
-	increaseY_scroll = int(value * (-512));
+	increaseY_scroll = int(value * (-512)); // TODO: この値を使用してy値を変化させてほしい。(0 ~ -512)
 	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
 }
 
