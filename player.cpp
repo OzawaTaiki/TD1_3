@@ -103,7 +103,6 @@ void Player::PosUpdate()
 void Player::Init(int _stageNo)
 {
 	pos = { float(startPos[_stageNo].x * kTileSize + kTileSize / 2),float(startPos[_stageNo].y * kTileSize + kTileSize / 2) };
-	size = { 40,40 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };

@@ -232,14 +232,14 @@ void Playground::CollisionPlayerWithPiece()
 		else
 		{
 			if (collisionDir.x < 0)
-				player->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + kTileSize + player->vertex[1].x;
+				player->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + player->vertex[1].x;
 			if (collisionDir.x > 0)
-				player->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + player->vertex[0].x;
+				player->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + player->vertex[0].x;
 			if (collisionDir.y < 0)
-				player->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + kTileSize + player->vertex[2].y;
+				player->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + player->vertex[2].y;
 			if (collisionDir.y > 0)
 			{
-				player->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + player->vertex[0].y;
+				player->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + player->vertex[0].y;
 				player->isGround = true;
 			}
 		}
@@ -257,13 +257,13 @@ void Playground::CollisionPlayerWithPiece()
 			else
 			{
 				if (collisionDir.x < 0)
-					player->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + kTileSize + player->vertex[1].x;
+					player->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + player->vertex[1].x;
 				if (collisionDir.x > 0)
-					player->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + player->vertex[0].x;
+					player->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + player->vertex[0].x;
 				if (collisionDir.y < 0)
-					player->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + kTileSize + player->vertex[2].y;
+					player->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + player->vertex[2].y;
 				if (collisionDir.y > 0)
-					player->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + player->vertex[0].y;
+					player->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + player->vertex[0].y;
 			}
 		}
 		/// piece-player間に箱があるときの処理
@@ -284,13 +284,13 @@ void Playground::CollisionPlayerWithPiece()
 					if (collidedNum != -1)
 					{
 						if (collisionDir.x < 0)
-							piece->piecePos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize - box[i]->size.x / 2 - kTileSize;
+							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize - box[i]->size.x / 2 - kTileSize;
 						if (collisionDir.x > 0)
-							piece->piecePos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize + box[i]->size.x / 2;
+							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize + box[i]->size.x / 2;
 						if (collisionDir.y < 0)
-							piece->piecePos[collidedNum].y = box[i]->pos.y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y;
+							piece->pos[collidedNum].y = box[i]->pos.y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y;
 						if (collisionDir.y > 0)
-							piece->piecePos[collidedNum].y = box[i]->pos.y - piece->runY * kTileSize + box[i]->size.y / 2;
+							piece->pos[collidedNum].y = box[i]->pos.y - piece->runY * kTileSize + box[i]->size.y / 2;
 					}
 				}
 			}
@@ -317,14 +317,14 @@ void Playground::CollisionPieceWithBox()
 			if (!pibo)
 			{
 				if (collisionDir.x < 0)
-					box[i]->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
+					box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
 				if (collisionDir.x > 0)
-					box[i]->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
+					box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
 				if (collisionDir.y < 0)
-					box[i]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
+					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
 				if (collisionDir.y > 0 && !box[i]->isLockedY)
 				{
-					box[i]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
+					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
 				box[i]->moveDir.x = collisionDir.x * -1;
@@ -333,13 +333,13 @@ void Playground::CollisionPieceWithBox()
 			else
 			{
 				if (collisionDir.x < 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
+					piece->pos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
 				if (collisionDir.x > 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
+					piece->pos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
 				if (collisionDir.y < 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
+					piece->pos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
 				if (collisionDir.y > 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
+					piece->pos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
 			}
 
 			/* /// 埋まってないとき
@@ -372,14 +372,14 @@ void Playground::CollisionPieceWithBox()
 				if (!pibo)
 				{
 					if (collisionDir.x < 0)
-						box[i]->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
+						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
 					if (collisionDir.x > 0)
-						box[i]->pos.x = piece->piecePos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
+						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
 					if (collisionDir.y < 0)
-						box[i]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
+						box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
 					if (collisionDir.y > 0)
 					{
-						box[i]->pos.y = piece->piecePos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
+						box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 						box[i]->velocity.y = 0;
 					}
 
@@ -389,13 +389,13 @@ void Playground::CollisionPieceWithBox()
 				else
 				{
 					if (collisionDir.x < 0)
-						piece->piecePos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
+						piece->pos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
 					if (collisionDir.x > 0)
-						piece->piecePos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
+						piece->pos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
 					if (collisionDir.y < 0)
-						piece->piecePos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
+						piece->pos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
 					if (collisionDir.y > 0)
-						piece->piecePos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
+						piece->pos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
 				}
 			}
 		}
@@ -420,17 +420,17 @@ void Playground::CollisionWithPiece()
 		if (collidedNum != -1)
 		{
 			if (collisionDir.x < 0)
-				piece->piecePos[collidedNum].x = hindCheckPos.x - piece->pieceSize[collidedNum].x * kTileSize;
+				piece->pos[collidedNum].x = hindCheckPos.x - piece->size[collidedNum].x * kTileSize;
 			if (collisionDir.x > 0)
-				piece->piecePos[collidedNum].x = hindCheckPos.x + kTileSize;
+				piece->pos[collidedNum].x = hindCheckPos.x + kTileSize;
 			if (collisionDir.y < 0)
 			{
-				piece->piecePos[collidedNum].y = hindCheckPos.y - piece->pieceSize[collidedNum].y * kTileSize;
+				piece->pos[collidedNum].y = hindCheckPos.y - piece->size[collidedNum].y * kTileSize;
 				piece->isLockedY = true;
 			}
 			if (collisionDir.y > 0)
 			{
-				piece->piecePos[collidedNum].y = hindCheckPos.y + kTileSize;
+				piece->pos[collidedNum].y = hindCheckPos.y + kTileSize;
 				piece->isLockedY = true;
 			}
 		}
@@ -561,7 +561,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(field, collision, player->pos, box);
+		piece->Update(field, player->pos, box);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
@@ -637,5 +637,5 @@ void Playground::Draw()
 	piece->Draw();
 	player->Draw();
 
-	Novice::DrawBox(0, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);
+	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);
 }
