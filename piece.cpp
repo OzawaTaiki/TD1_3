@@ -149,10 +149,16 @@ void Piece::Adjacent(int _pieceNum)
 
 	for (int i = _pieceNum + 1; i < piece->size(); i++)
 	{
-		if (pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][0].x < pos[i].x + adjacencyCheckVertex[i][3].x &&
+		if (/// 仮想サイズ適用時に衝突している
+			pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][0].x < pos[i].x + adjacencyCheckVertex[i][3].x &&
 			pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][3].x > pos[i].x + adjacencyCheckVertex[i][0].x &&
 			pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][0].y < pos[i].y + adjacencyCheckVertex[i][3].y &&
-			pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][3].y > pos[i].y + adjacencyCheckVertex[i][0].y)
+			pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][3].y > pos[i].y + adjacencyCheckVertex[i][0].y &&
+			/// 実際のサイズのときに衝突していない
+			pos[_pieceNum].x                         > pos[i].x + size[i].x * kTileSize ||
+			pos[_pieceNum].x + size[i].x * kTileSize < pos[i].x                         ||
+			pos[_pieceNum].y                         > pos[i].y + size[i].y * kTileSize ||
+			pos[_pieceNum].y + size[i].y * kTileSize < pos[i].y)
 		{
 			float xOverlap =
 				min(pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][3].x, pos[i].x + adjacencyCheckVertex[i][3].x)
@@ -815,7 +821,7 @@ void Piece::Draw()
 	for (int i = 0; i < adjacentPos.size(); i++)
 	{
 		//Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
-		Novice::DrawBox(int(adjacentPos[i].x * kTileSize+mapchipKeyPos.x), int(adjacentPos[i].y * kTileSize + mapchipKeyPos.y), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
+		Novice::DrawBox(int(adjacentPos[i].x * kTileSize + mapchipKeyPos.x), int(adjacentPos[i].y * kTileSize + mapchipKeyPos.y), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
 	}
 }
 
