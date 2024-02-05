@@ -129,5 +129,7 @@ void ResourceRegist()
 
 void JSONLoad()
 {
-	JSON_Manager::LoadJSON("stageSelect", "./data/stageSelect.json");
+	JSON_Manager::LoadJSON("stgSel-main", "./data/StageSelect/stageSelect.json");
+	JSON_Manager::LoadJSON("stgSel-scroll", "./data/StageSelect/scroll.json");
+	JSON_Manager::LoadJSON("stgSel-back", "./data/StageSelect/backButton.json");
 }
