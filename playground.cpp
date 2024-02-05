@@ -218,12 +218,11 @@ void Playground::CollisionPlayerWithBox()
 
 void Playground::CollisionPlayerWithPiece()
 {
-	piece->moveDir = { 0,0 };
 	Vector2 collisionDir = { 0,0 };
 	int collidedNum = -1;
 	//int collidedBoxNum = -1;
 
-	collidedNum = piece->PixelCollisionWithObj(player->pos, player->vertex,player->moveDir, collisionDir);
+	collidedNum = piece->PixelCollisionWithObj(player->pos, player->vertex, player->moveDir, collisionDir);
 
 	if (collidedNum != -1)
 	{
@@ -437,6 +436,11 @@ void Playground::CollisionWithPiece()
 	}
 }
 
+void Playground::CollisionPieceWithPiece()
+{
+	piece->CollisionPieceWithPiece();
+}
+
 void Playground::CollisionReset()
 {
 	collision->clear();
@@ -561,7 +565,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(player->pos, player->vertex,box, hindrancePos, hindranceVertex);
+		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
@@ -570,11 +574,12 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		CollisionWithPlayer();
 		CollisionPlayerWithBox();
 		CollisionWithBox();
-		CollisionPlayerWithPiece();
+		CollisionPlayerWithPiece();//
 		CollisionWithPiece();
 		CollisionPieceWithBox();
 		CollisionWithBox();
 		CollisionPieceWithBox();
+		CollisionPieceWithPiece();
 		CollisionPlayerWithBox();
 		CollisionPlayerWithPiece();
 

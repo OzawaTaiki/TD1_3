@@ -74,7 +74,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 						int((pos[i].x) / kTileSize) + x >= kStageAreaWidth / kTileSize ||
 						int((pos[i].y) / kTileSize) + y >= kWindowHeight / kTileSize)
 					{
-						if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+						if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
 							(*piece)[i][y][x] = 1;
 						continue;
 					}
@@ -87,7 +87,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					}
 
 					/// 消えたとこを戻す
-					if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+					if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
 						(*piece)[i][y][x] = 1;
 				}
 			}
@@ -354,8 +354,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][0][temp2 + count2++] = 2;
+					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = kAdjacentNum;
+					(*piece)[_pieceNum2][0][temp2 + count2++] = kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
@@ -364,8 +364,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = 2;
+					(*piece)[_pieceNum1][0][temp1 + count1++] = kAdjacentNum;
+					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = kAdjacentNum;
 				}
 			}
 			break;
@@ -381,9 +381,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][0] == 1)
-						(*piece)[_pieceNum1][temp1 + count1++][0] = 2;
+						(*piece)[_pieceNum1][temp1 + count1++][0] = kAdjacentNum;
 					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] == 1)
-						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = 2;
+						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
@@ -393,9 +393,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] != 0)
-						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = 2;
+						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = kAdjacentNum;
 					if ((*piece)[_pieceNum2][temp2 + count2][0] != 0)
-						(*piece)[_pieceNum2][temp2 + count2++][0] = 2;
+						(*piece)[_pieceNum2][temp2 + count2++][0] = kAdjacentNum;
 				}
 			}
 			break;
@@ -647,7 +647,7 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 				{
 					isOverlap[k] = true;
 
-					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == 2)
+					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == kAdjacentNum)
 						isOverlap[4] = true;
 				}
 			}
@@ -697,9 +697,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 上向き
 			if (_moveDir.y < 0 &&
 				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 2 ||
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum ||
 					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 2))
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.y = -1;
 				runY = int(o2pSub[1].y) / kTileSize;
@@ -709,9 +709,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 下向き
 			if (_moveDir.y > 0 &&
 				(isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 2 ||
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
-					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 2))
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.y = 1;
 				runY = int(o2pSub[2].y) / kTileSize;
@@ -721,9 +721,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 左向き
 			if (_moveDir.x < 0 &&
 				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 2 ||
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum ||
 					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 2))
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.x = -1;
 				runX = int(o2pSub[2].x) / kTileSize;
@@ -733,9 +733,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 右向き
 			if (_moveDir.x > 0 &&
 				(isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 2 ||
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
-					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 2))
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.x = 1;
 				runX = int(o2pSub[1].x) / kTileSize;
@@ -784,14 +784,14 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		float xOverlap = min(_pos.x + _vertex[1].x, pos[i].x + size[i].x * kTileSize) - max(_pos.x + _vertex[0].x, pos[i].x);
 		float yOverlap = min(_pos.y + _vertex[2].y, pos[i].y + size[i].y * kTileSize) - max(_pos.y + _vertex[0].y, pos[i].y);
 
-		if (xOverlap < yOverlap && moveDir.x != 0)
+		if (xOverlap < yOverlap && moveDir[i].x != 0)
 		{
 			if (_pos.x + _vertex[0].x < pos[i].x)
 				pieceHitEdge.x = -1;//left
 			else
 				pieceHitEdge.x = 1;//right
 		}
-		else if (moveDir.y != 0)
+		else if (moveDir[i].y != 0)
 		{
 			if (_pos.y + _vertex[0].y < pos[i].y)
 				pieceHitEdge.y = -1;//up
@@ -803,7 +803,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
 			isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
 			&& o2pSub[2].y > size[i].y * kTileSize
-			&& moveDir.y > 0
+			&& moveDir[i].y > 0
 			&& pieceHitEdge.y == 1)
 		{
 			_collisionDir.y = -1;
@@ -814,7 +814,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		if ((isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 ||
 			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
 			&& o2pSub[0].y < 0
-			&& moveDir.y < 0
+			&& moveDir[i].y < 0
 			&& pieceHitEdge.y == -1)
 		{
 			_collisionDir.y = 1;
@@ -825,7 +825,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
 			isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
 			&& o2pSub[1].x > size[i].x * kTileSize
-			&& moveDir.x > 0
+			&& moveDir[i].x > 0
 			&& pieceHitEdge.x == 1)
 		{
 			_collisionDir.x = -1;
@@ -836,7 +836,7 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		if ((isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 ||
 			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
 			&& o2pSub[0].x < 0
-			&& moveDir.x < 0
+			&& moveDir[i].x < 0
 			&& pieceHitEdge.x == -1)
 		{
 			_collisionDir.x = 1;
@@ -994,15 +994,81 @@ bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum
 
 void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity)
 {
-	velocity = _velocity;
+	velocity[_collidedNum - kTileKinds] = _velocity;
 
 	if (_collisionDir.x != 0 && canMoveX)
-		pos[_collidedNum - kTileKinds].x += velocity.x;
+		pos[_collidedNum - kTileKinds].x += velocity[_collidedNum - kTileKinds].x;
 	if (_collisionDir.y != 0 && canMoveY)
-		pos[_collidedNum - kTileKinds].y += velocity.y;
+		pos[_collidedNum - kTileKinds].y += velocity[_collidedNum - kTileKinds].y;
 
-	moveDir.x = _collisionDir.x;
-	moveDir.y = _collisionDir.y;
+	moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
+	moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
+}
+
+void Piece::CollisionPieceWithPiece()
+{
+
+	for (int i = 0; i < piece->size(); i++)
+	{
+		if (isHave == i)
+			continue;
+
+		for (int j = 0; j < piece->size(); j++)
+		{
+			if (isHave == j||i==j)
+				continue;
+			Vector2 pieceHitEdge = { 0,0 }; ///iのピースのどの辺に当たっているか
+
+			if (
+				pos[i].x                         < pos[j].x + size[j].x * kTileSize &&
+				pos[i].x + size[i].x * kTileSize > pos[j].x &&
+				pos[i].y                         < pos[j].y + size[j].y * kTileSize &&
+				pos[i].y + size[i].y * kTileSize > pos[j].y
+				)
+			{
+				float xOverlap = min(pos[i].x + size[i].x * kTileSize, pos[j].x + size[j].x * kTileSize) - max(pos[i].x, pos[j].x);
+				float yOverlap = min(pos[i].y + size[i].y * kTileSize, pos[j].y + size[j].y * kTileSize) - max(pos[i].y, pos[j].y);
+
+				if (xOverlap < yOverlap && moveDir[i].x != 0)
+				{
+					if (pos[i].x < pos[j].x)
+						pieceHitEdge.x = 1;//right
+					else
+						pieceHitEdge.x = -1;//left
+				}
+				else if (moveDir[i].y != 0)
+				{
+					if (pos[i].y < pos[j].y)
+						pieceHitEdge.y = 1;//bottom
+					else
+						pieceHitEdge.y = -1;//top
+				}
+
+				if (pieceHitEdge.x != 0)
+				{
+					if (moveDir[i].x != 0)
+					{
+						pos[j].x += velocity[i].x;
+					}
+					else if (moveDir[j].x != 0)
+					{
+						pos[i].x += velocity[j].x;
+					}
+				}
+				else if (pieceHitEdge.y != 0)
+				{
+					if (moveDir[i].y != 0)
+					{
+						pos[j].y += velocity[i].y;
+					}
+					else if (moveDir[j].y != 0)
+					{
+						pos[i].y += velocity[j].y;
+					}
+				}
+			}
+		}
+	}
 }
 
 Piece::Piece()
@@ -1026,6 +1092,8 @@ void Piece::Init()
 	size.resize(piece->size());
 	scale.resize(piece->size());
 	adjacencyCheckVertex.resize(piece->size(), std::vector<Vector2>(4));
+	velocity.resize(piece->size());
+	moveDir.resize(piece->size());
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
@@ -1048,10 +1116,8 @@ void Piece::Init()
 	}
 
 	isHave = -1;
-	p2mSub = { 0,0 };
-	velocity = { 0,0 };
-	moveDir = { 0,0 };
 	mapchipKeyPos = { 0,0 };
+	p2mSub = { 0,0 };
 	isLockedY = false;
 	isHave = -1;
 	runX = -1;
@@ -1066,7 +1132,8 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	canMoveX = true;
 	canMoveY = true;
 	isLockedY = false;
-	moveDir = { 0,0 };
+	std::fill(moveDir.begin(), moveDir.end(), Vector2{ 0,0 });
+	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
 	adjacentDir.clear();
 

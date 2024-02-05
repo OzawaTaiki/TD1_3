@@ -74,6 +74,7 @@ class Playground
 
 	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();
+	void CollisionPieceWithPiece();
 
 	void CollisionReset();
 
