@@ -6,7 +6,7 @@ Bubble::Bubble(ParticleData _pd)
 	// 画像データ
 	sprData.srcPos			= Transform(0, 0);
 	sprData.srcSize			= Size(1, 1);
-	sprData.textureHandle	= ResourceManager::Handle("white");
+	sprData.textureHandle	= ResourceManager::Handle("white1x1");
 	sprData.trgSize			= Size(30, 30);
 	sprData.drawMode		= DrawMode_Center;
 

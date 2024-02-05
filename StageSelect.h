@@ -34,7 +34,7 @@ private:
     JsonL*	json_back;
 
     EmitterData ed;
-    Emitter*    bubbleEmit;
+    BubbleEmitter*    bubbleEmit;
 
     // ステージ選択要素(15個のやつ)
     Size	    srcSize;                        // 画像解像度 (px)
