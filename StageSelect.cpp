@@ -13,9 +13,9 @@ StageSelect::StageSelect()
     UI_Manager::Init();
 
     ed.position.x = 100;
-    ed.position.y = 100;
-    ed.size.width = 300;
-    ed.size.height = 300;
+    ed.position.y = 500;
+    ed.size.width = 30;
+    ed.size.height = 30;
     bubbleEmit = new BubbleEmitter(&ed);
 
     scrSpr.srcPos           = Transform(0, 0);

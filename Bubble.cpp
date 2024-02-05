@@ -5,9 +5,9 @@ Bubble::Bubble(ParticleData _pd)
 {
 	// 画像データ
 	sprData.srcPos			= Transform(0, 0);
-	sprData.srcSize			= Size(1, 1);
-	sprData.textureHandle	= ResourceManager::Handle("white1x1");
-	sprData.trgSize			= Size(30, 30);
+	sprData.srcSize			= Size(64, 64);
+	sprData.textureHandle	= ResourceManager::Handle("bubble");
+	sprData.trgSize			= Size(64, 64);
 	sprData.drawMode		= DrawMode_Center;
 
 	// エミッターから受け取る
@@ -16,11 +16,15 @@ Bubble::Bubble(ParticleData _pd)
 	acceleration			= _pd.zeroAcceleration;
 	gravity					= _pd.zeroGravity;
 	airResist				= _pd.zeroAirResistance;
+
+	// 
+	scale					= 0.0f;
 }
 
 void Bubble::Update()
 {
-	acceleration.y = gravity + airResist * velocity.y;
+	velocity.x *= airResist;
+	acceleration.y = gravity;
 
 	// 座標に適用
 	velocity += acceleration;

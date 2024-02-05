@@ -12,6 +12,7 @@ private:
 	VECTOR2		acceleration;
 	float		gravity;
 	float		airResist;
+	float		scale;
 
 public:
 	Bubble(ParticleData _pd);
