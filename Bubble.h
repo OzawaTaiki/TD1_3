@@ -6,9 +6,10 @@ class Bubble
 {
 private:
 	SpriteData	sprData;
+	Transform	position;
 
 public:
-	Bubble();
+	Bubble(Transform _pos);
 
 	void	Update();
 	void	Draw();

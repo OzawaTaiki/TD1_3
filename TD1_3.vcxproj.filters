@@ -86,6 +86,9 @@
     <Filter Include="Particle\Bubble">
       <UniqueIdentifier>{86acc3ca-66da-443b-bee0-51a5b953d416}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle\Emitter">
+      <UniqueIdentifier>{022f563c-c992-44ee-844f-8090d760a530}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -178,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="Bubble.cpp">
       <Filter>Particle\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI_ToolKit_Defines.cpp">
+      <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="Bubble.h">
       <Filter>Particle\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleDefines.h">
+      <Filter>Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,12 @@
 ﻿#pragma once
 #include "PhilliaFunction/Phill.h"
+#include <Vector2.h>
 
-struct Transform { int x; int y; };
+struct Transform {
+	int x; 
+	int y;
+	Transform& operator = (Vector2 _vec2);
+};
 struct Size { int width; int height; };
 struct SpriteData
 {
