@@ -2,10 +2,9 @@
 #include "CSVLoader.h"
 #include "CursorManager.h"
 #include <Novice.h>
-#include <cassert>
+#include "box.h"
 
-
-void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box, int _scrollY)
+void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
@@ -31,10 +30,10 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 				/// クリックした位置にピースのブロックがあるか否か
 				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
 				{
-					piecePrePos = piecePos[i];
+					piecePrePos = pos[i];
 
-					piecePos[i].x = p2mSub.x + cursor.x;
-					piecePos[i].y = p2mSub.y + cursor.y-_scrollY;
+					pos[i].x = p2mSub.x + cursor.x;
+					pos[i].y = p2mSub.y + cursor.y-_scrollY;
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
@@ -46,25 +45,26 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 	/// ピースつかんでるとき
 	else if (Novice::IsPressMouse(0) && !Novice::IsTriggerMouse(0) && isHave != -1)
 	{
-		piecePos[isHave].x = cursor.x + p2mSub.x;
-		piecePos[isHave].y = cursor.y + p2mSub.y;
+		pos[isHave].x = cursor.x + p2mSub.x;
+		pos[isHave].y = cursor.y + p2mSub.y;
+
+		for (int i = 0; i < (*piece).size(); i++)
+		{
+			if (i == isHave || scale[i] == kKeyScale[1])
+				continue;
+
+			mapchipKeyPos.x = float((int)pos[i].x % kTileSize);
+			mapchipKeyPos.y = float((int)pos[i].y % kTileSize);
+		}
 	}
 
 	else
 	{
-		if (isHave != -1)
-		{
-			piecePos[isHave].x = float(int(piecePos[isHave].x / kTileSize + (int(piecePos[isHave].x) % kTileSize < kTileSize / 2 ? 0 : 1)) * kTileSize);
-			piecePos[isHave].y = float(int(piecePos[isHave].y / kTileSize + (int(piecePos[isHave].y) % kTileSize < kTileSize / 2 ? 0 : 1)) * kTileSize);
-		}
-
 		for (int i = 0; i < (*piece).size(); i++)
 		{
-			bool isPlayerIOverlap = false;			// ピース内にプレイヤーが入ってるか否か
-			bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているか否か
-
-			piecePosInMapchip[i].x = (int)piecePos[i].x / kTileSize;
-			piecePosInMapchip[i].y = (int)piecePos[i].y / kTileSize;
+			bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
+			bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
+			bool isBoxOverlap = false;				// ピースに箱が重なってるか否か
 
 			scale[i] = kKeyScale[1];
 
@@ -72,39 +72,15 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 			{
 				for (int x = 0; x < (*piece)[i][y].size(); x++)
 				{
-					scanX = int((piecePos[i].x) / kTileSize) + x;
-					scanY = int((piecePos[i].y) / kTileSize) + y;
-
 					/// 操作中のブロックがフィールド内にないとき
-					if (scanX < 0 ||
-						scanY < 0 ||
-						scanX >= kStageAreaWidth / kTileSize ||
-						scanY >= kWindowHeight / kTileSize)
+					if (int((pos[i].x) / kTileSize) + x < 0 ||
+						int((pos[i].y) / kTileSize) + y < 0 ||
+						int((pos[i].x) / kTileSize) + x >= kStageAreaWidth / kTileSize ||
+						int((pos[i].y) / kTileSize) + y >= kWindowHeight / kTileSize)
 					{
-						if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+						if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
 							(*piece)[i][y][x] = 1;
 						continue;
-					}
-
-
-					/*******************
-						ピース設置判定
-					*******************/
-					/// お邪魔ブロック判定
-					if (!isHindranceBlockInside)
-						isHindranceBlockInside = HindranceBlockCheck(_field, scanX, scanY);
-
-					/// プレイヤーと操作中のブロックが重なってるとき
-					if (isHave != -1 &&
-						scanX == int(_playerPos.x) / kTileSize &&
-						scanY == int(_playerPos.y) / kTileSize)
-					{
-						/// プレイヤーがブロックと重なってるとき
-						if ((*piece)[i][int(_playerPos.y - piecePos[i].y) / kTileSize][int(_playerPos.x - piecePos[i].x) / kTileSize] == 1)
-						{
-							isPlayerIOverlap = true;
-							break;
-						}
 					}
 
 					/// 操作中の位置にブロックがあるとき
@@ -115,20 +91,44 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 					}
 
 					/// 消えたとこを戻す
-					if ((*piece)[i][y][x] == 2)	// 2:隣接部分で消えてるところ
+					if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
 						(*piece)[i][y][x] = 1;
 				}
 			}
+
+			if (isHave == i)
+			{
+				isHave = -1;
+
+				/*******************
+					ピース設置判定
+				*******************/
+				for (int k = 0; k < _hindrancePos.size(); k++)
+				{
+					Vector2 check;
+					check.x = float(_hindrancePos[k].x * kTileSize);
+					check.y = float(_hindrancePos[k].y * kTileSize);
+					if (IsInPiece(check, i) || IsOverlap(check, _hindVertex, i))
+						isHindranceBlockInside = true;
+				}
+
+				for (int k = 0; k < _box.size(); k++)
+					if (IsOverlap(_box[k]->pos, _box[k]->vertex, i))
+						isBoxOverlap = true;
+
+				if (IsOverlap(_playerPos, _playerVertex, i))
+					isPlayerOverlap = true;
+			}
+
 
 			if (scale[i] != kKeyScale[0])
 				piecePrePos = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
 
 			/// ピースを置けなかったとき
-			if (isPlayerIOverlap || isHindranceBlockInside) //仮
-				piecePos[i] = piecePrePos;
+			if (isPlayerOverlap || isHindranceBlockInside || isBoxOverlap)
+				pos[i] = piecePrePos;
 		}
 
-		isHave = -1;
 
 		/// ピース隣接関係の処理
 		for (int i = 0; i < (*piece).size(); i++)
@@ -141,43 +141,71 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 
 void Piece::Adjacent(int _pieceNum)
 {
-	bool isAdjacent = false;
 
 	for (int i = _pieceNum + 1; i < piece->size(); i++)
 	{
-		/// ピースのｘ座標が重なっているか（ｙは除外
-		if (piecePosInMapchip[_pieceNum].x <= piecePosInMapchip[i].x + pieceSize[i].x - 1 &&
-			piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 >= piecePosInMapchip[i].x)
+		bool isAdjacent = false;
+		if (/// 仮想サイズ適用時に衝突している
+			pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][0].x < pos[i].x + adjacencyCheckVertex[i][3].x &&
+			pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][3].x > pos[i].x + adjacencyCheckVertex[i][0].x &&
+			pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][0].y < pos[i].y + adjacencyCheckVertex[i][3].y &&
+			pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][3].y > pos[i].y + adjacencyCheckVertex[i][0].y &&
+			/// 実際のサイズのときに衝突していない
+			(pos[_pieceNum].x > pos[i].x + size[i].x * kTileSize ||
+				pos[_pieceNum].x + size[_pieceNum].x * kTileSize < pos[i].x ||
+				pos[_pieceNum].y                                 > pos[i].y + size[i].y * kTileSize ||
+				pos[_pieceNum].y + size[_pieceNum].y * kTileSize < pos[i].y))
+		{
+			float xOverlap =
+				min(pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][3].x, pos[i].x + adjacencyCheckVertex[i][3].x)
+				- max(pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][0].x, pos[i].x + adjacencyCheckVertex[i][0].x);
+
+			float yOverlap =
+				min(pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][3].y, pos[i].y + adjacencyCheckVertex[i][3].y)
+				- max(pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][0].y, pos[i].y + adjacencyCheckVertex[i][0].y);
+
+			if (xOverlap < yOverlap)
+			{
+				AdjacentPos(_pieceNum, i, 'y');
+				isAdjacent = true;
+			}
+			else
+			{
+				AdjacentPos(_pieceNum, i, 'x');
+				isAdjacent = true;
+			}
+		}
+		/*/// ピースのｘ座標が重なっているか（ｙは除外
+		if (piecePosInMapchip[_pieceNum].x <= piecePosInMapchip[i].x + size[i].x - 1 &&
+			piecePosInMapchip[_pieceNum].x + size[_pieceNum].x - 1 >= piecePosInMapchip[i].x)
 		{
 			/// 上辺のー１または下辺の＋１に別のピースの下辺または上辺があるか
-			if (piecePosInMapchip[i].y - 1 == piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 ||
-				piecePosInMapchip[i].y + pieceSize[i].y - 1 == piecePosInMapchip[_pieceNum].y - 1)
+			if (piecePosInMapchip[i].y - 1 == piecePosInMapchip[_pieceNum].y + size[_pieceNum].y - 1 ||
+				piecePosInMapchip[i].y + size[i].y - 1 == piecePosInMapchip[_pieceNum].y - 1)
 			{
 				/// 隣接している
-				Novice::ScreenPrintf(1500, 800, "x");
 				AdjacentPos(_pieceNum, i, 'x');
 				isAdjacent = true;
 			}
 		}
 		/// ピースのｙ座標が重なっているか（ｘは除外
-		else if (piecePosInMapchip[_pieceNum].y <= piecePosInMapchip[i].y + pieceSize[i].y - 1 &&
-			piecePosInMapchip[_pieceNum].y + pieceSize[_pieceNum].y - 1 >= piecePosInMapchip[i].y)
+		else if (piecePosInMapchip[_pieceNum].y <= piecePosInMapchip[i].y + size[i].y - 1 &&
+			piecePosInMapchip[_pieceNum].y + size[_pieceNum].y - 1 >= piecePosInMapchip[i].y)
 		{
 			/// 左辺ー１または右辺＋１に別のピースの右辺または左辺があるか
-			if (piecePosInMapchip[i].x - 1 == piecePosInMapchip[_pieceNum].x + pieceSize[_pieceNum].x - 1 ||
-				piecePosInMapchip[i].x + pieceSize[i].x - 1 == piecePosInMapchip[_pieceNum].x - 1)
+			if (piecePosInMapchip[i].x - 1 == piecePosInMapchip[_pieceNum].x + size[_pieceNum].x - 1 ||
+				piecePosInMapchip[i].x + size[i].x - 1 == piecePosInMapchip[_pieceNum].x - 1)
 			{
 				/// 隣接している
-				Novice::ScreenPrintf(1500, 800, "y");
 				AdjacentPos(_pieceNum, i, 'y');
 				isAdjacent = true;
 			}
-		}
+		}*/
+
 		/// 隣接してるとき
 		if (isAdjacent)
 		{
 			AdjacentPieceDelete(_pieceNum, i);
-			break;
 		}
 	}
 }
@@ -189,6 +217,35 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 	{
 	case 'x':
 		/// 二つのピースのｘ座標を比較
+		if (pos[_pieceNum1].x > pos[_pieceNum2].x)
+		{
+			/// ｙ座標比較
+			if (pos[_pieceNum1].y < pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize - 1 });
+			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize - 1 });
+		}
+		else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
+		{
+			if (pos[_pieceNum1].y < pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize - 1 });
+			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize - 1 });
+		}
+		else if (pos[_pieceNum1].x == pos[_pieceNum2].x)
+		{
+			if (pos[_pieceNum1].y < pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize - 1 });
+			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize - 1 });
+		}
+		/*/// 二つのピースのｘ座標を比較
 		if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
 		{
 			/// ｙ座標比較
@@ -210,33 +267,59 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x,piecePosInMapchip[_pieceNum2].y - 1 });
 			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x,piecePosInMapchip[_pieceNum1].y - 1 });
-		}
+		}*/
 		break;
 	case 'y':
-		if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
+		if (pos[_pieceNum1].y > pos[_pieceNum2].y)
 		{
-			if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
+			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize });
+			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize });
+		}
+		else if (pos[_pieceNum1].y < pos[_pieceNum2].y)
+		{
+			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize });
+			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize });
+		}
+		else if (pos[_pieceNum1].y == pos[_pieceNum2].y)
+		{
+			if (pos[_pieceNum1].x < pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize });
+			else if (pos[_pieceNum1].x > pos[_pieceNum2].x)
+				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize - 1 ,
+					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize });
+		}
+		/*if (pos[_pieceNum1].y > pos[_pieceNum2].y)
+		{
+			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum1].y });
-			else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
+			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum1].y });
 		}
-		else if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
+		else if (pos[_pieceNum1].y < pos[_pieceNum2].y)
 		{
-			if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
+			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum2].y });
-			else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
+			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum2].y });
 		}
-		else if (piecePosInMapchip[_pieceNum1].y == piecePosInMapchip[_pieceNum2].y)
+		else if (pos[_pieceNum1].y == pos[_pieceNum2].y)
 		{
-			if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
+			if (pos[_pieceNum1].x < pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum2].y });
-			else if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
+			else if (pos[_pieceNum1].x > pos[_pieceNum2].x)
 				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum1].y });
-		}
+		}*/
 		break;
 	default:
-		assert(_dir == 'x' || _dir == 'y');
 		break;
 	}
 	for (int i = 0; i < adjacentPos.size(); i++)
@@ -265,54 +348,58 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 		{
 		case 'x':
 
-			temp1 = adjacentPos[i].x - piecePosInMapchip[_pieceNum1].x;
-			temp2 = adjacentPos[i].x - piecePosInMapchip[_pieceNum2].x;
+			temp1 = adjacentPos[i].x - int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize;
+			temp2 = adjacentPos[i].x - int(pos[_pieceNum2].x + mapchipKeyPos.x) / kTileSize;
 
 			/// ｙ座標比較
-			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
+			if (pos[_pieceNum1].y < pos[_pieceNum2].y)
 			{
 				/// ピースの端一個手前まで
 				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][0][temp2 + count2++] = 2;
+					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = kAdjacentNum;
+					(*piece)[_pieceNum2][0][temp2 + count2++] = kAdjacentNum;
 				}
 			}
-			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
+			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
 			{
 				/// ピースの端一個手前まで
 				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] = 2;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = 2;
+					(*piece)[_pieceNum1][0][temp1 + count1++] = kAdjacentNum;
+					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = kAdjacentNum;
 				}
 			}
 			break;
 		case 'y':
-			temp1 = adjacentPos[i].y - piecePosInMapchip[_pieceNum1].y;
-			temp2 = adjacentPos[i].y - piecePosInMapchip[_pieceNum2].y;
+			temp1 = adjacentPos[i].y - int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize;
+			temp2 = adjacentPos[i].y - int(pos[_pieceNum2].y + mapchipKeyPos.y) / kTileSize;
 
 			/// ｘ座標比較
-			if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
+			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
 			{
 				/// ピースの端一個手前まで
 				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
-					(*piece)[_pieceNum1][temp1 + count1++][0] = 2;
-					(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = 2;
+					if ((*piece)[_pieceNum1][temp1 + count1][0] == 1)
+						(*piece)[_pieceNum1][temp1 + count1++][0] = kAdjacentNum;
+					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] == 1)
+						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = kAdjacentNum;
 				}
 			}
-			else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
+			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
 			{
 				/// ピースの端一個手前まで
 				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
-					(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = 2;
-					(*piece)[_pieceNum2][temp2 + count2++][0] = 2;
+					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] != 0)
+						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = kAdjacentNum;
+					if ((*piece)[_pieceNum2][temp2 + count2][0] != 0)
+						(*piece)[_pieceNum2][temp2 + count2++][0] = kAdjacentNum;
 				}
 			}
 			break;
@@ -322,32 +409,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 	}
 }
 
-void Piece::FieldCollision(std::vector<std::vector<int>>* _collision)
-{
-	for (int i = 0; i < (*piece).size(); i++)
-	{
-		for (int y = 0; y < (*piece)[i].size(); y++)
-		{
-			for (int x = 0; x < (*piece)[i][y].size(); x++)
-			{
-				intVec2 temp = { piecePosInMapchip[i].x + x,piecePosInMapchip[i].y + y };
-
-				if ((*piece)[i][y][x] == 1 &&
-					temp.x >= 0 &&
-					temp.x < kStageAreaWidth / kTileSize &&
-					temp.y >= 0 &&
-					temp.y < kWindowHeight / kTileSize)
-				{
-					if ((*_collision)[temp.y][temp.x] != 1 && (*_collision)[temp.y][temp.x] != 5)
-						(*_collision)[temp.y][temp.x] = i + kTileKinds;
-				}
-			}
-		}
-	}
-}
 
 bool Piece::HindranceBlockCheck(const std::vector<std::vector<int>>* _field, int _x, int _y)
 {
+	_x = 0;
+	_y = 0;
+
 	if ((*_field)[_y][_x] == HINDRANCE)	return true;
 	return false;
 }
@@ -358,7 +425,6 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 	Vector2 localPos = _pos;
 
 	Vector2 o2pSub[4];
-
 	runX = 0;
 	runY = 0;
 
@@ -370,26 +436,39 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 
 		for (int k = 0; k < 4; k++)
 		{
-			o2pSub[k].x = _pos.x + _vertex[k].x - piecePos[i].x;
-			o2pSub[k].y = _pos.y + _vertex[k].y - piecePos[i].y;
+			o2pSub[k].x = _pos.x + _vertex[k].x - pos[i].x;
+			o2pSub[k].y = _pos.y + _vertex[k].y - pos[i].y;
 
-			if (o2pSub[k].x < 0 ||
-				o2pSub[k].y < 0 ||
-				int(o2pSub[k].x) / kTileSize < 0 ||
-				int(o2pSub[k].y) / kTileSize < 0 ||
-				int(o2pSub[k].x) / kTileSize >= pieceSize[i].x ||
-				int(o2pSub[k].y) / kTileSize >= pieceSize[i].y)
+			if (!(o2pSub[k].x > 0 &&
+				o2pSub[k].y > 0 &&
+				o2pSub[k].x < size[i].x * kTileSize &&
+				o2pSub[k].y < size[i].y * kTileSize))
 				isExit = true;
 		}
+		/*if (isExit)
+		{
+			if (IsOverlap(_pos, _vertex, i))
+			{
+				for (int k = 0; k < 4; k++)
+				{
+					if (o2pSub[k].x > 0 &&
+						o2pSub[k].y > 0 &&
+						o2pSub[k].x < size[i].x * kTileSize &&
+						o2pSub[k].y < size[i].y * kTileSize &&
+						(*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == 2)
+						isOverlap = false;
+				}
+			}
+		}*/
+
 		if (isExit)
 			continue;
 
-		/// 上向き
 		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
 			(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
 		{
 			_collisionDir.y = -1;
-			localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
+			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
 			runY = int(o2pSub[1].y) / kTileSize;
 			hitPieceNum = i;
 		}
@@ -398,18 +477,17 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
 		{
 			_collisionDir.y = 1;
-			localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
+			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
 			runY = int(o2pSub[2].y) / kTileSize;
 			hitPieceNum = i;
 		}
-
 
 		/// 左向き
 		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
 			(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
 		{
 			_collisionDir.x = -1;
-			localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
+			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
 			runX = int(o2pSub[2].x) / kTileSize;
 			hitPieceNum = i;
 		}
@@ -418,11 +496,257 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
 		{
 			_collisionDir.x = 1;
-			localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
+			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
+			runX = int(o2pSub[1].x) / kTileSize;
+			hitPieceNum = i;
+		}
+	}
+	return hitPieceNum;
+
+	/*int hitPieceNum = -1;
+	Vector2 localPos = _pos;
+	Vector2 pieceHitEdge = { 0,0 };
+	Vector2 o2pSub[4];
+	runX = 0;
+	runY = 0;
+
+	for (int i = 0; i < (*piece).size(); i++)
+	{
+		bool isHit[4] = { false,0,0,0 };
+
+		if (!IsInPiece(_pos, _vertex, i) || isHave == i)
+			continue;
+
+		for (int k = 0; k < 4; k++)
+		{
+			o2pSub[k].x = _pos.x + _vertex[k].x - pos[i].x;
+			o2pSub[k].y = _pos.y + _vertex[k].y - pos[i].y;
+
+			if (o2pSub[k].x > 0 &&
+				o2pSub[k].y > 0 &&
+				o2pSub[k].x < size[i].x * kTileSize &&
+				o2pSub[k].y < size[i].y * kTileSize)
+			{
+				if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == 1)
+					isHit[k] = true;
+			}
+		}
+
+		float xOverlap = min(_pos.x + _vertex[1].x, pos[i].x + (size[i].x - 1) * kTileSize) -
+			max(_pos.x + _vertex[0].x, pos[i].x + kTileSize);
+		float yOverlap = min(_pos.y + _vertex[2].y, pos[i].y + (size[i].y - 1) * kTileSize) -
+			max(_pos.y + _vertex[0].y, pos[i].y + kTileSize);
+
+		if (_pos.x + _vertex[0].x < pos[i].x + kTileSize)
+			pieceHitEdge.x = -1;//left
+		else if (_pos.x + _vertex[0].x > pos[i].x + kTileSize)
+			pieceHitEdge.x = 1;//right
+
+		if (_pos.y + _vertex[0].y < pos[i].y + kTileSize)
+			pieceHitEdge.y = -1;//up
+		else if (_pos.y + _vertex[0].y > pos[i].y + kTileSize)
+			pieceHitEdge.y = 1;//bottom
+
+
+		/// 上向き
+		if ((isHit[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
+			isHit[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1) &&
+			pieceHitEdge.y == -1)
+		{
+			_collisionDir.y = -1;
+			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
+			runY = int(o2pSub[1].y) / kTileSize;
+			hitPieceNum = i;
+		}
+		/// 下向き
+		if ((isHit[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 ||
+			isHit[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) &&
+			pieceHitEdge.y == 1)
+		{
+			_collisionDir.y = 1;
+			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
+			runY = int(o2pSub[2].y) / kTileSize;
+			hitPieceNum = i;
+		}
+
+
+		/// 左向き
+		if ((isHit[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
+			isHit[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1) &&
+			pieceHitEdge.x == -1)
+		{
+			_collisionDir.x = -1;
+			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
+			runX = int(o2pSub[2].x) / kTileSize;
+			hitPieceNum = i;
+		}
+		/// 右向き
+		if ((isHit[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 ||
+			isHit[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) &&
+			pieceHitEdge.x == 1)
+		{
+			_collisionDir.x = 1;
+			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
 			runX = int(o2pSub[1].x) / kTileSize;
 			hitPieceNum = i;
 		}
 
+	}
+	return hitPieceNum;*/
+}
+
+int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, const Vector2& _moveDir, Vector2& _collisionDir)
+{
+	int hitPieceNum = -1;
+
+	Vector2 o2pSub[4];
+	runX = 0;
+	runY = 0;
+
+	for (int i = 0; i < (*piece).size(); i++)
+	{
+		bool isExit = false;
+		bool isOverlap[5] = { false,0,0,0,0 }; ///各頂点+全体管理
+
+		if (!IsInPiece(_pos, i) && !IsOverlap(_pos, _vertex, i) || isHave == i)
+			continue;
+
+		for (int k = 0; k < 4; k++)
+		{
+			o2pSub[k].x = _pos.x + _vertex[k].x - pos[i].x;
+			o2pSub[k].y = _pos.y + _vertex[k].y - pos[i].y;
+
+			if (!(o2pSub[k].x > 0 &&
+				o2pSub[k].y > 0 &&
+				o2pSub[k].x < size[i].x * kTileSize &&
+				o2pSub[k].y < size[i].y * kTileSize))
+				isExit = true;
+		}
+		/*if (isExit)
+		{
+			if (IsOverlap(_pos, _vertex, i))
+			{
+				for (int k = 0; k < 4; k++)
+				{
+					if (o2pSub[k].x > 0 &&
+						o2pSub[k].y > 0 &&
+						o2pSub[k].x < size[i].x * kTileSize &&
+						o2pSub[k].y < size[i].y * kTileSize &&
+						(*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == 2)
+						isOverlap = false;
+				}
+			}
+		}*/
+
+		if (IsOverlap(_pos, _vertex, i))
+		{
+			isOverlap[4] = false;
+			for (int k = 0; k < 4; k++)
+			{
+				if (o2pSub[k].x > 0 &&
+					o2pSub[k].y > 0 &&
+					o2pSub[k].x < size[i].x * kTileSize &&
+					o2pSub[k].y < size[i].y * kTileSize &&
+					(*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] != 0)
+				{
+					isOverlap[k] = true;
+
+					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == kAdjacentNum)
+						isOverlap[4] = true;
+				}
+			}
+		}
+
+		if (isExit && !isOverlap[4])
+			continue;
+
+		if (!isOverlap[4])
+		{
+			/// 上向き
+			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+				(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+			{
+				_collisionDir.y = -1;
+				runY = int(o2pSub[1].y) / kTileSize;
+				hitPieceNum = i;
+			}
+			/// 下向き
+			if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
+				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			{
+				_collisionDir.y = 1;
+				runY = int(o2pSub[2].y) / kTileSize;
+				hitPieceNum = i;
+			}
+
+			/// 左向き
+			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+				(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+			{
+				_collisionDir.x = -1;
+				runX = int(o2pSub[2].x) / kTileSize;
+				hitPieceNum = i;
+			}
+			/// 右向き
+			if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
+				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			{
+				_collisionDir.x = 1;
+				runX = int(o2pSub[1].x) / kTileSize;
+				hitPieceNum = i;
+			}
+		}
+		else
+		{
+			/// 上向き
+			if (_moveDir.y < 0 &&
+				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
+			{
+				_collisionDir.y = -1;
+				runY = int(o2pSub[1].y) / kTileSize;
+				hitPieceNum = i;
+				canMoveY = false;
+			}
+			/// 下向き
+			if (_moveDir.y > 0 &&
+				(isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum))
+			{
+				_collisionDir.y = 1;
+				runY = int(o2pSub[2].y) / kTileSize;
+				hitPieceNum = i;
+			}
+
+			/// 左向き
+			if (_moveDir.x < 0 &&
+				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
+			{
+				_collisionDir.x = -1;
+				runX = int(o2pSub[2].x) / kTileSize;
+				hitPieceNum = i;
+				canMoveX = false;
+			}
+			/// 右向き
+			if (_moveDir.x > 0 &&
+				(isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum))
+			{
+				_collisionDir.x = 1;
+				runX = int(o2pSub[1].x) / kTileSize;
+				hitPieceNum = i;
+				canMoveX = false;
+			}
+		}
 	}
 	return hitPieceNum;
 }
@@ -430,10 +754,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir)
 {
 	int hitPieceNum = -1;
-	//Vector2 localPos = _pos;
-
 	Vector2 o2pSub[4];
 
+	Vector2 pieceHitEdge = { 0,0 };
 	bool isContinue[4] = { false,0,0,0 };
 
 	runX = 0;
@@ -444,55 +767,83 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		if (IsInPiece(_pos, i) || isHave == i)
 			continue;
 
+		Vector2 hitBlockPos[4];
+
 		for (int k = 0; k < 4; k++)
 		{
 			isContinue[k] = false;
-			o2pSub[k].x = _pos.x + _vertex[k].x - piecePos[i].x;
-			o2pSub[k].y = _pos.y + _vertex[k].y - piecePos[i].y;
+			o2pSub[k].x = _pos.x + _vertex[k].x - pos[i].x;
+			o2pSub[k].y = _pos.y + _vertex[k].y - pos[i].y;
+
+			hitBlockPos[k].x = float(int(o2pSub[k].x) / kTileSize * kTileSize) + pos[i].x;
+			hitBlockPos[k].y = float(int(o2pSub[k].y) / kTileSize * kTileSize) + pos[i].y;
 
 			if (o2pSub[k].x > 0 &&
 				o2pSub[k].y > 0 &&
-				o2pSub[k].x < pieceSize[i].x * kTileSize &&
-				o2pSub[k].y < pieceSize[i].y * kTileSize)
+				o2pSub[k].x < size[i].x * kTileSize &&
+				o2pSub[k].y < size[i].y * kTileSize)
 				isContinue[k] = true;
 		}
 
-		/// 上向き
+		float xOverlap = min(_pos.x + _vertex[1].x, pos[i].x + size[i].x * kTileSize) - max(_pos.x + _vertex[0].x, pos[i].x);
+		float yOverlap = min(_pos.y + _vertex[2].y, pos[i].y + size[i].y * kTileSize) - max(_pos.y + _vertex[0].y, pos[i].y);
+
+		if (xOverlap < yOverlap && moveDir[i].x != 0)
+		{
+			if (_pos.x + _vertex[0].x < pos[i].x)
+				pieceHitEdge.x = -1;//left
+			else
+				pieceHitEdge.x = 1;//right
+		}
+		else if (moveDir[i].y != 0)
+		{
+			if (_pos.y + _vertex[0].y < pos[i].y)
+				pieceHitEdge.y = -1;//up
+			else
+				pieceHitEdge.y = 1;//bottom
+		}
+
+		/// 上向き objの上辺にpieceが当たった
 		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
 			isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
-			&& moveDir.y > 0)
+			&& o2pSub[2].y > size[i].y * kTileSize
+			&& moveDir[i].y > 0
+			&& pieceHitEdge.y == 1)
 		{
 			_collisionDir.y = -1;
-			//localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
 			runY = int(o2pSub[1].y) / kTileSize;
 			hitPieceNum = i;
 		}
 		/// 下向き
 		if ((isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 ||
-			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) &&
-			moveDir.y < 0)
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			&& o2pSub[0].y < 0
+			&& moveDir[i].y < 0
+			&& pieceHitEdge.y == -1)
 		{
 			_collisionDir.y = 1;
-			//localPos.y = piecePos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
 			runY = int(o2pSub[2].y) / kTileSize;
 			hitPieceNum = i;
 		}
 		/// 左向き
 		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
 			isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
-			&& moveDir.x > 0)
+			&& o2pSub[1].x > size[i].x * kTileSize
+			&& moveDir[i].x > 0
+			&& pieceHitEdge.x == 1)
 		{
 			_collisionDir.x = -1;
-			//localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
 			runX = int(o2pSub[2].x) / kTileSize;
 			hitPieceNum = i;
 		}
-		/// 右向き
+		/// 右向き objの右辺にpieceが当たった
 		if ((isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 ||
-			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1) && moveDir.x < 0)
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			&& o2pSub[0].x < 0
+			&& moveDir[i].x < 0
+			&& pieceHitEdge.x == -1)
 		{
 			_collisionDir.x = 1;
-			//localPos.x = piecePos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
 			runX = int(o2pSub[1].x) / kTileSize;
 			hitPieceNum = i;
 		}
@@ -501,45 +852,60 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 }
 
 
-void Piece::DrawPieceShadow()
-{
-	if (isHave != -1)
-	{
-		for (int y = 0; y < (*piece)[isHave].size(); y++)
-		{
-			for (int x = 0; x < (*piece)[isHave][y].size(); x++)
-			{
-				if (int((scanX + x) * kTileSize * scale[isHave]) / kTileSize >= 0 &&
-					int((scanX + x) * kTileSize * scale[isHave]) / kTileSize < kStageAreaWidth &&
-					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize >= 0 &&
-					int((scanY + y) * kTileSize * scale[isHave]) / kTileSize < kWindowHeight)
-
-					Novice::DrawBox(int((scanX + x) * kTileSize * scale[isHave]), int(+(scanY + y) * kTileSize * scale[isHave]), int(kTileSize * scale[isHave]) - 1, int(kTileSize * scale[isHave]) - 1, 0, (*piece)[isHave][y][x] == 0 ? 0 : 0xff, kFillModeSolid);
-			}
-		}
-	}
-}
-
 
 
 bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 {
+	if (isHave == _pieceNum)
+		return false;
+
 	bool isHitEdges[4] = { false,0,0,0 };
 
 	Vector2 o2pSub;
-	o2pSub.x = _pos.x - piecePos[_pieceNum].x;
-	o2pSub.y = _pos.y - piecePos[_pieceNum].y;
+	o2pSub.x = _pos.x - pos[_pieceNum].x;
+	o2pSub.y = _pos.y - pos[_pieceNum].y;
 
 	intVec2 base;
 	base.x = (int)o2pSub.x / kTileSize;
 	base.y = (int)o2pSub.y / kTileSize;
 
+	/// ピースの外側に対象があるとき...
 	if (o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
-		o2pSub.x >= pieceSize[_pieceNum].x * kTileSize ||
-		o2pSub.y >= pieceSize[_pieceNum].y * kTileSize ||
+		o2pSub.x >= size[_pieceNum].x * kTileSize ||
+		o2pSub.y >= size[_pieceNum].y * kTileSize ||
 		(*piece)[_pieceNum][base.y][base.x] == 1)
 		return false;
+	/*if ((o2pSub.x < 0 ||
+		o2pSub.y < 0 ||
+		o2pSub.x >= size[_pieceNum].x * kTileSize ||
+		o2pSub.y >= size[_pieceNum].y * kTileSize))
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			o2pSub.x = _pos.x + _vertex[i].x - (pos[_pieceNum].x + adjacencyCheckVertex[_pieceNum][0].x);
+			o2pSub.y = _pos.y + _vertex[i].y - (pos[_pieceNum].y + adjacencyCheckVertex[_pieceNum][0].y);
+
+			if (o2pSub.x >= 0 &&
+				o2pSub.y >= 0 &&
+				o2pSub.x < size[_pieceNum].x * kTileSize + kAdjacencyCheckSize.x &&
+				o2pSub.y < size[_pieceNum].y * kTileSize + kAdjacencyCheckSize.y )
+			{
+				if (o2pSub.x > size[_pieceNum].x * kTileSize)
+					o2pSub.x -= kAdjacencyCheckSize.x;
+				if (o2pSub.y > size[_pieceNum].y * kTileSize)
+					o2pSub.y -= kAdjacencyCheckSize.y;
+
+				base.x = (int)o2pSub.x / kTileSize;
+				base.y = (int)o2pSub.y / kTileSize;
+
+				if ((*piece)[_pieceNum][base.y][base.x] == 2)
+					return true;
+			}
+			else if (i == 3)
+				return false;
+		}
+	}*/
 
 	for (int dir = 0; dir < 4; dir++)
 	{
@@ -608,42 +974,103 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 	return true;
 }
 
-
-void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity)
+bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum)
 {
-	velocity = _velocity;
+	if (isHave == _pieceNum)
+		return false;
 
-	piecePosInMapchip[_collidedNum - kTileKinds].x += (int)_collisionDir.x;
-	piecePosInMapchip[_collidedNum - kTileKinds].y += (int)_collisionDir.y;
+	for (int i = 0; i < 4; i++)
+	{
+		Vector2 o2pSub;
+		o2pSub.x = _pos.x + _vertex[i].x - pos[_pieceNum].x;
+		o2pSub.y = _pos.y + _vertex[i].y - pos[_pieceNum].y;
 
-	if (_collisionDir.x != 0)
-		piecePos[_collidedNum - kTileKinds].x += velocity.x;
-	if (_collisionDir.y != 0)
-		piecePos[_collidedNum - kTileKinds].y += velocity.y;
-
-	moveDir.x = _collisionDir.x;
-	moveDir.y = _collisionDir.y;
+		if (o2pSub.x >= 0 &&
+			o2pSub.y >= 0 &&
+			o2pSub.x < size[_pieceNum].x * kTileSize &&
+			o2pSub.y < size[_pieceNum].y * kTileSize &&
+			(*piece)[_pieceNum][int(o2pSub.y) / kTileSize][int(o2pSub.x) / kTileSize] != 0)
+			return true;
+	}
+	return false;
 }
 
 
-void Piece::VelocityControl()
+void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity)
 {
-	if (velocity.x != 0)
+	velocity[_collidedNum - kTileKinds] = _velocity;
+
+	if (_collisionDir.x != 0 && canMoveX)
+		pos[_collidedNum - kTileKinds].x += velocity[_collidedNum - kTileKinds].x;
+	if (_collisionDir.y != 0 && canMoveY)
+		pos[_collidedNum - kTileKinds].y += velocity[_collidedNum - kTileKinds].y;
+
+	moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
+	moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
+}
+
+void Piece::CollisionPieceWithPiece()
+{
+
+	for (int i = 0; i < piece->size(); i++)
 	{
-		moveCnt.x++;
-		if (kTileSize == velocity.x * moveCnt.x)
+		if (isHave == i)
+			continue;
+
+		for (int j = 0; j < piece->size(); j++)
 		{
-			velocity.x = 0;
-			moveCnt.x = 0;
-		}
-	}
-	if (velocity.y != 0)
-	{
-		moveCnt.y++;
-		if (kTileSize == velocity.y * moveCnt.y)
-		{
-			velocity.y = 0;
-			moveCnt.y = 0;
+			if (isHave == j||i==j)
+				continue;
+			Vector2 pieceHitEdge = { 0,0 }; ///iのピースのどの辺に当たっているか
+
+			if (
+				pos[i].x                         < pos[j].x + size[j].x * kTileSize &&
+				pos[i].x + size[i].x * kTileSize > pos[j].x &&
+				pos[i].y                         < pos[j].y + size[j].y * kTileSize &&
+				pos[i].y + size[i].y * kTileSize > pos[j].y
+				)
+			{
+				float xOverlap = min(pos[i].x + size[i].x * kTileSize, pos[j].x + size[j].x * kTileSize) - max(pos[i].x, pos[j].x);
+				float yOverlap = min(pos[i].y + size[i].y * kTileSize, pos[j].y + size[j].y * kTileSize) - max(pos[i].y, pos[j].y);
+
+				if (xOverlap < yOverlap && moveDir[i].x != 0)
+				{
+					if (pos[i].x < pos[j].x)
+						pieceHitEdge.x = 1;//right
+					else
+						pieceHitEdge.x = -1;//left
+				}
+				else if (moveDir[i].y != 0)
+				{
+					if (pos[i].y < pos[j].y)
+						pieceHitEdge.y = 1;//bottom
+					else
+						pieceHitEdge.y = -1;//top
+				}
+
+				if (pieceHitEdge.x != 0)
+				{
+					if (moveDir[i].x != 0)
+					{
+						pos[j].x += velocity[i].x;
+					}
+					else if (moveDir[j].x != 0)
+					{
+						pos[i].x += velocity[j].x;
+					}
+				}
+				else if (pieceHitEdge.y != 0)
+				{
+					if (moveDir[i].y != 0)
+					{
+						pos[j].y += velocity[i].y;
+					}
+					else if (moveDir[j].y != 0)
+					{
+						pos[i].y += velocity[j].y;
+					}
+				}
+			}
 		}
 	}
 }
@@ -651,64 +1078,77 @@ void Piece::VelocityControl()
 Piece::Piece()
 {
 	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
+
+	Init();
+
 }
 
 void Piece::PiecePosInit(int _x, int _y)
 {
-	piecePos[0] = { float(_x * kTileSize) ,float(_y * kTileSize) };
+	pos[0] = { float(_x * kTileSize) ,float(_y * kTileSize) };
 }
 
 void Piece::Init()
 {
 	piece = CSV_Loader::GetPointerPiece();
 
-	piecePos.resize(piece->size());
-	piecePosInMapchip.resize(piece->size());
-	pieceSize.resize(piece->size());
+	pos.resize(piece->size());
+	size.resize(piece->size());
 	scale.resize(piece->size());
+	adjacencyCheckVertex.resize(piece->size(), std::vector<Vector2>(4));
+	velocity.resize(piece->size());
+	moveDir.resize(piece->size());
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		pieceSize[i] = { 0,0 };
-		piecePos[i] = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
+		size[i] = { 0,0 };
+		pos[i] = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
 		scale[i] = 1.0f;
 
 		for (int j = 0; j < (*piece)[i].size(); j++)
 		{
-			if (pieceSize[i].x < (*piece)[i][j].size())
-				pieceSize[i].x = (float)(*piece)[i][j].size();
+			if (size[i].x < (*piece)[i][j].size())
+				size[i].x = (float)(*piece)[i][j].size();
 		}
-		if (pieceSize[i].y < (*piece)[i].size())
-			pieceSize[i].y = (float)(*piece)[i].size();
+		if (size[i].y < (*piece)[i].size())
+			size[i].y = (float)(*piece)[i].size();
+
+		adjacencyCheckVertex[i][0] = { -kAdjacencyCheckSize.x, -kAdjacencyCheckSize.y };
+		adjacencyCheckVertex[i][1] = { size[i].x * kTileSize + kAdjacencyCheckSize.x,-kAdjacencyCheckSize.y };
+		adjacencyCheckVertex[i][2] = { -kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
+		adjacencyCheckVertex[i][3] = { size[i].x * kTileSize + kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
 	}
 
 	isHave = -1;
+	mapchipKeyPos = { 0,0 };
 	p2mSub = { 0,0 };
-	velocity = { 0,0 };
-	moveCnt = { 0,0 };
-	moveDir = { 0,0 };
+	isLockedY = false;
+	isHave = -1;
+	runX = -1;
+	runY = -1;
+	canMoveX = true;
+	canMoveY = true;
+
 }
 
-void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box, int _scrollY)
+void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
 {
-	moveDir = { 0,0 };
+	canMoveX = true;
+	canMoveY = true;
+	isLockedY = false;
+	std::fill(moveDir.begin(), moveDir.end(), Vector2{ 0,0 });
+	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
 	adjacentDir.clear();
 
-	PieceMove(_field, _playerPos, _box, _scrollY);
-	FieldCollision(_collision);
+	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex);
 }
 
 void Piece::Draw(int _scrollY)
 {
-	//DrawPieceShadow();
-
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		Novice::ScreenPrintf(0, i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
-		Novice::ScreenPrintf(int(piecePos[i].x), int(piecePos[i].y) + i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
-		//Novice::ScreenPrintf(0, 1020 + i * 20, "%.1f,%.1f", pieceSize[i].x, pieceSize[i].y);
-		//Novice::ScreenPrintf(900, 900 + i * 20, "%d,%d", piecePosInMapchip[i].x, piecePosInMapchip[i].y);
+		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
 
 		for (int y = 0; y < (*piece)[i].size(); y++)
 		{
@@ -717,9 +1157,9 @@ void Piece::Draw(int _scrollY)
 				if ((*piece)[i][y][x] == 1)
 				{
 					if (scale[i]!=kKeyScale[0])
-						Phill::DrawQuadPlus(int(piecePos[i].x + x * kTileSize * scale[i]), int(piecePos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
 					else
-						Phill::DrawQuadPlus(int(piecePos[i].x + x * kTileSize * scale[i]), int(piecePos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
 				}
 			}
 		}
