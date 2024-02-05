@@ -8,10 +8,6 @@
 
 StageSelect::StageSelect()
 {
-    json_main = JSON_Manager::GetJSON(jsonName[0]);
-    json_scroll = JSON_Manager::GetJSON(jsonName[1]);
-    json_back = JSON_Manager::GetJSON(jsonName[2]);
-
     LoadFromJSON();
 
     UI_Manager::Init();
@@ -160,6 +156,7 @@ void StageSelect::Update()
     {
         JSON_Manager::ReloadJSON(jsonName[0]);
         JSON_Manager::ReloadJSON(jsonName[1]);
+        JSON_Manager::ReloadJSON(jsonName[2]);
         LoadFromJSON();
         Calculation();
         Init();
@@ -207,11 +204,16 @@ void StageSelect::EasingHover(int _index)
 
 void StageSelect::LoadFromJSON()
 {
+    // データを取得
+    json_main = JSON_Manager::GetJSON(jsonName[0]);
+    json_scroll = JSON_Manager::GetJSON(jsonName[1]);
+    json_back = JSON_Manager::GetJSON(jsonName[2]);
+
     elementSize.width		= atoi((*json_main)["elementWidth"]);
     elementSize.height		= atoi((*json_main)["elementHeight"]);
     srcSize.width			= atoi((*json_main)["srcWidth"]);
     srcSize.height			= atoi((*json_main)["srcHeight"]);
-
+    
     frameOffset_jump		= atoi((*json_main)["frameOffset_jump"]);
     IntervalFrame_jump		= atoi((*json_main)["intervalFrame_jump"]);
     targetFrame_jump		= atoi((*json_main)["targetFrame_jump"]);
@@ -239,7 +241,7 @@ void StageSelect::LoadFromJSON()
     backSpr.drawMode        = DrawMode_Center;
 
     backPos.x               = atoi((*json_back)["x"]);
-    backPos.x               = atoi((*json_back)["y"]);
+    backPos.y               = atoi((*json_back)["y"]);
 }
 
 void StageSelect::Calculation()
