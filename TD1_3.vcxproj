@@ -129,6 +129,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="PhilliaFunction\TCPIP.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="playground.cpp" />
+    <ClCompile Include="TileChange.cpp" />
     <ClCompile Include="UI\Button.cpp" />
     <ClCompile Include="UI\Checkbox.cpp" />
     <ClCompile Include="UI\Scroll.cpp" />
@@ -183,6 +184,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="piece.h" />
     <ClInclude Include="playground.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="TileChange.h" />
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\Checkbox.h" />
     <ClInclude Include="UI\Scroll.h" />

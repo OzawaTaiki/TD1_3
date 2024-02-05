@@ -92,6 +92,12 @@
     <Filter Include="Particle\Emitter\BubbleEmitter">
       <UniqueIdentifier>{84601111-1d76-4dce-9784-4d45e29afef0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="シーンチェンジ">
+      <UniqueIdentifier>{90c9b95a-ccac-43fe-a886-02b890a3e346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーンチェンジ\旧作">
+      <UniqueIdentifier>{a1ae3383-407b-4af4-ac39-0f5eb6c8a681}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -193,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="BubbleEmitter.cpp">
       <Filter>Particle\Emitter\BubbleEmitter</Filter>
+    </ClCompile>
+    <ClCompile Include="TileChange.cpp">
+      <Filter>シーンチェンジ\旧作</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="BubbleEmitter.h">
       <Filter>Particle\Emitter\BubbleEmitter</Filter>
+    </ClInclude>
+    <ClInclude Include="TileChange.h">
+      <Filter>シーンチェンジ\旧作</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
