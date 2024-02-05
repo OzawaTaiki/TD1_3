@@ -544,15 +544,15 @@ Playground::Playground()
 	hindranceVertex[1] = { kTileSize,0 };
 	hindranceVertex[2] = { 0,kTileSize };
 	hindranceVertex[3] = { kTileSize,kTileSize };
-	
-	/// - - - ナイトウが勝手に実装 はじめ - - - ///
-	json_scr				= JSON_Manager::GetJSON("scroll");
-	scrSpr.srcPos			= Transform(0, 0);
-	scrSpr.srcSize			= Size(1, 1);
-	scrSpr.trgSize			= Size(14, 54);
-	scrSpr.textureHandle	= ResourceManager::Handle("white1x1");
 
-	scrollBar				= new Scroller(&scrSpr);
+	/// - - - ナイトウが勝手に実装 はじめ - - - ///
+	json_scr = JSON_Manager::GetJSON("scroll");
+	scrSpr.srcPos = Transform(0, 0);
+	scrSpr.srcSize = Size(1, 1);
+	scrSpr.trgSize = Size(14, 54);
+	scrSpr.textureHandle = ResourceManager::Handle("white1x1");
+
+	scrollBar = new Scroller(&scrSpr);
 	LoadFromJSON();
 	// スクロールバー初期化
 	scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2
@@ -614,7 +614,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	if (!frameSlow || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN])
 	{
 		CollisionReset();
-		piece->Update(field, collision, player->pos, box);
+		piece->Update(field, collision, player->pos, box, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
@@ -676,7 +676,7 @@ void Playground::Draw()
 
 	for (int i = 0; i < box.size(); i++)
 		box[i]->Draw(i);
-	piece->Draw();
+	piece->Draw(increaseY_scroll);
 	player->Draw();
 
 	Novice::DrawBox(0, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);

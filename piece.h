@@ -46,7 +46,7 @@ public:
 
 	int pieceTexture;
 
-	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box);
+	void PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box, int _scrollY);
 	//void PieceMove(const Vector2& _playerPos, const Vector2& _playerSize);
 
 
@@ -85,7 +85,7 @@ public:
 
 	void PiecePosInit(int _x, int _y);
 	void Init();
-	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box);
-	void Draw();
+	void Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box,int _scrollY);
+	void Draw(int _scrollY);
 
 };

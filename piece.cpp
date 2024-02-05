@@ -5,7 +5,7 @@
 #include <cassert>
 
 
-void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box)
+void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector2& _playerPos, std::vector<Box*> _box, int _scrollY)
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
@@ -14,15 +14,19 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 	{
 		for (int i = 0; i < (*piece).size(); i++)
 		{
+			Vector2 tempPos = piecePos[i];
+			if (tempPos.x > kStageAreaWidth)
+				tempPos.y += _scrollY;
+
 			/// ピースを矩形の当たり判定で...
-			if (piecePos[i].x < cursor.x &&
-				piecePos[i].x + pieceSize[i].x * kTileSize * scale[i] > cursor.x &&
-				piecePos[i].y < cursor.y &&
-				piecePos[i].y + pieceSize[i].y * kTileSize * scale[i] > cursor.y &&
+			if (tempPos.x < cursor.x &&
+				tempPos.x + pieceSize[i].x * kTileSize * scale[i] > cursor.x &&
+				tempPos.y < cursor.y &&
+				tempPos.y + pieceSize[i].y * kTileSize * scale[i] > cursor.y &&
 				isHave == -1)
 			{
-				p2mSub.x = (piecePos[i].x - cursor.x) / scale[i];
-				p2mSub.y = (piecePos[i].y - cursor.y) / scale[i];
+				p2mSub.x = (tempPos.x - cursor.x) / scale[i];
+				p2mSub.y = (tempPos.y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
 				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
@@ -30,7 +34,7 @@ void Piece::PieceMove(const std::vector< std::vector<int>>* _field, const Vector
 					piecePrePos = piecePos[i];
 
 					piecePos[i].x = p2mSub.x + cursor.x;
-					piecePos[i].y = p2mSub.y + cursor.y;
+					piecePos[i].y = p2mSub.y + cursor.y-_scrollY;
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
@@ -685,22 +689,23 @@ void Piece::Init()
 	moveDir = { 0,0 };
 }
 
-void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box)
+void Piece::Update(const std::vector< std::vector<int>>* _field, std::vector< std::vector<int>>* _collision, const Vector2& _playerPos, const std::vector<Box*> _box, int _scrollY)
 {
 	moveDir = { 0,0 };
 	adjacentPos.clear();
 	adjacentDir.clear();
 
-	PieceMove(_field, _playerPos, _box);
+	PieceMove(_field, _playerPos, _box, _scrollY);
 	FieldCollision(_collision);
 }
 
-void Piece::Draw()
+void Piece::Draw(int _scrollY)
 {
 	//DrawPieceShadow();
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
+		Novice::ScreenPrintf(0, i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
 		Novice::ScreenPrintf(int(piecePos[i].x), int(piecePos[i].y) + i * 20, "%.1f,%.1f", piecePos[i].x, piecePos[i].y);
 		//Novice::ScreenPrintf(0, 1020 + i * 20, "%.1f,%.1f", pieceSize[i].x, pieceSize[i].y);
 		//Novice::ScreenPrintf(900, 900 + i * 20, "%d,%d", piecePosInMapchip[i].x, piecePosInMapchip[i].y);
@@ -710,7 +715,12 @@ void Piece::Draw()
 			for (int x = 0; x < (*piece)[i][y].size(); x++)
 			{
 				if ((*piece)[i][y][x] == 1)
-					Phill::DrawQuadPlus(int(piecePos[i].x + x * kTileSize * scale[i]), int(piecePos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				{
+					if (scale[i]!=kKeyScale[0])
+						Phill::DrawQuadPlus(int(piecePos[i].x + x * kTileSize * scale[i]), int(piecePos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+					else
+						Phill::DrawQuadPlus(int(piecePos[i].x + x * kTileSize * scale[i]), int(piecePos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				}
 			}
 		}
 	}
