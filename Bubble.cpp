@@ -18,7 +18,8 @@ Bubble::Bubble(ParticleData _pd)
 	airResist				= _pd.zeroAirResistance;
 
 	// 
-	scale					= 0.0f;
+	framecount = 0;
+	scale					= 1.0f;
 }
 
 void Bubble::Update()
@@ -29,6 +30,10 @@ void Bubble::Update()
 	// 座標に適用
 	velocity += acceleration;
 	position += velocity;
+	if (framecount < targetFrame_erase)
+		scale = 1.0f - Phill::ConstantT(targetFrame_erase, framecount);
+
+	framecount++;
 }
 
 void Bubble::Draw()
@@ -36,7 +41,7 @@ void Bubble::Draw()
 	Phill::DrawQuadPlus(
 		int(position.x), int(position.y),
 		sprData.trgSize.width, sprData.trgSize.height,
-		1.0f, 1.0f, 0.0f,
+		scale, scale, 0.0f,
 		sprData.srcPos.x, sprData.srcPos.y,
 		sprData.srcSize.width, sprData.srcSize.height,
 		sprData.textureHandle,

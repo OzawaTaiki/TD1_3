@@ -5,7 +5,7 @@ BubbleEmitter::BubbleEmitter(EmitterData* _ed)
 {
 	pEd = _ed;
 	framecount = 0;
-	spawnInterval = 30;
+	spawnInterval = 3;
 }
 
 void BubbleEmitter::Update()

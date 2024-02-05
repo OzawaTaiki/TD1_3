@@ -14,6 +14,10 @@ private:
 	float		airResist;
 	float		scale;
 
+	// ターゲットフレーム
+	const int	targetFrame_erase = 60;
+	int			framecount;
+
 public:
 	Bubble(ParticleData _pd);
 
