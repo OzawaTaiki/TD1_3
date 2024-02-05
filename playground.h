@@ -2,6 +2,8 @@
 #include <vector>
 #include <Vector2.h>
 #include "intVec2.h"
+#include "JSON-Loader/JSON-Manager.h"
+#include "UI/UI_Manager.h"
 
 class Piece;
 class Player;
@@ -50,6 +52,21 @@ class Playground
 	Player* player;
 	std::vector<Box*> box;
 
+	/// - - - ナイトウが勝手に宣言 はじめ - - - ///
+
+	JsonL*		json_scr;
+
+	SpriteData	scrSpr;					// スクロールバーのリソース
+	Scroller*	scrollBar;              // スクロールバー実体
+
+	Size		scrollBarSize;          // スクロールバーのサイズ
+	Size		scrollboxSize;          // スクロールボックスのサイズ
+	int			scrollboxMargin;
+	Transform	scrollbarPosition;
+	int			scrollMarginTop;        // スクロール要素 上マージン
+	int			increaseY_scroll;		// スクロールによるy増加分（マイナス値へ変化する）
+
+	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 
 	/// 仮の者たち
 	int blockTexture;
@@ -83,6 +100,8 @@ class Playground
 	void BoxBoxCollision();*/
 
 
+	void LoadFromJSON();
+	void ScrollCalculation();
 public:
 	Playground();
 

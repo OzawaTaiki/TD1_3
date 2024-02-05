@@ -4,7 +4,7 @@
 #include <Novice.h>
 #include "box.h"
 
-void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
+void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
@@ -13,15 +13,19 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	{
 		for (int i = 0; i < (*piece).size(); i++)
 		{
+			Vector2 tempPos = pos[i];
+			if (tempPos.x > kStageAreaWidth)
+				tempPos.y += _scrollY;
+
 			/// ピースを矩形の当たり判定で...
-			if (pos[i].x < cursor.x &&
-				pos[i].x + size[i].x * kTileSize * scale[i] > cursor.x &&
-				pos[i].y < cursor.y &&
-				pos[i].y + size[i].y * kTileSize * scale[i] > cursor.y &&
+			if (tempPos.x < cursor.x &&
+				tempPos.x + size[i].x * kTileSize * scale[i] > cursor.x &&
+				tempPos.y < cursor.y &&
+				tempPos.y + size[i].y * kTileSize * scale[i] > cursor.y &&
 				isHave == -1)
 			{
-				p2mSub.x = (pos[i].x - cursor.x) / scale[i];
-				p2mSub.y = (pos[i].y - cursor.y) / scale[i];
+				p2mSub.x = (tempPos.x - cursor.x) / scale[i];
+				p2mSub.y = (tempPos.y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
 				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
@@ -29,7 +33,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					piecePrePos = pos[i];
 
 					pos[i].x = p2mSub.x + cursor.x;
-					pos[i].y = p2mSub.y + cursor.y;
+					pos[i].y = p2mSub.y + cursor.y - _scrollY;
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
@@ -74,8 +78,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 						int((pos[i].x) / kTileSize) + x >= kStageAreaWidth / kTileSize ||
 						int((pos[i].y) / kTileSize) + y >= kWindowHeight / kTileSize)
 					{
-						if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
-							(*piece)[i][y][x] = 1;
+						if ((*piece)[i][y][x] < 0)	// 2:隣接部分で消えてるところ
+							(*piece)[i][y][x] *= kAdjacentNum;
 						continue;
 					}
 
@@ -87,8 +91,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					}
 
 					/// 消えたとこを戻す
-					if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
-						(*piece)[i][y][x] = 1;
+					if ((*piece)[i][y][x] < 0)	// 2:隣接部分で消えてるところ
+						(*piece)[i][y][x] *= -1;
 				}
 			}
 
@@ -354,8 +358,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = kAdjacentNum;
-					(*piece)[_pieceNum2][0][temp2 + count2++] = kAdjacentNum;
+					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] *= kAdjacentNum;
+					(*piece)[_pieceNum2][0][temp2 + count2++] *= kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
@@ -364,8 +368,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] = kAdjacentNum;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = kAdjacentNum;
+					(*piece)[_pieceNum1][0][temp1 + count1++] *= kAdjacentNum;
+					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -392,10 +396,10 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
-					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] != 0)
-						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = kAdjacentNum;
-					if ((*piece)[_pieceNum2][temp2 + count2][0] != 0)
-						(*piece)[_pieceNum2][temp2 + count2++][0] = kAdjacentNum;
+					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
+						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
+					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
+						(*piece)[_pieceNum2][temp2 + count2++][0] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -406,14 +410,6 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 }
 
 
-bool Piece::HindranceBlockCheck(const std::vector<std::vector<int>>* _field, int _x, int _y)
-{
-	_x = 0;
-	_y = 0;
-
-	if ((*_field)[_y][_x] == HINDRANCE)	return true;
-	return false;
-}
 
 int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir)
 {
@@ -647,7 +643,7 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 				{
 					isOverlap[k] = true;
 
-					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == kAdjacentNum)
+					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] <0)
 						isOverlap[4] = true;
 				}
 			}
@@ -1015,7 +1011,7 @@ void Piece::CollisionPieceWithPiece()
 
 		for (int j = 0; j < piece->size(); j++)
 		{
-			if (isHave == j||i==j)
+			if (isHave == j || i == j)
 				continue;
 			Vector2 pieceHitEdge = { 0,0 }; ///iのピースのどの辺に当たっているか
 
@@ -1070,10 +1066,9 @@ void Piece::CollisionPieceWithPiece()
 		}
 	}
 }
-
 Piece::Piece()
 {
-	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
+	pieceTexture = Novice::LoadTexture("./Resources/img/pieceBlock.png");
 
 	Init();
 
@@ -1127,7 +1122,7 @@ void Piece::Init()
 
 }
 
-void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
+void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
 {
 	canMoveX = true;
 	canMoveY = true;
@@ -1137,21 +1132,26 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	adjacentPos.clear();
 	adjacentDir.clear();
 
-	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex);
+	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex, _scrollY);
 }
 
-void Piece::Draw()
+void Piece::Draw(int _scrollY)
 {
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
+		//Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
 
 		for (int y = 0; y < (*piece)[i].size(); y++)
 		{
 			for (int x = 0; x < (*piece)[i][y].size(); x++)
 			{
-				if ((*piece)[i][y][x] == 1)
-					Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				if ((*piece)[i][y][x] > 0)
+				{
+					if (scale[i] != kKeyScale[0])
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+					else
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				}
 			}
 		}
 	}
@@ -1159,7 +1159,7 @@ void Piece::Draw()
 	for (int i = 0; i < adjacentPos.size(); i++)
 	{
 		//Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
-		Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
+		//Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
 	}
 }
 

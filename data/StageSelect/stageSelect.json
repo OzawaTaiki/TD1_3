@@ -1,0 +1,13 @@
+{
+  "bgcolor": "ff4477ff",
+  "elementWidth": 196,
+  "elementHeight": 196,
+  "srcWidth": 1,
+  "srcHeight": 1,
+  "elementMargin": 2,
+  "targFrame_turn": 6,
+  "intervalFrame_jump": 40,
+  "targetFrame_jump": 30,
+  "frameOffset_jump": 60,
+  "targetTheta_jump": 60
+}

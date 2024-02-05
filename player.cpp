@@ -74,7 +74,7 @@ void Player::Clamp()
 Player::Player()
 {
 	pos = { 64,64 };
-	size = { 40,40 };
+	size = { 64,96 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
@@ -89,7 +89,7 @@ Player::Player()
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
-	GH = Novice::LoadTexture("./img/player.png");
+	GH = Novice::LoadTexture("./Resources/img/player.png");
 }
 
 void Player::PosUpdate()
@@ -127,9 +127,9 @@ void Player::Update(const char* _keys, const char* _preKeys)
 
 void Player::Draw()
 {
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, int(size.x), int(size.y), GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
-	Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
+	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)
 	{
 		Novice::ScreenPrintf(1600, 900 + i * 20, "%.1f,%.1f", pos.x + vertex[i].x, pos.y + vertex[i].y);

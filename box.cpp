@@ -79,17 +79,22 @@ Box::Box(int _x, int _y)
 	posInMapchip = { _x,_y };
 	size = { 64,64 };
 	velocity = { 0,0 };
+	moveDir = { 0,0 };
 	acceleraion = { 0,0.5f };
 
 	pos = { posInMapchip.x * kTileSize + size.x / 2.0f ,posInMapchip.y * kTileSize + size.y / 2.0f };
-	color = 0xc03030ff;
+	color = 0xffffffff;
 	isDraw = true;
 	isOnPlayer = false;
 	isOnBox = -1;
 	isdAddVelo = false;
 	isLockedX = false;
 	isLockedY = false;
-	GH = Novice::LoadTexture("white1x1.png");
+	vertex[0] = { -size.x / 2,-size.y / 2 };
+	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
+	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
+	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
+	GH = Novice::LoadTexture("./Resources/img/soap.png");
 }
 
 void Box::Update()
@@ -120,7 +125,9 @@ void Box::Draw(int _num)
 	if (!isDraw)
 		return;
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, color, PhillDrawMode::DrawMode_Center);
-	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
-	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
+
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
+	Novice::ScreenPrintf(-100, -100, "%d", _num);
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }
