@@ -7,7 +7,7 @@ Bubble::Bubble(ParticleData _pd)
 	sprData.srcPos			= Transform(0, 0);
 	sprData.srcSize			= Size(64, 64);
 	sprData.textureHandle	= ResourceManager::Handle("bubble");
-	sprData.trgSize			= Size(64, 64);
+	sprData.trgSize			= Size(32, 32);
 	sprData.drawMode		= DrawMode_Center;
 
 	// エミッターから受け取る
@@ -62,4 +62,10 @@ void VECTOR2::operator=(Vector2 _vec2)
 	x = _vec2.x;
 	y = _vec2.y;
 	return;
+}
+
+void VECTOR2::operator=(Transform _tf)
+{
+	x = float(_tf.x);
+	y = float(_tf.y);
 }

@@ -12,10 +12,10 @@ StageSelect::StageSelect()
 
     UI_Manager::Init();
 
-    ed.position.x = 100;
-    ed.position.y = 500;
-    ed.size.width = 30;
-    ed.size.height = 30;
+    cursor = Transform(0,0);
+    ed.position = cursor;
+    ed.size.width = 30;         // エミッターのwidth
+    ed.size.height = 30;        // エミッターのheight
     bubbleEmit = new BubbleEmitter(&ed);
 
     scrSpr.srcPos           = Transform(0, 0);
@@ -86,6 +86,8 @@ void StageSelect::Init()
 void StageSelect::Update()
 {
     // DEBUG 終わったら消す
+    CursorManager::GetCursorPos(&cursor);
+    ed.position = cursor;
     bubbleEmit->Update();
 
     CursorManager::GetCursorPos(&cur);

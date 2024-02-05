@@ -8,6 +8,7 @@ struct VECTOR2
 	float	y;
 	void operator+=(VECTOR2 _vec2);
 	void operator=(Vector2 _vec2);
+	void operator=(Transform _tf);
 };
 
 struct ParticleData

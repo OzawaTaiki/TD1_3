@@ -36,6 +36,8 @@ private:
     EmitterData ed;
     BubbleEmitter*    bubbleEmit;
 
+    Transform   cursor;
+
     // ステージ選択要素(15個のやつ)
     Size	    srcSize;                        // 画像解像度 (px)
     Size	    elementSize;                    // 通常時の要素サイズ (px)
