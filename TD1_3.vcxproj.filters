@@ -80,6 +80,12 @@
     <Filter Include="シーン\シーンクラス\StageSelect">
       <UniqueIdentifier>{8f62346a-6a4c-49f2-8651-2707976d6a63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{2ff0ea48-21af-4d1c-ab8a-a7c50ecdc138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Bubble">
+      <UniqueIdentifier>{86acc3ca-66da-443b-bee0-51a5b953d416}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -169,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="StageSelect.cpp">
       <Filter>シーン\シーンクラス\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>Particle\Bubble</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="StageSelect.h">
       <Filter>シーン\シーンクラス\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>Particle\Bubble</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
