@@ -26,7 +26,7 @@ public:
 	std::vector<std::vector<Vector2>> adjacencyCheckVertex;
 	std::vector<intVec2> adjacentPos;		//ピースが隣接してるときの左or上の座標
 	std::vector<char> adjacentDir;
-	const int kAdjacentNum = 2;
+	const int kAdjacentNum = -1;
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標

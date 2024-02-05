@@ -382,7 +382,7 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][0] == 1)
 						(*piece)[_pieceNum1][temp1 + count1++][0] = kAdjacentNum;
-					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] == 1)
+					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
 						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = kAdjacentNum;
 				}
 			}
@@ -460,8 +460,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 		if (isExit)
 			continue;
 
-		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0)
 		{
 			_collisionDir.y = -1;
 			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
@@ -469,8 +469,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			hitPieceNum = i;
 		}
 		/// 下向き
-		if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 		{
 			_collisionDir.y = 1;
 			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
@@ -479,8 +479,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 		}
 
 		/// 左向き
-		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0)
 		{
 			_collisionDir.x = -1;
 			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
@@ -488,8 +488,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			hitPieceNum = i;
 		}
 		/// 右向き
-		if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 		{
 			_collisionDir.x = 1;
 			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
@@ -659,16 +659,16 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 		if (!isOverlap[4])
 		{
 			/// 上向き
-			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+				(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0)
 			{
 				_collisionDir.y = -1;
 				runY = int(o2pSub[1].y) / kTileSize;
 				hitPieceNum = i;
 			}
 			/// 下向き
-			if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 &&
+				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 			{
 				_collisionDir.y = 1;
 				runY = int(o2pSub[2].y) / kTileSize;
@@ -676,16 +676,16 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			}
 
 			/// 左向き
-			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+			if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+				(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0)
 			{
 				_collisionDir.x = -1;
 				runX = int(o2pSub[2].x) / kTileSize;
 				hitPieceNum = i;
 			}
 			/// 右向き
-			if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+			if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 &&
+				(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 			{
 				_collisionDir.x = 1;
 				runX = int(o2pSub[1].x) / kTileSize;
@@ -696,9 +696,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 		{
 			/// 上向き
 			if (_moveDir.y < 0 &&
-				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
 					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum ||
-					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 &&
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.y = -1;
@@ -708,9 +708,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			}
 			/// 下向き
 			if (_moveDir.y > 0 &&
-				(isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
+				(isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 &&
 					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0 &&
 					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.y = 1;
@@ -720,9 +720,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 
 			/// 左向き
 			if (_moveDir.x < 0 &&
-				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
+				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
 					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum ||
-					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 &&
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.x = -1;
@@ -732,9 +732,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			}
 			/// 右向き
 			if (_moveDir.x > 0 &&
-				(isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
+				(isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 &&
 					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0 &&
 					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum))
 			{
 				_collisionDir.x = 1;
@@ -800,8 +800,8 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 		}
 
 		/// 上向き objの上辺にpieceが当たった
-		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
-			isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 ||
+			isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0)
 			&& o2pSub[2].y > size[i].y * kTileSize
 			&& moveDir[i].y > 0
 			&& pieceHitEdge.y == 1)
@@ -811,8 +811,8 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 			hitPieceNum = i;
 		}
 		/// 下向き
-		if ((isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 ||
-			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 ||
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 			&& o2pSub[0].y < 0
 			&& moveDir[i].y < 0
 			&& pieceHitEdge.y == -1)
@@ -822,8 +822,8 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 			hitPieceNum = i;
 		}
 		/// 左向き
-		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 ||
-			isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+		if ((isContinue[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 ||
+			isContinue[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0)
 			&& o2pSub[1].x > size[i].x * kTileSize
 			&& moveDir[i].x > 0
 			&& pieceHitEdge.x == 1)
@@ -833,8 +833,8 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 			hitPieceNum = i;
 		}
 		/// 右向き objの右辺にpieceが当たった
-		if ((isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 ||
-			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((isContinue[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 ||
+			isContinue[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 			&& o2pSub[0].x < 0
 			&& moveDir[i].x < 0
 			&& pieceHitEdge.x == -1)
@@ -870,7 +870,7 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 		o2pSub.y < 0 ||
 		o2pSub.x >= size[_pieceNum].x * kTileSize ||
 		o2pSub.y >= size[_pieceNum].y * kTileSize ||
-		(*piece)[_pieceNum][base.y][base.x] == 1)
+		(*piece)[_pieceNum][base.y][base.x] > 0)
 		return false;
 	/*if ((o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
