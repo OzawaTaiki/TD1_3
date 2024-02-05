@@ -269,8 +269,7 @@ void Playground::CollisionPlayerWithPiece()
 		/// piece-player間に箱があるときの処理
 		else
 		{
-			int i;
-			for (i = 0; i < box.size(); i++)
+			for (int i = 0; i < box.size(); i++)
 			{
 				if (player->pos.x - player->size.x / 2.0f <= box[i]->pos.x + box[i]->size.x / 2.0f &&
 					player->pos.x + player->size.x / 2.0f >= box[i]->pos.x - box[i]->size.x / 2.0f &&
@@ -283,7 +282,10 @@ void Playground::CollisionPlayerWithPiece()
 
 					if (collidedNum != -1)
 					{
-						if (collisionDir.x < 0)
+						piece->MoveOnCollision(collisionDir, collidedNum + kTileKinds, box[i]->velocity);
+
+
+						/*if (collisionDir.x < 0)
 							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize - box[i]->size.x / 2 - kTileSize;
 						if (collisionDir.x > 0)
 							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize + box[i]->size.x / 2;
@@ -291,6 +293,9 @@ void Playground::CollisionPlayerWithPiece()
 							piece->pos[collidedNum].y = box[i]->pos.y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y;
 						if (collisionDir.y > 0)
 							piece->pos[collidedNum].y = box[i]->pos.y - piece->runY * kTileSize + box[i]->size.y / 2;
+
+						piece->moveDir[collidedNum].x = collisionDir.x;
+						piece->moveDir[collidedNum].y = collisionDir.y;*/
 					}
 				}
 			}
@@ -341,27 +346,6 @@ void Playground::CollisionPieceWithBox()
 				if (collisionDir.y > 0)
 					piece->pos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
 			}
-
-			/* /// 埋まってないとき
-			if (!isFill(check, box[i]->vertex))
-			{
-				box[i]->pos = check;
-			}
-			 埋まってるとき
-			else
-			{
-				box[i]->isLockedX = true;
-				box[i]->isLockedY = true;
-
-				if (collisionDir.x < 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
-				if (collisionDir.x > 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
-				if (collisionDir.y < 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
-				if (collisionDir.y > 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
-			}*/
 		}
 		else
 		{
@@ -527,6 +511,7 @@ Playground::Playground()
 	blockTexture = Novice::LoadTexture("./Resources/img/block.png");
 	goalTexture = Novice::LoadTexture("./Resources/img/goal.png");
 	obstacleTexture = Novice::LoadTexture("./img/obstacleBlock.png");
+	backGroundTexture = Novice::LoadTexture("./Resources/img/stageBackGround.png");
 
 	hindranceVertex[0] = { 0,0 };
 	hindranceVertex[1] = { kTileSize,0 };
@@ -606,7 +591,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex,increaseY_scroll);
+		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
@@ -616,7 +601,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		CollisionPlayerWithBox();
 		CollisionWithBox();
 		CollisionPlayerWithPiece();//
-		CollisionWithPiece();
+		//CollisionWithPiece();
 		CollisionPieceWithBox();
 		CollisionWithBox();
 		CollisionPieceWithBox();
@@ -654,6 +639,8 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 
 void Playground::Draw()
 {
+	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xffffffd0);
+
 	for (int y = 0; y < (*field).size(); y++)
 	{
 		for (int x = 0; x < (*field)[y].size(); x++)
@@ -661,18 +648,18 @@ void Playground::Draw()
 			if ((*field)[y][x] != 9)
 			{
 				if ((*field)[y][x] == BLOCK)
-					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize , kTileSize , 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				else if ((*field)[y][x] == GOAL)
-					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize*2, kTileSize*2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				else if ((*field)[y][x] == HINDRANCE)///お邪魔
 					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 				else if ((*field)[y][x] == SPINE)///とげ
 					Novice::DrawBox(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
 
-				else if ((*field)[y][x] != 9 && (*field)[y][x] != 0)
-					Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
+				//else if ((*field)[y][x] != 0)
+					//Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
 			}
 			//Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
 		}

@@ -126,8 +126,8 @@ void Box::Draw(int _num)
 		return;
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, color, PhillDrawMode::DrawMode_Center);
 
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
-	Novice::ScreenPrintf(-100, -100, "%d", _num);
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
+	//Novice::ScreenPrintf(-100, -100, "%d", _num);
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }

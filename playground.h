@@ -72,6 +72,7 @@ class Playground
 	int blockTexture;
 	int goalTexture;
 	int obstacleTexture;
+	int backGroundTexture;
 
 	bool frameSlow = false;
 

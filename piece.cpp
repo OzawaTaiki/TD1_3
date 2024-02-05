@@ -109,7 +109,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					check.x = float(_hindrancePos[k].x * kTileSize);
 					check.y = float(_hindrancePos[k].y * kTileSize);
 					if (IsInPiece(check, i) || IsOverlap(check, _hindVertex, i))
-						isHindranceBlockInside = true;
+						isHindranceBlockInside = false;
 				}
 
 				for (int k = 0; k < _box.size(); k++)
@@ -518,7 +518,7 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 				{
 					isOverlap[k] = true;
 
-					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] <0)
+					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] < 0)
 						isOverlap[4] = true;
 				}
 			}
@@ -835,15 +835,16 @@ bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum
 
 void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity)
 {
-	velocity[_collidedNum - kTileKinds] = _velocity;
+		velocity[_collidedNum - kTileKinds].x = _velocity.x;
+		velocity[_collidedNum - kTileKinds].y = _velocity.y;
 
 	if (_collisionDir.x != 0 && canMoveX)
 		pos[_collidedNum - kTileKinds].x += velocity[_collidedNum - kTileKinds].x;
 	if (_collisionDir.y != 0 && canMoveY)
 		pos[_collidedNum - kTileKinds].y += velocity[_collidedNum - kTileKinds].y;
 
-	moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
-	moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
+		moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
+		moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
 }
 
 void Piece::CollisionPieceWithPiece()
@@ -965,6 +966,12 @@ void Piece::Init()
 	canMoveX = true;
 	canMoveY = true;
 
+	color[0] = 0xc08080d0;
+	color[1] = 0x80c080d0;
+	color[2] = 0x8080c0d0;
+	color[3] = 0xc0c080d0;
+	color[4] = 0xc080c0d0;
+
 }
 
 void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
@@ -984,7 +991,7 @@ void Piece::Draw(int _scrollY)
 {
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		//Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
+		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y - 20) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
 
 		for (int y = 0; y < (*piece)[i].size(); y++)
 		{
@@ -993,9 +1000,9 @@ void Piece::Draw(int _scrollY)
 				if ((*piece)[i][y][x] > 0)
 				{
 					if (scale[i] != kKeyScale[0])
-						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, color[i], PhillDrawMode::DrawMode_LeftTop);
 					else
-						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, color[i], PhillDrawMode::DrawMode_LeftTop);
 				}
 			}
 		}

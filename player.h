@@ -12,6 +12,7 @@ public:
 	Vector2 velocity;
 	Vector2 acceleratiion;
 	Vector2 moveDir;
+	intVec2 GHSize;
 
 
 	Vector2 vertex[4];
