@@ -223,7 +223,7 @@ void Playground::CollisionPlayerWithPiece()
 	int collidedNum = -1;
 	//int collidedBoxNum = -1;
 
-	collidedNum = piece->PixelCollisionWithObj(player->pos, player->vertex, collisionDir);
+	collidedNum = piece->PixelCollisionWithObj(player->pos, player->vertex,player->moveDir, collisionDir);
 
 	if (collidedNum != -1)
 	{
@@ -561,7 +561,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(field, player->pos, box);
+		piece->Update(player->pos, player->vertex,box, hindrancePos, hindranceVertex);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
