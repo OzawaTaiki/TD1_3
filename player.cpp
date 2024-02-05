@@ -81,6 +81,8 @@ Player::Player()
 
 	isAlive = true;
 	isGround = false;
+	isOnBox=false;
+	isAddVelo = false;
 
 	vertex[0] = { -size.x / 2,-size.y / 2 };
 	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
