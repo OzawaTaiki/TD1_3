@@ -71,6 +71,6 @@ public:
 	void PiecePosInit(int _x, int _y);
 	void Init();
 	void Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex);
-	void Draw();
+	void Draw(int _scrollY);
 
 };

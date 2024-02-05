@@ -13,15 +13,19 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	{
 		for (int i = 0; i < (*piece).size(); i++)
 		{
+			Vector2 tempPos = piecePos[i];
+			if (tempPos.x > kStageAreaWidth)
+				tempPos.y += _scrollY;
+
 			/// ピースを矩形の当たり判定で...
-			if (pos[i].x < cursor.x &&
-				pos[i].x + size[i].x * kTileSize * scale[i] > cursor.x &&
-				pos[i].y < cursor.y &&
-				pos[i].y + size[i].y * kTileSize * scale[i] > cursor.y &&
+			if (tempPos.x < cursor.x &&
+				tempPos.x + pieceSize[i].x * kTileSize * scale[i] > cursor.x &&
+				tempPos.y < cursor.y &&
+				tempPos.y + pieceSize[i].y * kTileSize * scale[i] > cursor.y &&
 				isHave == -1)
 			{
-				p2mSub.x = (pos[i].x - cursor.x) / scale[i];
-				p2mSub.y = (pos[i].y - cursor.y) / scale[i];
+				p2mSub.x = (tempPos.x - cursor.x) / scale[i];
+				p2mSub.y = (tempPos.y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
 				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
@@ -29,7 +33,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					piecePrePos = pos[i];
 
 					pos[i].x = p2mSub.x + cursor.x;
-					pos[i].y = p2mSub.y + cursor.y;
+					pos[i].y = p2mSub.y + cursor.y-_scrollY;
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
@@ -1140,7 +1144,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex);
 }
 
-void Piece::Draw()
+void Piece::Draw(int _scrollY)
 {
 	for (int i = 0; i < (*piece).size(); i++)
 	{
@@ -1151,7 +1155,12 @@ void Piece::Draw()
 			for (int x = 0; x < (*piece)[i][y].size(); x++)
 			{
 				if ((*piece)[i][y][x] == 1)
-					Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				{
+					if (scale[i]!=kKeyScale[0])
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+					else
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+				}
 			}
 		}
 	}

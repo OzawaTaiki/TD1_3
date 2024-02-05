@@ -8,6 +8,7 @@
 #include "piece.h"
 #include "player.h"
 #include "box.h"
+#include "ResourceManager.h"
 
 
 void Playground::CollisionWithPlayer()
@@ -498,6 +499,26 @@ void Playground::SpineHitCheck()
 	}
 }
 
+void Playground::LoadFromJSON()
+{
+	scrollBarSize.width = atoi((*json_scr)["barWidth"].c_str());
+	scrollBarSize.height = atoi((*json_scr)["barHeight"].c_str());
+	scrollboxSize.width = atoi((*json_scr)["boxWidth"].c_str());
+	scrollboxSize.height = atoi((*json_scr)["boxHeight"].c_str());
+	scrollboxMargin = atoi((*json_scr)["boxMargin"].c_str());
+	scrollbarPosition.x = atoi((*json_scr)["barX"].c_str());
+	scrollbarPosition.y = atoi((*json_scr)["barY"].c_str());
+	scrollMarginTop = atoi((*json_scr)["MarginTop"].c_str());
+}
+
+void Playground::ScrollCalculation()
+{
+	// ナイトウが追加
+	float value = scrollBar->GetValue();
+	increaseY_scroll = int(value * (-512)); // TODO: この値を使用してy値を変化させてほしい。(0 ~ -512)
+	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
+}
+
 Playground::Playground()
 {
 	piece = new Piece;
@@ -511,6 +532,22 @@ Playground::Playground()
 	hindranceVertex[1] = { kTileSize,0 };
 	hindranceVertex[2] = { 0,kTileSize };
 	hindranceVertex[3] = { kTileSize,kTileSize };
+
+	/// - - - ナイトウが勝手に実装 はじめ - - - ///
+	json_scr = JSON_Manager::GetJSON("scroll");
+	scrSpr.srcPos = Transform(0, 0);
+	scrSpr.srcSize = Size(1, 1);
+	scrSpr.trgSize = Size(14, 54);
+	scrSpr.textureHandle = ResourceManager::Handle("white1x1");
+
+	scrollBar = new Scroller(&scrSpr);
+	LoadFromJSON();
+	// スクロールバー初期化
+	scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2
+	scrollBar->SetBoxSize(scrollboxSize);
+	scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
+
+	/// - - - ナイトウが勝手に実装 おわり - - - ///
 }
 
 void Playground::Init(int _stageNo)
@@ -553,6 +590,10 @@ void Playground::Init(int _stageNo)
 
 void Playground::Update(const char* _keys, const char* _preKeys)
 {
+	// ナイトウが勝手に追加 (二行)
+	scrollBar->UpdateStatus();
+	ScrollCalculation();
+
 	/// ctrl + enter でコマ送りモード
 	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LCONTROL])
 		frameSlow = frameSlow ? false : true;
@@ -639,8 +680,10 @@ void Playground::Draw()
 
 	for (int i = 0; i < box.size(); i++)
 		box[i]->Draw(i);
-	piece->Draw();
+	piece->Draw(increaseY_scroll);
 	player->Draw();
 
 	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);
+	// ナイトウが勝手に追加
+	scrollBar->Draw();
 }
