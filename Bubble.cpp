@@ -7,7 +7,7 @@ Bubble::Bubble(ParticleData _pd)
 	sprData.srcPos			= Transform(0, 0);
 	sprData.srcSize			= Size(64, 64);
 	sprData.textureHandle	= ResourceManager::Handle("bubble");
-	sprData.trgSize			= Size(32, 32);
+	sprData.trgSize			= Size(16, 16);
 	sprData.drawMode		= DrawMode_Center;
 
 	// エミッターから受け取る
@@ -48,6 +48,11 @@ void Bubble::Draw()
 		0xffffffff,
 		DrawMode_Center
 	);
+}
+
+int Bubble::ableDelete()
+{
+	return framecount > targetFrame_erase;
 }
 
 void VECTOR2::operator+=(VECTOR2 _vec2)

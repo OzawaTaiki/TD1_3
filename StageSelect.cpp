@@ -14,8 +14,8 @@ StageSelect::StageSelect()
 
     cursor = Transform(0,0);
     ed.position = cursor;
-    ed.size.width = 30;         // エミッターのwidth
-    ed.size.height = 30;        // エミッターのheight
+    ed.size.width = 10;         // エミッターのwidth
+    ed.size.height = 10;        // エミッターのheight
     bubbleEmit = new BubbleEmitter(&ed);
 
     scrSpr.srcPos           = Transform(0, 0);

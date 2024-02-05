@@ -23,5 +23,6 @@ public:
 
 	void	Update();
 	void	Draw();
+	int		ableDelete();
 
 };
