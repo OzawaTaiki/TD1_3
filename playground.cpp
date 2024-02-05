@@ -501,14 +501,14 @@ void Playground::SpineHitCheck()
 
 void Playground::LoadFromJSON()
 {
-	scrollBarSize.width = atoi((*json_scr)["barWidth"].c_str());
-	scrollBarSize.height = atoi((*json_scr)["barHeight"].c_str());
-	scrollboxSize.width = atoi((*json_scr)["boxWidth"].c_str());
-	scrollboxSize.height = atoi((*json_scr)["boxHeight"].c_str());
-	scrollboxMargin = atoi((*json_scr)["boxMargin"].c_str());
-	scrollbarPosition.x = atoi((*json_scr)["barX"].c_str());
-	scrollbarPosition.y = atoi((*json_scr)["barY"].c_str());
-	scrollMarginTop = atoi((*json_scr)["MarginTop"].c_str());
+	scrollBarSize.width = atoi((*json_scr)["barWidth"]);
+	scrollBarSize.height = atoi((*json_scr)["barHeight"]);
+	scrollboxSize.width = atoi((*json_scr)["boxWidth"]);
+	scrollboxSize.height = atoi((*json_scr)["boxHeight"]);
+	scrollboxMargin = atoi((*json_scr)["boxMargin"]);
+	scrollbarPosition.x = atoi((*json_scr)["barX"]);
+	scrollbarPosition.y = atoi((*json_scr)["barY"]);
+	scrollMarginTop = atoi((*json_scr)["MarginTop"]);
 }
 
 void Playground::ScrollCalculation()
@@ -534,7 +534,7 @@ Playground::Playground()
 	hindranceVertex[3] = { kTileSize,kTileSize };
 
 	/// - - - ナイトウが勝手に実装 はじめ - - - ///
-	json_scr = JSON_Manager::GetJSON("scroll");
+	json_scr = JSON_Manager::GetJSON("plygro-scroll");
 	scrSpr.srcPos = Transform(0, 0);
 	scrSpr.srcSize = Size(1, 1);
 	scrSpr.trgSize = Size(14, 54);

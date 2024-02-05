@@ -8,8 +8,9 @@
 
 StageSelect::StageSelect()
 {
-    json = JSON_Manager::GetJSON(jsonName);
-    json_scr = JSON_Manager::GetJSON(jsonName_scr);
+    json_main = JSON_Manager::GetJSON(jsonName[0]);
+    json_scroll = JSON_Manager::GetJSON(jsonName[1]);
+    json_back = JSON_Manager::GetJSON(jsonName[2]);
 
     LoadFromJSON();
 
