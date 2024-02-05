@@ -7,7 +7,8 @@
 
 StageSelect::StageSelect()
 {
-    json = JSON_Manager::GetJSON(jsonName);
+    json_main = JSON_Manager::GetJSON(jsonName[0]);
+    json_scroll = JSON_Manager::GetJSON(jsonName[1]);
 
     LoadFromJSON();
 
@@ -26,8 +27,10 @@ StageSelect::StageSelect()
     constantT_jump		    = 0.0f;
     easedT_jump			    = 0.0f;
     targetTheta_jump	    = 0.0f;
-    ssElementHandle		    = ResourceManager::Handle("white1x1");
     isInterval			    = 0;
+
+    ssElementHandle		    = ResourceManager::Handle("white1x1");
+    ssBackHandle            = ResourceManager::Handle("white1x1");
 
     Calculation();
 
@@ -154,7 +157,8 @@ void StageSelect::Update()
     // ホットリロード
     if (KeyManager::GetKeys(DIK_F5) && !KeyManager::GetPreKeys(DIK_F5))
     {
-        JSON_Manager::ReloadJSON(jsonName);
+        JSON_Manager::ReloadJSON(jsonName[0]);
+        JSON_Manager::ReloadJSON(jsonName[1]);
         LoadFromJSON();
         Calculation();
         Init();
@@ -199,27 +203,27 @@ void StageSelect::EasingHover(int _index)
 
 void StageSelect::LoadFromJSON()
 {
-    elementSize.width		= atoi((*json)["elementWidth"].c_str());
-    elementSize.height		= atoi((*json)["elementHeight"].c_str());
-    srcSize.width			= atoi((*json)["srcWidth"].c_str());
-    srcSize.height			= atoi((*json)["srcHeight"].c_str());
+    elementSize.width		= atoi((*json_main)["elementWidth"].c_str());
+    elementSize.height		= atoi((*json_main)["elementHeight"].c_str());
+    srcSize.width			= atoi((*json_main)["srcWidth"].c_str());
+    srcSize.height			= atoi((*json_main)["srcHeight"].c_str());
 
-    frameOffset_jump		= atoi((*json)["frameOffset_jump"].c_str());
-    IntervalFrame_jump		= atoi((*json)["intervalFrame_jump"].c_str());
-    targetFrame_jump		= atoi((*json)["targetFrame_jump"].c_str());
+    frameOffset_jump		= atoi((*json_main)["frameOffset_jump"].c_str());
+    IntervalFrame_jump		= atoi((*json_main)["intervalFrame_jump"].c_str());
+    targetFrame_jump		= atoi((*json_main)["targetFrame_jump"].c_str());
 
-    targetFrame_turn		= atoi((*json)["targFrame_turn"].c_str());
-    elementMargin			= atoi((*json)["elementMargin"].c_str());
-    bgColor					= UINT(strtoll((*json)["bgcolor"].c_str(), nullptr, 16));
+    targetFrame_turn		= atoi((*json_main)["targFrame_turn"].c_str());
+    elementMargin			= atoi((*json_main)["elementMargin"].c_str());
+    bgColor					= UINT(strtoll((*json_main)["bgcolor"].c_str(), nullptr, 16));
 
-    scrollBarSize.width     = atoi((*json)["scrollbarWidth"].c_str());
-    scrollBarSize.height    = atoi((*json)["scrollbarHeight"].c_str());
-    scrollboxSize.width     = atoi((*json)["scrollboxWidth"].c_str());
-    scrollboxSize.height    = atoi((*json)["scrollboxHeight"].c_str());
-    scrollboxMargin         = atoi((*json)["scrollboxMargin"].c_str());
-    scrollbarPosition.x     = atoi((*json)["scrollbarX"].c_str());
-    scrollbarPosition.y     = atoi((*json)["scrollbarY"].c_str());
-    scrollMarginTop         = atoi((*json)["scrollMarginTop"].c_str());
+    scrollBarSize.width     = atoi((*json_scroll)["scrollbarWidth"].c_str());
+    scrollBarSize.height    = atoi((*json_scroll)["scrollbarHeight"].c_str());
+    scrollboxSize.width     = atoi((*json_scroll)["scrollboxWidth"].c_str());
+    scrollboxSize.height    = atoi((*json_scroll)["scrollboxHeight"].c_str());
+    scrollboxMargin         = atoi((*json_scroll)["scrollboxMargin"].c_str());
+    scrollbarPosition.x     = atoi((*json_scroll)["scrollbarX"].c_str());
+    scrollbarPosition.y     = atoi((*json_scroll)["scrollbarY"].c_str());
+    scrollMarginTop         = atoi((*json_scroll)["scrollMarginTop"].c_str());
 }
 
 void StageSelect::Calculation()

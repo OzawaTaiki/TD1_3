@@ -22,9 +22,10 @@ struct StageSelectElement
 class StageSelect
 {
 private:
-    const char* jsonName = "stageSelect";
+    const char* jsonName[2] = { "stgSel-main", "stgSel-scroll"};
 
-    JsonL*	json;
+    JsonL*	json_main;
+    JsonL*	json_scroll;
 
     SpriteData  scrSpr;                         // スクロールデータ
     Scroller*   scrollBar;                      // スクロールバー実体
@@ -51,6 +52,7 @@ private:
     StageSelectElement elements[15];
 
     int		ssElementHandle;
+    int		ssBackHandle;
 
     int		frameCount_current;                 // フレームカウント 総合
     int		frameCount_turn[15];                // フレームカウント ホバー時

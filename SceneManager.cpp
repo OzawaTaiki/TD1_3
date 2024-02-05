@@ -134,6 +134,7 @@ void SceneManager::ChangeScene()
 				break;
 			}
 		}
+		scene_current = scene_next;
 		existChangeRequest = 0;
 	}
 }
