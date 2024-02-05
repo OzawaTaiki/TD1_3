@@ -12,6 +12,12 @@ StageSelect::StageSelect()
 
     UI_Manager::Init();
 
+    ed.position.x = 100;
+    ed.position.y = 100;
+    ed.size.width = 300;
+    ed.size.height = 300;
+    bubbleEmit = new BubbleEmitter(&ed);
+
     scrSpr.srcPos           = Transform(0, 0);
     scrSpr.srcSize          = Size(1, 1);
     scrSpr.trgSize          = Size(14,54);
@@ -79,6 +85,9 @@ void StageSelect::Init()
 
 void StageSelect::Update()
 {
+    // DEBUG 終わったら消す
+    bubbleEmit->Update();
+
     CursorManager::GetCursorPos(&cur);
     scrollBar->UpdateStatus();
     ScrollCalc();
@@ -194,6 +203,9 @@ void StageSelect::Draw()
     Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
 
     scrollBar->Draw();
+
+    // DEBUG 終わったら消す
+    bubbleEmit->Draw();
 }
 
 void StageSelect::EasingHover(int _index)

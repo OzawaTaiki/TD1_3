@@ -3,14 +3,6 @@
 #include "UI/UI_ToolKit_Defines.h"
 #include "ParticleDefines.h"
 
-struct VECTOR2
-{
-	float	x;
-	float	y;
-	VECTOR2& operator+=(VECTOR2 _vec2);
-	VECTOR2& operator=(Vector2 _vec2);
-};
-
 class Bubble
 {
 private:

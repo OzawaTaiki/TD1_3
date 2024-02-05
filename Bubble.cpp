@@ -41,14 +41,14 @@ void Bubble::Draw()
 	);
 }
 
-VECTOR2& VECTOR2::operator+=(VECTOR2 _vec2)
+void VECTOR2::operator+=(VECTOR2 _vec2)
 {
 	x += _vec2.x;
 	y += _vec2.y;
 	return;
 }
 
-VECTOR2& VECTOR2::operator=(Vector2 _vec2)
+void VECTOR2::operator=(Vector2 _vec2)
 {
 	x = _vec2.x;
 	y = _vec2.y;

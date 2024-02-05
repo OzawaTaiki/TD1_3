@@ -2,13 +2,29 @@
 #include "UI/UI_ToolKit_Defines.h"
 #include <Vector2.h>
 
+struct VECTOR2
+{
+	float	x;
+	float	y;
+	void operator+=(VECTOR2 _vec2);
+	void operator=(Vector2 _vec2);
+};
+
 struct ParticleData
 {
-	Vector2		zeroPosition;
-	Vector2		zeroAcceleration;
-	Vector2		zeroVelocity;
+	VECTOR2		zeroPosition;
+	VECTOR2		zeroAcceleration;
+	VECTOR2		zeroVelocity;
 	Size		zeroSize;
 	float		zeroTheta;
 	float		zeroGravity;
 	float		zeroAirResistance;
+};
+
+struct EmitterData
+{
+	VECTOR2		position;
+	VECTOR2		velocity;
+	VECTOR2		acceleration;
+	Size		size;
 };

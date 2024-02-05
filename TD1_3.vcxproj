@@ -139,7 +139,8 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="UI\UI_ToolKit_Defines.cpp" />
-    <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="BaseEmitter.cpp" />
+    <ClCompile Include="BubbleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
@@ -193,7 +194,8 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="ParticleDefines.h" />
-    <ClInclude Include="Emitter.h" />
+    <ClInclude Include="BaseEmitter.h" />
+    <ClInclude Include="BubbleEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
