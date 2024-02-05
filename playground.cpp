@@ -524,8 +524,8 @@ Playground::Playground()
 	piece = new Piece;
 	player = new Player;
 
-	blockTexture = Novice::LoadTexture("./img/block.png");
-	goalTexture = Novice::LoadTexture("./img/goal.png");
+	blockTexture = Novice::LoadTexture("./Resources/img/block.png");
+	goalTexture = Novice::LoadTexture("./Resources/img/goal.png");
 	obstacleTexture = Novice::LoadTexture("./img/obstacleBlock.png");
 
 	hindranceVertex[0] = { 0,0 };
@@ -660,18 +660,18 @@ void Playground::Draw()
 		{
 			if ((*field)[y][x] != 9)
 			{
-				if ((*field)[y][x] == 1)
-					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 7 * 64, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+				if ((*field)[y][x] == BLOCK)
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize , kTileSize , 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
-				else if ((*field)[y][x] == 2)
-					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+				else if ((*field)[y][x] == GOAL)
+					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize*2, kTileSize*2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
-				else if ((*field)[y][x] == 3)
+				else if ((*field)[y][x] == HINDRANCE)///お邪魔
 					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
-				else if ((*field)[y][x] == 5)///とげ
-					Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
+				else if ((*field)[y][x] == SPINE)///とげ
+					Novice::DrawBox(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
 
-				else if ((*field)[y][x] != 9 /*&& (*field)[y][x] != 0*/)
+				else if ((*field)[y][x] != 9 && (*field)[y][x] != 0)
 					Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
 			}
 			//Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
@@ -683,7 +683,7 @@ void Playground::Draw()
 	piece->Draw(increaseY_scroll);
 	player->Draw();
 
-	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0x80, kFillModeSolid);
+	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0xa0, kFillModeSolid);
 	// ナイトウが勝手に追加
 	scrollBar->Draw();
 }

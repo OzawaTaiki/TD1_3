@@ -78,8 +78,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 						int((pos[i].x) / kTileSize) + x >= kStageAreaWidth / kTileSize ||
 						int((pos[i].y) / kTileSize) + y >= kWindowHeight / kTileSize)
 					{
-						if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
-							(*piece)[i][y][x] = 1;
+						if ((*piece)[i][y][x] < 0)	// 2:隣接部分で消えてるところ
+							(*piece)[i][y][x] *= kAdjacentNum;
 						continue;
 					}
 
@@ -91,8 +91,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					}
 
 					/// 消えたとこを戻す
-					if ((*piece)[i][y][x] == kAdjacentNum)	// 2:隣接部分で消えてるところ
-						(*piece)[i][y][x] = 1;
+					if ((*piece)[i][y][x] < 0)	// 2:隣接部分で消えてるところ
+						(*piece)[i][y][x] *= -1;
 				}
 			}
 
@@ -358,8 +358,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] = kAdjacentNum;
-					(*piece)[_pieceNum2][0][temp2 + count2++] = kAdjacentNum;
+					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] *= kAdjacentNum;
+					(*piece)[_pieceNum2][0][temp2 + count2++] *= kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
@@ -368,8 +368,8 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] = kAdjacentNum;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] = kAdjacentNum;
+					(*piece)[_pieceNum1][0][temp1 + count1++] *= kAdjacentNum;
+					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -384,10 +384,10 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
-					if ((*piece)[_pieceNum1][temp1 + count1][0] == 1)
-						(*piece)[_pieceNum1][temp1 + count1++][0] = kAdjacentNum;
-					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] == 1)
-						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] = kAdjacentNum;
+					if ((*piece)[_pieceNum1][temp1 + count1][0] > 0)
+						(*piece)[_pieceNum1][temp1 + count1++][0] *= kAdjacentNum;
+					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
+						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
@@ -396,10 +396,10 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
-					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] != 0)
-						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] = kAdjacentNum;
-					if ((*piece)[_pieceNum2][temp2 + count2][0] != 0)
-						(*piece)[_pieceNum2][temp2 + count2++][0] = kAdjacentNum;
+					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
+						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
+					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
+						(*piece)[_pieceNum2][temp2 + count2++][0] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -410,14 +410,6 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 }
 
 
-bool Piece::HindranceBlockCheck(const std::vector<std::vector<int>>* _field, int _x, int _y)
-{
-	_x = 0;
-	_y = 0;
-
-	if ((*_field)[_y][_x] == HINDRANCE)	return true;
-	return false;
-}
 
 int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir)
 {
@@ -464,8 +456,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 		if (isExit)
 			continue;
 
-		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0)
 		{
 			_collisionDir.y = -1;
 			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + kTileSize + _vertex[2].y + 1;
@@ -473,8 +465,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			hitPieceNum = i;
 		}
 		/// 下向き
-		if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 		{
 			_collisionDir.y = 1;
 			localPos.y = pos[i].y + int(o2pSub[1].y) * kTileSize + _vertex[0].y - 1;
@@ -483,8 +475,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 		}
 
 		/// 左向き
-		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] > 0)
 		{
 			_collisionDir.x = -1;
 			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + kTileSize + _vertex[1].x + 1;
@@ -492,8 +484,8 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Ve
 			hitPieceNum = i;
 		}
 		/// 右向き
-		if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1)
+		if ((*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] > 0 &&
+			(*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] > 0)
 		{
 			_collisionDir.x = 1;
 			localPos.x = pos[i].x + int(o2pSub[2].x) / kTileSize * kTileSize + _vertex[0].x - 1;
@@ -651,7 +643,7 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 				{
 					isOverlap[k] = true;
 
-					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] == kAdjacentNum)
+					if ((*piece)[i][int(o2pSub[k].y) / kTileSize][int(o2pSub[k].x) / kTileSize] <0)
 						isOverlap[4] = true;
 				}
 			}
@@ -701,9 +693,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 上向き
 			if (_moveDir.y < 0 &&
 				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] < 0 ||
 					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] < 0))
 			{
 				_collisionDir.y = -1;
 				runY = int(o2pSub[1].y) / kTileSize;
@@ -713,9 +705,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 下向き
 			if (_moveDir.y > 0 &&
 				(isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] < 0 ||
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
-					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum))
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] < 0))
 			{
 				_collisionDir.y = 1;
 				runY = int(o2pSub[2].y) / kTileSize;
@@ -725,9 +717,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 左向き
 			if (_moveDir.x < 0 &&
 				(isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == 1 &&
-					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] < 0 ||
 					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == 1 &&
-					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == kAdjacentNum))
+					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] < 0))
 			{
 				_collisionDir.x = -1;
 				runX = int(o2pSub[2].x) / kTileSize;
@@ -737,9 +729,9 @@ int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, co
 			/// 右向き
 			if (_moveDir.x > 0 &&
 				(isOverlap[1] && (*piece)[i][int(o2pSub[1].y) / kTileSize][int(o2pSub[1].x) / kTileSize] == 1 &&
-					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] == kAdjacentNum ||
+					isOverlap[0] && (*piece)[i][int(o2pSub[0].y) / kTileSize][int(o2pSub[0].x) / kTileSize] < 0 ||
 					isOverlap[3] && (*piece)[i][int(o2pSub[3].y) / kTileSize][int(o2pSub[3].x) / kTileSize] == 1 &&
-					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] == kAdjacentNum))
+					isOverlap[2] && (*piece)[i][int(o2pSub[2].y) / kTileSize][int(o2pSub[2].x) / kTileSize] < 0))
 			{
 				_collisionDir.x = 1;
 				runX = int(o2pSub[1].x) / kTileSize;
@@ -1074,10 +1066,9 @@ void Piece::CollisionPieceWithPiece()
 		}
 	}
 }
-
 Piece::Piece()
 {
-	pieceTexture = Novice::LoadTexture("./img/pieceBlock.png");
+	pieceTexture = Novice::LoadTexture("./Resources/img/pieceBlock.png");
 
 	Init();
 
@@ -1148,18 +1139,18 @@ void Piece::Draw(int _scrollY)
 {
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
+		//Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
 
 		for (int y = 0; y < (*piece)[i].size(); y++)
 		{
 			for (int x = 0; x < (*piece)[i][y].size(); x++)
 			{
-				if ((*piece)[i][y][x] == 1)
+				if ((*piece)[i][y][x] > 0)
 				{
 					if (scale[i] != kKeyScale[0])
 						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
 					else
-						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
 				}
 			}
 		}
@@ -1168,7 +1159,7 @@ void Piece::Draw(int _scrollY)
 	for (int i = 0; i < adjacentPos.size(); i++)
 	{
 		//Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
-		Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
+		//Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
 	}
 }
 

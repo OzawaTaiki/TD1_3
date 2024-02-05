@@ -26,7 +26,7 @@ public:
 	std::vector<std::vector<Vector2>> adjacencyCheckVertex;
 	std::vector<intVec2> adjacentPos;		//ピースが隣接してるときの左or上の座標
 	std::vector<char> adjacentDir;
-	const int kAdjacentNum = 2;
+	const int kAdjacentNum = -1;
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
@@ -50,7 +50,6 @@ public:
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
 
-	bool HindranceBlockCheck(const std::vector< std::vector<int>>* _field, int _x, int _y);
 
 	void Adjacent(int _pieceNum);
 	void AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir);
