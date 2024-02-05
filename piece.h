@@ -41,6 +41,8 @@ public:
 	int runX;
 	int runY;
 
+	unsigned int color[5];
+
 	bool canMoveX;
 	bool canMoveY;
 

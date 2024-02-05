@@ -73,6 +73,7 @@ class Playground
 	int blockTexture;
 	int goalTexture;
 	int obstacleTexture;
+	int backGroundTexture;
 
 	Sound *BGM;
 
