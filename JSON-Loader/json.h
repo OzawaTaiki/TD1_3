@@ -12,10 +12,10 @@ private:
 
 public:
 
-	std::string operator[] (const char* key) const
+	const char* operator[] (const char* key) const
 	{
 		auto it = data.find(key);
-		if (it != data.end()) return it->second;
+		if (it != data.end()) return it->second.c_str();
 		else return {};
 	}
 	std::unordered_map<std::string, std::string>* rowData = &data;

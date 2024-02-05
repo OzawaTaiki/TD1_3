@@ -131,4 +131,5 @@ void JSONLoad()
 {
 	JSON_Manager::LoadJSON("stgSel-main", "./data/StageSelect/stageSelect.json");
 	JSON_Manager::LoadJSON("stgSel-scroll", "./data/StageSelect/scroll.json");
+	JSON_Manager::LoadJSON("stgSel-back", "./data/StageSelect/backButton.json");
 }
