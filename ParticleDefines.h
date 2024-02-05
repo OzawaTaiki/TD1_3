@@ -4,8 +4,11 @@
 
 struct ParticleData
 {
-	Vector2		zeroPos;
+	Vector2		zeroPosition;
+	Vector2		zeroAcceleration;
+	Vector2		zeroVelocity;
 	Size		zeroSize;
 	float		zeroTheta;
-	
+	float		zeroGravity;
+	float		zeroAirResistance;
 };

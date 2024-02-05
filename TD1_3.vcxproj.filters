@@ -183,7 +183,10 @@
       <Filter>Particle\Bubble</Filter>
     </ClCompile>
     <ClCompile Include="UI\UI_ToolKit_Defines.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Particle\Emitter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="ParticleDefines.h">
       <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Particle\Emitter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
