@@ -548,6 +548,8 @@ Playground::Playground()
 	scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
 
 	/// - - - ナイトウが勝手に実装 おわり - - - ///
+
+	//BGM=new Sound(/*path*/, 0.5f, true) :
 }
 
 void Playground::Init(int _stageNo)
@@ -606,7 +608,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex,increaseY_scroll);
+		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
@@ -661,10 +663,10 @@ void Playground::Draw()
 			if ((*field)[y][x] != 9)
 			{
 				if ((*field)[y][x] == BLOCK)
-					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize , kTileSize , 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				else if ((*field)[y][x] == GOAL)
-					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize*2, kTileSize*2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				else if ((*field)[y][x] == HINDRANCE)///お邪魔
 					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);

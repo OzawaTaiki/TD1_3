@@ -4,6 +4,7 @@
 #include "intVec2.h"
 #include "JSON-Loader/JSON-Manager.h"
 #include "UI/UI_Manager.h"
+#include "sound.h"
 
 class Piece;
 class Player;
@@ -73,6 +74,9 @@ class Playground
 	int goalTexture;
 	int obstacleTexture;
 
+	Sound *BGM;
+
+
 	bool frameSlow = false;
 
 	bool isFill(const Vector2& _pos, const Vector2* _vertex);
@@ -87,7 +91,6 @@ class Playground
 
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
-	//void CollisionBoxWithBox();			//box		box
 
 	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();
