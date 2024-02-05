@@ -48,7 +48,7 @@ public:
 
 	bool isLockedY;
 
-	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex);
+	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
 
 	bool HindranceBlockCheck(const std::vector< std::vector<int>>* _field, int _x, int _y);
 
@@ -70,7 +70,7 @@ public:
 
 	void PiecePosInit(int _x, int _y);
 	void Init();
-	void Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex);
+	void Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
 	void Draw(int _scrollY);
 
 };

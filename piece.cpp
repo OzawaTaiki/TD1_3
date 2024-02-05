@@ -4,7 +4,7 @@
 #include <Novice.h>
 #include "box.h"
 
-void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
+void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
@@ -13,15 +13,15 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	{
 		for (int i = 0; i < (*piece).size(); i++)
 		{
-			Vector2 tempPos = piecePos[i];
+			Vector2 tempPos = pos[i];
 			if (tempPos.x > kStageAreaWidth)
 				tempPos.y += _scrollY;
 
 			/// ピースを矩形の当たり判定で...
 			if (tempPos.x < cursor.x &&
-				tempPos.x + pieceSize[i].x * kTileSize * scale[i] > cursor.x &&
+				tempPos.x + size[i].x * kTileSize * scale[i] > cursor.x &&
 				tempPos.y < cursor.y &&
-				tempPos.y + pieceSize[i].y * kTileSize * scale[i] > cursor.y &&
+				tempPos.y + size[i].y * kTileSize * scale[i] > cursor.y &&
 				isHave == -1)
 			{
 				p2mSub.x = (tempPos.x - cursor.x) / scale[i];
@@ -33,7 +33,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					piecePrePos = pos[i];
 
 					pos[i].x = p2mSub.x + cursor.x;
-					pos[i].y = p2mSub.y + cursor.y-_scrollY;
+					pos[i].y = p2mSub.y + cursor.y - _scrollY;
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
@@ -1019,7 +1019,7 @@ void Piece::CollisionPieceWithPiece()
 
 		for (int j = 0; j < piece->size(); j++)
 		{
-			if (isHave == j||i==j)
+			if (isHave == j || i == j)
 				continue;
 			Vector2 pieceHitEdge = { 0,0 }; ///iのピースのどの辺に当たっているか
 
@@ -1131,7 +1131,7 @@ void Piece::Init()
 
 }
 
-void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex)
+void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
 {
 	canMoveX = true;
 	canMoveY = true;
@@ -1141,7 +1141,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	adjacentPos.clear();
 	adjacentDir.clear();
 
-	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex);
+	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex, _scrollY);
 }
 
 void Piece::Draw(int _scrollY)
@@ -1156,7 +1156,7 @@ void Piece::Draw(int _scrollY)
 			{
 				if ((*piece)[i][y][x] == 1)
 				{
-					if (scale[i]!=kKeyScale[0])
+					if (scale[i] != kKeyScale[0])
 						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);
 					else
 						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, 0xffffffda, PhillDrawMode::DrawMode_LeftTop);

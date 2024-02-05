@@ -606,7 +606,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		pibo = false;
 
 		CollisionReset();
-		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex);
+		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex,increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
 		player->Update(_keys, _preKeys);
