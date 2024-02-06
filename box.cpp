@@ -129,13 +129,13 @@ void Box::Draw(int _num, int warningVisible)
 	if (moveSound != nullptr)	moveSound->PlayAudio();
 
 	if (warningVisible & (int)powf(2.0f, (float)_num))
-	{
-		Phill::DrawQuadPlus(int(pos.x), int(pos.y - 100), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, 0xff3030d0, PhillDrawMode::DrawMode_Center);
-	}
+		color = 0xff0000d0;
+	else color = WHITE;
+
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
 
-	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
 	//Novice::ScreenPrintf(-100, -100, "%d", _num);
-	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }

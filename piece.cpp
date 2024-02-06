@@ -10,6 +10,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 {
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
+	warningIconVisible = 0;
 
 	if (Novice::IsTriggerMouse(0))
 	{
@@ -65,7 +66,6 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			mapchipKeyPos.y = float((int)pos[i].y % kTileSize);
 		}
 
-		warningIconVisible = 0;
 		for (int k = 0; k < _box.size(); k++)
 			if (IsOverlap(_box[k]->pos, _box[k]->vertex, isHave))
 			{
@@ -1019,7 +1019,7 @@ void Piece::Draw(int _scrollY)
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
-		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y - 20) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
+		//Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y - 20) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
 
 		for (int y = 0; y < (*piece)[i].size(); y++)
 		{

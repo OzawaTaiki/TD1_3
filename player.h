@@ -56,6 +56,6 @@ public:
 	Player();
 
 	void Init(int _stageNo);
-	void Update(const char* _keys, const char* _preKeys);
+	void Update(const char* _keys, const char* _preKeys,int _isHave);
 	void Draw();
 };

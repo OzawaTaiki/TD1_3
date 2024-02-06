@@ -459,11 +459,11 @@ bool Playground::isFill(const Vector2& _pos, const Vector2* _vertex)
 void Playground::GoalCheck()
 {
 	if (
-		(*field)[int(player->pos.y) / kTileSize][int(player->pos.x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] == 2
+		(*field)[int(player->pos.y) / kTileSize][int(player->pos.x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] == GOAL
 		)
 	{
 		isClear = true;
@@ -592,7 +592,6 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	scrollBar->UpdateStatus();
 	ScrollCalculation();
 
-#ifdef _DEBUG
 	/// ctrl + enter でコマ送りモード
 	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LCONTROL])
 		frameSlow = frameSlow ? false : true;
@@ -600,7 +599,6 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	/// コマ送りモードは入力しながらenter
 	if (!frameSlow || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN])
 	{
-#endif // _DEBUG
 
 		plbo = false;
 		plpi = false;
@@ -609,7 +607,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
-		player->Update(_keys, _preKeys);
+		player->Update(_keys, _preKeys, piece->isHave);
 
 		/// 衝突判定たち
 		CollisionWithPlayer();
@@ -633,9 +631,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		//CollisionPlayerWithBox();
 		//CollisionPlayerWithPiece();
 		//CollisionWithPiece();
-#ifdef _DEBUG
 	}
-#endif // _DEBUG
 
 	if (_keys[DIK_R] && _preKeys[DIK_R] || !player->isAlive)
 	{
@@ -643,16 +639,16 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		selectStage--;
 	}
 
-#ifdef _DEBUG
 	/// shift + enter で次のステージ
 	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
 		selectStage++;
+		if (selectStage == 4 || selectStage == 5 || selectStage == 8 || selectStage == 9)
+			selectStage++;
 		if (selectStage >= kMaxStage)
 			selectStage = 0;
 		Init(selectStage);
 	}
-#endif // _DEBUG
 }
 
 void Playground::Draw()

@@ -79,9 +79,7 @@ class Playground
 	Sound* goalSound;
 
 
-#ifdef _DEBUG
 	bool frameSlow = false;
-#endif // _DEBUG
 
 
 	bool isFill(const Vector2& _pos, const Vector2* _vertex);

@@ -132,16 +132,19 @@ void Player::Init(int _stageNo)
 	isGround = false;
 }
 
-void Player::Update(const char* _keys, const char* _preKeys)
+void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 {
 	isOnBox = false;
 	isAddVelo = false;
 
-	Move(_keys, _preKeys);
-	Jump(_keys, _preKeys);
-	Gravity();
-	Clamp();
-	MoveDirUpdate();
+	if (_isHave == -1)
+	{
+		Move(_keys, _preKeys);
+		Jump(_keys, _preKeys);
+		Gravity();
+		Clamp();
+		MoveDirUpdate();
+	}
 }
 
 void Player::Draw()
@@ -151,7 +154,7 @@ void Player::Draw()
 	if (jumpSound != nullptr)		jumpSound->PlayAudio();
 
 
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y-8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y - 8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)
