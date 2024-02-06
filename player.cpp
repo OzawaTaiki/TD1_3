@@ -7,6 +7,7 @@
 void Player::Move(const char* _keys, const char* _preKeys)
 {
 	int moveX = 0;
+#ifdef _DEBUG
 	if (_keys[DIK_LSHIFT])
 	{
 		if (_keys[DIK_A] && !_preKeys[DIK_A])
@@ -16,11 +17,16 @@ void Player::Move(const char* _keys, const char* _preKeys)
 	}
 	else
 	{
+#endif // _DEBUG
+
 		if (_keys[DIK_A])
 			moveX = -1;
 		if (_keys[DIK_D])
 			moveX = 1;
+
+#ifdef _DEBUG
 	}
+#endif // _DEBUG
 
 	velocity.x = moveX * kMoveSpd;
 }

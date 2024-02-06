@@ -28,6 +28,7 @@ private:
     static  char*   preKeys;
     static  char*   keys;
 
+
 public:
     /// <summary>
     ///	次のフレームからシーンを変更します。

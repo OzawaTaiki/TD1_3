@@ -4,7 +4,7 @@
 #include <vector>
 #include "intVec2.h"
 #include "definition.h"
-
+#include "sound.h"
 class Box;
 
 class Piece
@@ -30,8 +30,8 @@ public:
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
-
 	Vector2 mapchipKeyPos;
+
 
 	/// piece初期位置
 	const Vector2 kPieceStartKeyPos = { kStageAreaWidth + 50.0f,65.0f };			// pieceの初期基準座標
@@ -40,15 +40,17 @@ public:
 	int isHave;								// piece所持フラグ -1:もってない 0~:番号のピース所持
 	int runX;
 	int runY;
+	bool canMoveX;
+	bool canMoveY;
+	bool isLockedY;
 
 	unsigned int color[5];
 
-	bool canMoveX;
-	bool canMoveY;
-
 	int pieceTexture;
 
-	bool isLockedY;
+	Sound* pickUpSound;
+	Sound* PutDownSound;
+
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
 

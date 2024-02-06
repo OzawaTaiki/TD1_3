@@ -28,7 +28,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 				p2mSub.y = (tempPos.y - cursor.y) / scale[i];
 
 				/// クリックした位置にピースのブロックがあるか否か
-				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0 /*&& !IsInPiece(_playerPos, i)*/)
+				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0
+					/*&& !IsInPiece(_playerPos, i)*/)
 				{
 					piecePrePos = pos[i];
 
@@ -37,6 +38,9 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 					scale[i] = kKeyScale[0];
 					isHave = i;
+
+					//TODO : path確定後
+					//pickUpSound->SoundEnable();
 				}
 			}
 		}
@@ -60,6 +64,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 	else
 	{
+
 		for (int i = 0; i < (*piece).size(); i++)
 		{
 			bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
@@ -98,6 +103,9 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 			if (isHave == i)
 			{
+				//TODO : path確定後 
+				//PutDownSound->SoundEnable();
+
 				isHave = -1;
 
 				/*******************
@@ -835,16 +843,16 @@ bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum
 
 void Piece::MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity)
 {
-		velocity[_collidedNum - kTileKinds].x = _velocity.x;
-		velocity[_collidedNum - kTileKinds].y = _velocity.y;
+	velocity[_collidedNum - kTileKinds].x = _velocity.x;
+	velocity[_collidedNum - kTileKinds].y = _velocity.y;
 
 	if (_collisionDir.x != 0 && canMoveX)
 		pos[_collidedNum - kTileKinds].x += velocity[_collidedNum - kTileKinds].x;
 	if (_collisionDir.y != 0 && canMoveY)
 		pos[_collidedNum - kTileKinds].y += velocity[_collidedNum - kTileKinds].y;
 
-		moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
-		moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
+	moveDir[_collidedNum - kTileKinds].x = _collisionDir.x;
+	moveDir[_collidedNum - kTileKinds].y = _collisionDir.y;
 }
 
 void Piece::CollisionPieceWithPiece()
@@ -972,6 +980,10 @@ void Piece::Init()
 	color[3] = 0xc0c080d0;
 	color[4] = 0xc080c0d0;
 
+	//TODO : パス確定後
+	//pickUpSound = new Sound(/*path*/, 0.5f);
+	//PutDownSound = new Sound(/*path*/, 0.5f);
+
 }
 
 void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
@@ -989,6 +1001,9 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 
 void Piece::Draw(int _scrollY)
 {
+	if (pickUpSound != nullptr)		pickUpSound->PlayAudio();
+	if (PutDownSound != nullptr)		PutDownSound->PlayAudio();
+
 	for (int i = 0; i < (*piece).size(); i++)
 	{
 		Novice::ScreenPrintf(int(pos[i].x), int(pos[i].y - 20) + i * 20, "%.1f,%.1f", pos[i].x, pos[i].y);
@@ -1008,10 +1023,10 @@ void Piece::Draw(int _scrollY)
 		}
 	}
 
-	for (int i = 0; i < adjacentPos.size(); i++)
-	{
-		//Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
-		//Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
-	}
+	//for (int i = 0; i < adjacentPos.size(); i++)
+	//{
+	//	Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
+	//	Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
+	//}
 }
 
