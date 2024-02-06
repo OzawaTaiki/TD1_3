@@ -12,31 +12,45 @@ Sound::Sound(char* _path, float _volume, bool _isLoop)
 	isPlaying = false;
 	isFade = true;
 	volume = _volume;
+	currentVolume = 0;
 	frameCnt = 0;
+}
+
+void Sound::printVolume(int x, int y)
+{
+#ifdef _DEBUG
+	Novice::ScreenPrintf(x, y, "%.1f", currentVolume);
+#endif // _DEBUG
+}
+
+void Sound::SoundEnable()
+{
+	isSound = true;
 }
 
 void Sound::PlayAudio(bool _isFadeIn, int _fadeFrame)
 {
+	float val = 0;
 	if (_isFadeIn && isPlaying && isFade)
 	{
 		assert(_fadeFrame != -1);
 
 		frameCnt++;
-		float val = (float)frameCnt / (float)_fadeFrame;
+		val = (float)frameCnt / (float)_fadeFrame;
 		if (val >= 1.0f)
 		{
 			val = 1.0f;
 			isFade = false;
 		}
-
-		Novice::SetAudioVolume(voiceHandle, val * volume);
+		currentVolume = val * volume;
+		Novice::SetAudioVolume(voiceHandle, currentVolume);
 	}
 
 	if (isLoop)
 	{
-		if (Novice::IsPlayingAudio(voiceHandle) || voiceHandle == -1 && isSound)
+		if (!Novice::IsPlayingAudio(voiceHandle) || voiceHandle == -1 && isSound)
 		{
-			voiceHandle = Novice::PlayAudio(soundHandle, isLoop, volume);
+			voiceHandle = Novice::PlayAudio(soundHandle, isLoop, currentVolume);
 			isSound = false;
 			isPlaying = true;
 		}
@@ -49,6 +63,7 @@ void Sound::PlayAudio(bool _isFadeIn, int _fadeFrame)
 			isSound = false;
 		}
 	}
+
 
 }
 
@@ -66,6 +81,7 @@ void Sound::StopAudio(bool _isFadeOut, int _fadeFrame)
 			val = 0;
 			isPlaying = false;
 			isFade = false;
+			isSound = false;
 		}
 
 		Novice::SetAudioVolume(voiceHandle, val * volume);

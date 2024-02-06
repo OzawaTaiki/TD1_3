@@ -426,12 +426,6 @@ void Playground::CollisionPieceWithPiece()
 	piece->CollisionPieceWithPiece();
 }
 
-void Playground::CollisionReset()
-{
-	collision->clear();
-	collision = new std::vector<std::vector<int>>(*field);
-}
-
 bool Playground::isFill(const Vector2& _pos, const Vector2* _vertex)
 {
 	for (int i = 0; i < 4; i++)
@@ -466,6 +460,9 @@ void Playground::GoalCheck()
 		)
 	{
 		isClear = true;
+		//TODO : 確定後
+		//goalSound = new Sound(/*path*/, 0.5f);
+		//goalSound->SoundEnable();
 	}
 }
 
@@ -499,7 +496,7 @@ void Playground::ScrollCalculation()
 {
 	// ナイトウが追加
 	float value = scrollBar->GetValue();
-	increaseY_scroll = int(value * (-512)); // TODO: この値を使用してy値を変化させてほしい。(0 ~ -512)
+	increaseY_scroll = int(value * (-512));
 	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
 }
 
@@ -534,7 +531,11 @@ Playground::Playground()
 
 	/// - - - ナイトウが勝手に実装 おわり - - - ///
 
-	//BGM=new Sound(/*path*/, 0.5f, true) :
+	//TODO : 確定後
+	// 要検討事項 ： goalは判定時にインスタンスを作り，鳴らしたらデリートするべきか
+	//				ここでインスタンスを作って判定時にフラグを立てるか
+	BGM = new Sound(path, 0.5f, true);
+	//goalSound = nullptr;
 }
 
 void Playground::Init(int _stageNo)
@@ -573,6 +574,8 @@ void Playground::Init(int _stageNo)
 
 	isClear = false;
 	player->Init(selectStage);
+	//TODO : 確定後
+	BGM->SoundEnable();
 }
 
 void Playground::Update(const char* _keys, const char* _preKeys)
@@ -581,6 +584,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	scrollBar->UpdateStatus();
 	ScrollCalculation();
 
+#ifdef _DEBUG
 	/// ctrl + enter でコマ送りモード
 	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LCONTROL])
 		frameSlow = frameSlow ? false : true;
@@ -588,11 +592,12 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	/// コマ送りモードは入力しながらenter
 	if (!frameSlow || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN])
 	{
+#endif // _DEBUG
+
 		plbo = false;
 		plpi = false;
 		pibo = false;
 
-		CollisionReset();
 		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
@@ -602,7 +607,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		CollisionWithPlayer();
 		CollisionPlayerWithBox();
 		CollisionWithBox();
-		CollisionPlayerWithPiece();//
+		CollisionPlayerWithPiece();
 		//CollisionWithPiece();
 		CollisionPieceWithBox();
 		CollisionWithBox();
@@ -620,8 +625,9 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		//CollisionPlayerWithBox();
 		//CollisionPlayerWithPiece();
 		//CollisionWithPiece();
+#ifdef _DEBUG
 	}
-
+#endif // _DEBUG
 
 	if (_keys[DIK_R] && _preKeys[DIK_R] || !player->isAlive)
 	{
@@ -629,6 +635,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		selectStage--;
 	}
 
+#ifdef _DEBUG
 	/// shift + enter で次のステージ
 	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
@@ -637,10 +644,14 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 			selectStage = 0;
 		Init(selectStage);
 	}
+#endif // _DEBUG
 }
 
 void Playground::Draw()
 {
+	if (BGM != nullptr)			BGM->PlayAudio(true, 300);
+	if (goalSound != nullptr)	goalSound->PlayAudio();
+
 	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xffffffd0);
 
 	for (int y = 0; y < (*field).size(); y++)

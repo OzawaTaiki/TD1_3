@@ -55,10 +55,10 @@ class Playground
 
 	/// - - - ナイトウが勝手に宣言 はじめ - - - ///
 
-	JsonL*		json_scr;
+	JsonL* json_scr;
 
 	SpriteData	scrSpr;					// スクロールバーのリソース
-	Scroller*	scrollBar;              // スクロールバー実体
+	Scroller* scrollBar;              // スクロールバー実体
 
 	Size		scrollBarSize;          // スクロールバーのサイズ
 	Size		scrollboxSize;          // スクロールボックスのサイズ
@@ -75,10 +75,15 @@ class Playground
 	int obstacleTexture;
 	int backGroundTexture;
 
-	Sound *BGM;
+	Sound* BGM;
+	Sound* goalSound;
 
+	char path[128] = "./Resources/sound/BGM_title.mp3";
 
+#ifdef _DEBUG
 	bool frameSlow = false;
+#endif // _DEBUG
+
 
 	bool isFill(const Vector2& _pos, const Vector2* _vertex);
 
@@ -93,15 +98,8 @@ class Playground
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
 
-	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();
 	void CollisionPieceWithPiece();
-
-	void CollisionReset();
-
-	/*void PiecePlayerCollision();
-	void BoxPieceCollision();
-	void BoxBoxCollision();*/
 
 
 	void LoadFromJSON();
