@@ -1,6 +1,7 @@
 ﻿#include "FillWPlayer.h"
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
+#include "ResourceManager.h"
 
 void FillWithPlayer::LoadFromJSON()
 {
@@ -22,23 +23,27 @@ FillWithPlayer::FillWithPlayer()
 	frameCount = 0;
 	frameBuffer_end = 0;
 	fillCount = 0;
+	constantT = 0.0f;
+	easedT = 0.0f;
+	handle = ResourceManager::Handle("dekaP");
 }
 
 void FillWithPlayer::Update()
 {
-	if (frameCount < targetFrame_fill * (fillCount + 1))
+	if (frameCount < targetFrame_fill)
 	{
-		constantT = Phill::ConstantT(targetFrame_fill * (fillCount + 1), frameCount);
-		easedT = Phill::EaseOutQuart(constantT);
+		Novice::ScreenPrintf(300, 15, "%d", frameCount);
+		constantT = Phill::ConstantT(targetFrame_fill, frameCount);
+		//easedT = Phill::EaseOutQuart(constantT);
 		if (fillCount == 0)
 		{
-			p.x = Phill::Lerp(1920, targetPosition_fill[fillCount].x, easedT);
-			p.y = Phill::Lerp(0, targetPosition_fill[fillCount].y, easedT);
+			p.x = Phill::Lerp(1920, targetPosition_fill[fillCount].x, constantT);
+			p.y = Phill::Lerp(0, targetPosition_fill[fillCount].y, constantT);
 		}
 		else
 		{
-			p.x = Phill::Lerp(targetPosition_fill[fillCount - 1].x, targetPosition_fill[fillCount].x, easedT);
-			p.y = Phill::Lerp(targetPosition_fill[fillCount - 1].y, targetPosition_fill[fillCount].y, easedT);
+			p.x = Phill::Lerp(targetPosition_fill[fillCount - 1].x, targetPosition_fill[fillCount].x, constantT);
+			p.y = Phill::Lerp(targetPosition_fill[fillCount - 1].y, targetPosition_fill[fillCount].y, constantT);
 		}
 
 	}
@@ -51,6 +56,10 @@ void FillWithPlayer::Update()
 	{
 		isChangeTiming = 1;
 	}
+	if (isChangeTiming == 0)
+	{
+		bufferPos.push_back(p);
+	}
 
 	frameCount++;
 }
@@ -59,4 +68,17 @@ void FillWithPlayer::Draw()
 {
 	if (isChangeTiming == 0)
 		Novice::DrawEllipse(p.x, p.y, 15, 15, 0.0f, 0x0000ffff,kFillModeSolid);
+	for (auto& elm : bufferPos)
+	{
+		Phill::DrawQuadPlus(
+			elm.x, elm.y,
+			640, 680,
+			1.0f, 1.0f,
+			0.0f,
+			0, 0, 640, 680,
+			handle,
+			0xffffff66,
+			DrawMode_Center
+		);
+	}
 }

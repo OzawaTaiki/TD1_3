@@ -16,7 +16,7 @@ StageSelect::StageSelect()
     UI_Manager::Init();
 
     cursor = Transform(0,0);
-    ed.position = cursor;
+    ed.position = cursor;       // エミッターの座標
     ed.size.width = 10;         // エミッターのwidth
     ed.size.height = 10;        // エミッターのheight
     bubbleEmit = new BubbleEmitter(&ed);

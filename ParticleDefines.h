@@ -20,6 +20,8 @@ struct ParticleData
 	float		zeroTheta;
 	float		zeroGravity;
 	float		zeroAirResistance;
+	SpriteData*	sprd;
+
 };
 
 struct EmitterData
@@ -28,4 +30,5 @@ struct EmitterData
 	VECTOR2		velocity;
 	VECTOR2		acceleration;
 	Size		size;
+	SpriteData* sprd;
 };

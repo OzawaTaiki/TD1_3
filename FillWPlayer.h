@@ -1,11 +1,13 @@
 ﻿#pragma once
 #include "JSON-Loader/JSON-Manager.h"
 #include "UI/UI_ToolKit_Defines.h"
+#include <vector>
 
 class FillWithPlayer
 {
 private:
 	JsonL*	fcountData;
+	std::vector<Transform> bufferPos;
 	// JSONで読み込むデータ
 	int		targetFrame_fill;
 	int		targetFrame_end;
@@ -19,6 +21,8 @@ private:
 	float	constantT;
 	float	easedT;
 	Transform	p;
+	int		handle;
+
 
 	void	LoadFromJSON();
 

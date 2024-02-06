@@ -16,6 +16,10 @@ Bubble::Bubble(ParticleData _pd)
 	acceleration			= _pd.zeroAcceleration;
 	gravity					= _pd.zeroGravity;
 	airResist				= _pd.zeroAirResistance;
+	if (_pd.sprd)
+	{
+		sprData = *(_pd.sprd);
+	}
 
 	// 
 	framecount = 0;

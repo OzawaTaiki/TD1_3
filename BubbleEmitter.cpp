@@ -24,6 +24,7 @@ void BubbleEmitter::Update()
 		pd.zeroVelocity.y = float(rand() % int(setting.velocityY_range * 10.0f)) / 10.0f + setting.velocityY_offset;
 		pd.zeroGravity = 0.05f;
 		pd.zeroAirResistance = 0.95f;
+		pd.sprd = pEd->sprd;
 		
 		bubbles.push_back(new Bubble(pd));
 	}
