@@ -23,12 +23,12 @@ void Player::Move(const char* _keys, const char* _preKeys)
 		if (_keys[DIK_A])
 		{
 			moveX = -1;
-			moveSound->SoundEnable();
+			//moveSound->SoundEnable();
 		}
 		if (_keys[DIK_D])
 		{
 			moveX = 1;
-			moveSound->SoundEnable();
+			//moveSound->SoundEnable();
 		}
 
 #ifdef _DEBUG
@@ -44,7 +44,7 @@ void Player::Jump(const char* _keys, const char* _preKeys)
 	{
 		velocity.y = kJumpVelocity;
 		isGround = false;
-		jumpSound->SoundEnable();
+		//jumpSound->SoundEnable();
 	}
 }
 
@@ -105,8 +105,8 @@ Player::Player()
 
 	playerTexture = ResourceManager::Handle("playerTex");
 
-	moveSound = new Sound(ResourceManager::Handle("playerMoveSound"), 0.5f);
-	jumpSound = new Sound(ResourceManager::Handle("playerJumpSound"), 0.5f);
+	//moveSound = new Sound(ResourceManager::Handle("playerMoveSound"), 0.5f);
+	//jumpSound = new Sound(ResourceManager::Handle("playerJumpSound"), 0.5f);
 }
 
 void Player::PosUpdate()

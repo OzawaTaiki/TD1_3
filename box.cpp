@@ -97,7 +97,7 @@ Box::Box(int _x, int _y)
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 	boxTextrue = ResourceManager::Handle("soapTex");
 	// TODO : 
-	moveSound = new Sound(ResourceManager::Handle("boxMove"), 0.5f);
+	//moveSound = new Sound(ResourceManager::Handle("boxMove"), 0.5f);
 }
 
 void Box::Update()

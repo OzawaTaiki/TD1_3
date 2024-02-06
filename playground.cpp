@@ -98,7 +98,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[0].x) / kTileSize + 1) * kTileSize + box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
-			box[i]->moveSound->SoundEnable();
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 右の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->vertex[1].y) / kTileSize][int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize] != AIR ||
@@ -108,7 +108,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize) * kTileSize - box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
-			box[i]->moveSound->SoundEnable();
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 上の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[0].x) / kTileSize] != AIR ||
@@ -118,7 +118,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.y = (int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize + 1) * kTileSize + box[i]->size.y / 2;
 			box[i]->velocity.y = 0;
 			box[i]->isLockedY = true;
-			box[i]->moveSound->SoundEnable();
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 下の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[2].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[2].x) / kTileSize] != AIR ||
@@ -129,7 +129,7 @@ void Playground::CollisionWithBox()
 			box[i]->velocity.y = 0;
 			box[i]->moveDir.y = 0;
 			box[i]->isLockedY = true;
-			box[i]->moveSound->SoundEnable();
+			//box[i]->moveSound->SoundEnable();
 		}
 		box[i]->PosUpdate();
 	}
@@ -163,7 +163,7 @@ void Playground::CollisionPlayerWithBox()
 
 				}
 				box[i]->PosUpdate();
-				box[i]->moveSound->SoundEnable();
+				//box[i]->moveSound->SoundEnable();
 			}
 			else
 			{
@@ -337,7 +337,7 @@ void Playground::CollisionPieceWithBox()
 					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
-				box[i]->moveSound->SoundEnable();
+				//box[i]->moveSound->SoundEnable();
 				box[i]->moveDir.x = collisionDir.x * -1;
 				box[i]->moveDir.y = collisionDir.y * -1;
 			}
@@ -373,7 +373,7 @@ void Playground::CollisionPieceWithBox()
 						box[i]->velocity.y = 0;
 					}
 
-					box[i]->moveSound->SoundEnable();
+					//box[i]->moveSound->SoundEnable();
 					box[i]->moveDir.x = collisionDir.x * -1;
 					box[i]->moveDir.y = collisionDir.y * -1;
 				}
@@ -516,6 +516,7 @@ Playground::Playground()
 	goalTexture = ResourceManager::Handle("goalTex");
 	//obstacleTexture = ResourceManager::Handle("");
 	backGroundTexture = ResourceManager::Handle("backGround");
+	togeTexture = ResourceManager::Handle("togeTex");
 
 	hindranceVertex[0] = { 0,0 };
 	hindranceVertex[1] = { kTileSize,0 };
@@ -541,7 +542,7 @@ Playground::Playground()
 	//TODO : 確定後
 	// 要検討事項 ： goalは判定時にインスタンスを作り，鳴らしたらデリートするべきか
 	//				ここでインスタンスを作って判定時にフラグを立てるか
-	BGM = new Sound(path, 0.5f, true);
+	//BGM = new Sound(path, 0.5f, true);
 	//goalSound = nullptr;
 }
 
@@ -582,7 +583,7 @@ void Playground::Init(int _stageNo)
 	isClear = false;
 	player->Init(selectStage);
 	//TODO : 確定後
-	BGM->SoundEnable();
+	//BGM->SoundEnable();
 }
 
 void Playground::Update(const char* _keys, const char* _preKeys)
@@ -676,7 +677,7 @@ void Playground::Draw()
 				//else if ((*field)[y][x] == HINDRANCE)///お邪魔
 					//Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 				else if ((*field)[y][x] == SPINE)///とげ
-					Novice::DrawBox(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, togeTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				//else if ((*field)[y][x] != 0)
 					//Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);

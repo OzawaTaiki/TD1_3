@@ -133,6 +133,7 @@ void ResourceRegist()
 	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
 	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
+	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
 	//サウンド
 	/*

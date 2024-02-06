@@ -73,11 +73,11 @@ class Playground
 	int goalTexture;
 	//int obstacleTexture;
 	int backGroundTexture;
+	int togeTexture;
 
 	Sound* BGM;
 	Sound* goalSound;
 
-	char path[128] = "./Resources/sound/BGM_title.mp3";
 
 #ifdef _DEBUG
 	bool frameSlow = false;
