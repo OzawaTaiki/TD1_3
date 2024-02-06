@@ -1015,7 +1015,7 @@ void Piece::Draw(int _scrollY)
 				if ((*piece)[i][y][x] > 0)
 				{
 					if (scale[i] != kKeyScale[0])
-						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]) - 1, int(kTileSize * scale[i]) - 1, 1.0f, 1.0f, 0.0f, (i % 7) * 120, 0, 120, 120, pieceTexture, color[i], PhillDrawMode::DrawMode_LeftTop);
+						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + _scrollY + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, color[i], PhillDrawMode::DrawMode_LeftTop);
 					else
 						Phill::DrawQuadPlus(int(pos[i].x + x * kTileSize * scale[i]), int(pos[i].y + y * kTileSize * scale[i]), int(kTileSize * scale[i]), int(kTileSize * scale[i]), 1.0f, 1.0f, 0.0f, ((*piece)[i][y][x] - 1) * 64, 0, 64, 64, pieceTexture, color[i], PhillDrawMode::DrawMode_LeftTop);
 				}
