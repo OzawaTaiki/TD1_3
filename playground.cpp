@@ -326,10 +326,15 @@ void Playground::CollisionPieceWithBox()
 		{
 			if (!pibo)
 			{
+				Vector2 prePos = box[i]->pos;
+
 				if (collisionDir.x < 0)
 					box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
 				if (collisionDir.x > 0)
 					box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
+				if (isFill(box[i]->pos, box[i]->vertex))
+					box[i]->pos.x = prePos.x;
+
 				if (collisionDir.y < 0)
 					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
 				if (collisionDir.y > 0 && !box[i]->isLockedY)
@@ -337,6 +342,8 @@ void Playground::CollisionPieceWithBox()
 					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
+				if (isFill(box[i]->pos, box[i]->vertex))
+					box[i]->pos.y = prePos.y;
 				//box[i]->moveSound->SoundEnable();
 				box[i]->moveDir.x = collisionDir.x * -1;
 				box[i]->moveDir.y = collisionDir.y * -1;
@@ -361,10 +368,14 @@ void Playground::CollisionPieceWithBox()
 			{
 				if (!pibo)
 				{
+					Vector2 prePos = box[i]->pos;
 					if (collisionDir.x < 0)
 						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
 					if (collisionDir.x > 0)
 						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
+					if (isFill(box[i]->pos, box[i]->vertex))
+						box[i]->pos.x = prePos.x;
+
 					if (collisionDir.y < 0)
 						box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y + 1;
 					if (collisionDir.y > 0)
@@ -372,6 +383,8 @@ void Playground::CollisionPieceWithBox()
 						box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 						box[i]->velocity.y = 0;
 					}
+					if (isFill(box[i]->pos, box[i]->vertex))
+						box[i]->pos.y = prePos.y;
 
 					//box[i]->moveSound->SoundEnable();
 					box[i]->moveDir.x = collisionDir.x * -1;
