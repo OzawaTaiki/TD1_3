@@ -2,6 +2,7 @@
 #include "definition.h"
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
+#include "ResourceManager.h"
 
 void Box::Gravity()
 {
@@ -94,7 +95,7 @@ Box::Box(int _x, int _y)
 	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
-	GH = Novice::LoadTexture("./Resources/img/soap.png");
+	boxTextrue = ResourceManager::Handle("soapTex");
 }
 
 void Box::Update()
@@ -124,7 +125,7 @@ void Box::Draw(int _num)
 {
 	if (!isDraw)
 		return;
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, color, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
 
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
 	//Novice::ScreenPrintf(-100, -100, "%d", _num);

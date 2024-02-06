@@ -19,7 +19,7 @@ public:
 
 
 	const float kMaxVeloY = 15.0f;
-	int GH;
+	int boxTextrue;
 	int isOnBox;
 	unsigned int color;
 
