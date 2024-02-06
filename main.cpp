@@ -125,6 +125,13 @@ void ResourceRegist()
 
 		ResourceManager::Regist(name, result);
 	}
+
+	ResourceManager::Regist("playerTex", "./Resources/img/player.png");
+	ResourceManager::Regist("soapTex", "./Resources/img/soap.png");
+	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
+	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");
+	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
+	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
 }
 
 void JSONLoad()

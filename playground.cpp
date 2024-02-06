@@ -505,10 +505,10 @@ Playground::Playground()
 	piece = new Piece;
 	player = new Player;
 
-	blockTexture = Novice::LoadTexture("./Resources/img/block.png");
-	goalTexture = Novice::LoadTexture("./Resources/img/goal.png");
-	obstacleTexture = Novice::LoadTexture("./img/obstacleBlock.png");
-	backGroundTexture = Novice::LoadTexture("./Resources/img/stageBackGround.png");
+	blockTexture = ResourceManager::Handle("blockTex");
+	goalTexture = ResourceManager::Handle("goalTex");
+	//obstacleTexture = ResourceManager::Handle("");
+	backGroundTexture = ResourceManager::Handle("backGround");
 
 	hindranceVertex[0] = { 0,0 };
 	hindranceVertex[1] = { kTileSize,0 };
@@ -666,8 +666,8 @@ void Playground::Draw()
 				else if ((*field)[y][x] == GOAL)
 					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
-				else if ((*field)[y][x] == HINDRANCE)///お邪魔
-					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+				//else if ((*field)[y][x] == HINDRANCE)///お邪魔
+					//Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 				else if ((*field)[y][x] == SPINE)///とげ
 					Novice::DrawBox(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
 

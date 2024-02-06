@@ -39,7 +39,7 @@ public:
 		{2,11}
 	};
 
-	int GH;
+	int playerTexture;
 
 	void Move(const char* _keys , const char* _preKeys);
 	void Jump(const char* _keys, const char* _preKeys);

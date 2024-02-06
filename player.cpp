@@ -3,6 +3,7 @@
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
 #include "definition.h"
+#include "ResourceManager.h"
 
 void Player::Move(const char* _keys, const char* _preKeys)
 {
@@ -80,7 +81,7 @@ void Player::Clamp()
 Player::Player()
 {
 	pos = { 64,64 };
-	size = { 54,80 };
+	size = { 54,70 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
@@ -95,7 +96,7 @@ Player::Player()
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
-	GH = Novice::LoadTexture("./Resources/img/player.png");
+	playerTexture = ResourceManager::Handle("playerTex");
 }
 
 void Player::PosUpdate()
@@ -133,7 +134,7 @@ void Player::Update(const char* _keys, const char* _preKeys)
 
 void Player::Draw()
 {
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)

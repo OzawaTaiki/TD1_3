@@ -69,10 +69,9 @@ class Playground
 
 	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 
-	/// 仮の者たち
 	int blockTexture;
 	int goalTexture;
-	int obstacleTexture;
+	//int obstacleTexture;
 	int backGroundTexture;
 
 	Sound* BGM;
