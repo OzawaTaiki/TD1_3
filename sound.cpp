@@ -30,12 +30,12 @@ Sound::Sound(int _handle, float _volume, bool _isLoop)
 	frameCnt = 0;
 }
 
+#ifdef _DEBUG
 void Sound::printVolume(int x, int y)
 {
-#ifdef _DEBUG
 	Novice::ScreenPrintf(x, y, "%.1f", currentVolume);
-#endif // _DEBUG
 }
+#endif // _DEBUG
 
 void Sound::SoundEnable()
 {

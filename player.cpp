@@ -8,6 +8,8 @@
 void Player::Move(const char* _keys, const char* _preKeys)
 {
 	int moveX = 0;
+	if (_preKeys[DIK_1])
+		moveX = 0;
 #ifdef _DEBUG
 	if (_keys[DIK_LSHIFT])
 	{

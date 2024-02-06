@@ -15,8 +15,6 @@ void Phill::Init()
 	callCnt = 0;
 }
 
-#ifdef _DEBUG
-
 bool Phill::isDebugMode = false;
 void Phill::SetDebugMode(DebugMode mode)
 {
@@ -48,7 +46,6 @@ bool Phill::isDebug()
 	return isDebugMode;
 }
 
-#endif // _DEBUG
 
 void Phill::Rotate(int& _x, int& _y, float _theta)
 {

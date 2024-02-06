@@ -6,12 +6,10 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 
-#ifdef _DEBUG
 enum DebugMode {
 	kStandardMode, // 通常モード
 	kDebugMode     // デバッグモード
 };
-#endif // _DEBUG
 
 enum PhillDrawMode
 {
@@ -26,13 +24,11 @@ enum PhillDrawMode
 class Phill {
 
 // デバッグ機能
-#ifdef _DEBUG
+
 public:
 	static	void	SetDebugMode(DebugMode _mode);
 	static	void	ToggleDebugMode();
 	static	bool	isDebug();
-#endif // _DEBUG
-
 
 
 public:

@@ -17,7 +17,9 @@ public:
 	Sound(const char* _path, float _volume, bool _isLoop = false);
 	Sound(int _handle, float _volume, bool _isLoop = false);
 
+#ifdef _DEBUG
 	void printVolume(int x, int y);
+#endif // _DEBUG
 
 	void SoundEnable();
 
