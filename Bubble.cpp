@@ -34,8 +34,10 @@ void Bubble::Update()
 	// 座標に適用
 	velocity += acceleration;
 	position += velocity;
-	if (framecount < targetFrame_erase)
-		scale = 1.0f - Phill::ConstantT(targetFrame_erase, framecount);
+	if (framecount < 10)
+		scale = Phill::ConstantT(10, framecount);
+	if (framecount >= 10 && framecount < targetFrame_erase)
+		scale = 1.0f - Phill::ConstantT(targetFrame_erase-10, framecount-10);
 
 	framecount++;
 }

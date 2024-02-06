@@ -13,6 +13,7 @@ private:
 	std::vector<BubbleEmitter*> emitters;
 	std::list<EmitterData> ed;
 	BubbleSetting bs;
+	SpriteData sprd;
 	// JSONで読み込むデータ
 	int		targetFrame_fill;
 	int		targetFrame_end;

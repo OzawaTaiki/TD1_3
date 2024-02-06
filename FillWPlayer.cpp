@@ -60,17 +60,23 @@ void FillWithPlayer::Update()
 	if (isChangeTiming == 0)
 	{
 		bufferPos.push_back(p);
-		if (frameCount % 5)
+		if (frameCount % 20)
 		{
-			bs.gravity = 0.4f;
-			bs.velocityX_range = 1.0f;
+			sprd.srcPos = 0;
+			sprd.srcSize = 64;
+			sprd.trgSize = 64;
+			sprd.drawMode = DrawMode_Center;
+			sprd.textureHandle = ResourceManager::Handle("bubble");
+			bs.gravity = 0.01f;
+			bs.velocityX_range = 4.0f;
+			bs.velocityX_offset = -2.0f;
 			bs.velocityY_range = 1.0f;
 			EmitterData temp_ed{};
-			temp_ed.position.x = p.x - 100.0f;
+			temp_ed.position.x = p.x - 500.0f;
 			temp_ed.position.y = p.y - 100.0f;
-			temp_ed.size.width = 200;
+			temp_ed.size.width = 1000;
 			temp_ed.size.height = 200;
-			temp_ed.sprd = nullptr;
+			temp_ed.sprd = &sprd;
 			ed.push_back(temp_ed);
 			emitters.push_back(new BubbleEmitter(&ed.back()));
 			emitters.back()->SetParticleSetting(&bs);
@@ -98,7 +104,7 @@ void FillWithPlayer::Draw()
 			0.0f,
 			0, 0, 640, 680,
 			handle,
-			0xffffff66,
+			0xffffffff,
 			DrawMode_Center
 		);
 	}

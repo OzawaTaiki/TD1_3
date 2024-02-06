@@ -49,7 +49,7 @@ void BubbleEmitter::Draw()
 		int(pEd->position.x), int(pEd->position.y),
 		pEd->size.width, pEd->size.height,
 		0.0f,
-		0xff000099,
+		0xff000000,
 		kFillModeSolid
 	);
 	for (Bubble* elm : bubbles)

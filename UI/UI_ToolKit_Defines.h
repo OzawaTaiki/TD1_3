@@ -6,8 +6,13 @@ struct Transform {
 	int x; 
 	int y;
 	void operator = (Vector2 _vec2);
+	void operator = (int _i);
 };
-struct Size { int width; int height; };
+struct Size {
+	int width; 
+	int height;
+	void operator = (int _i);
+};
 struct SpriteData
 {
 	Transform srcPos;
