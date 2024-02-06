@@ -84,7 +84,7 @@ void JsonL::Load(const char* _path)
 					continue;
 				}
 				// 数字である時
-				else if (buffer[i] >= 48 && buffer[i] <= 57 && isCharValue == 0)
+				else if ((buffer[i] == 45 || buffer[i] >= 48 && buffer[i] <= 57) && isCharValue == 0)
 				{
 					if (valueSpan == _CLOSE) valueSpan = i;
 					isInValue = 1;

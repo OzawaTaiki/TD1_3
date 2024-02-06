@@ -92,12 +92,12 @@ void StageSelect::Update()
     CursorManager::GetCursorPos(&cursor);
     ed.position = cursor;
     bubbleEmit->Update();
-    if (fwp) fwp->Update();
 
     if (KeyManager::GetKeys(DIK_SPACE) && !KeyManager::GetPreKeys(DIK_SPACE))
     {
         fwp = new FillWithPlayer();
     }
+    if (fwp) fwp->Update();
 
     CursorManager::GetCursorPos(&cur);
     scrollBar->UpdateStatus();

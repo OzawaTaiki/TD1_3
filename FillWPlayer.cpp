@@ -31,7 +31,7 @@ FillWithPlayer::FillWithPlayer()
 
 void FillWithPlayer::Update()
 {
-	if (frameCount < targetFrame_fill)
+	if (frameCount < targetFrame_fill && isChangeTiming == 0)
 	{
 		Novice::ScreenPrintf(300, 15, "%d", frameCount);
 		constantT = Phill::ConstantT(targetFrame_fill, frameCount);
@@ -64,7 +64,7 @@ void FillWithPlayer::Update()
 		{
 			sprd.srcPos = 0;
 			sprd.srcSize = 64;
-			sprd.trgSize = 64;
+			sprd.trgSize = 256;
 			sprd.drawMode = DrawMode_Center;
 			sprd.textureHandle = ResourceManager::Handle("bubble");
 			bs.gravity = 0.01f;
@@ -72,10 +72,10 @@ void FillWithPlayer::Update()
 			bs.velocityX_offset = -2.0f;
 			bs.velocityY_range = 1.0f;
 			EmitterData temp_ed{};
-			temp_ed.position.x = p.x - 500.0f;
-			temp_ed.position.y = p.y - 100.0f;
-			temp_ed.size.width = 1000;
-			temp_ed.size.height = 200;
+			temp_ed.position.x = p.x - 300.0f;
+			temp_ed.position.y = p.y - 400.0f;
+			temp_ed.size.width = 600;
+			temp_ed.size.height = 800;
 			temp_ed.sprd = &sprd;
 			ed.push_back(temp_ed);
 			emitters.push_back(new BubbleEmitter(&ed.back()));
@@ -95,19 +95,18 @@ void FillWithPlayer::Draw()
 {
 	if (isChangeTiming == 0)
 		Novice::DrawEllipse(p.x, p.y, 15, 15, 0.0f, 0x0000ffff,kFillModeSolid);
-	for (auto& elm : bufferPos)
-	{
-		Phill::DrawQuadPlus(
-			elm.x, elm.y,
-			640, 680,
-			1.0f, 1.0f,
-			0.0f,
-			0, 0, 640, 680,
-			handle,
-			0xffffffff,
-			DrawMode_Center
-		);
-	}
+	
+	Phill::DrawQuadPlus(
+		p.x, p.y,
+		640, 680,
+		1.0f, 1.0f,
+		0.0f,
+		0, 0, 640, 680,
+		handle,
+		0xffffffff,
+		DrawMode_Center
+	);
+	
 	for (auto& elm : emitters)
 	{
 		elm->Draw();
