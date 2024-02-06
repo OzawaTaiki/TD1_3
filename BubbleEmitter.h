@@ -9,6 +9,7 @@ struct BubbleSetting
 	float	velocityX_range;
 	float	velocityY_offset;
 	float	velocityY_range;
+	float	gravity;
 };
 
 class BubbleEmitter : public Emitter

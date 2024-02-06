@@ -3,6 +3,7 @@
 #include <Novice.h>
 #include "ResourceManager.h"
 
+
 void FillWithPlayer::LoadFromJSON()
 {
 	fcountData = JSON_Manager::GetJSON("fillWithPlayer");
@@ -59,6 +60,26 @@ void FillWithPlayer::Update()
 	if (isChangeTiming == 0)
 	{
 		bufferPos.push_back(p);
+		if (frameCount % 5)
+		{
+			bs.gravity = 0.4f;
+			bs.velocityX_range = 1.0f;
+			bs.velocityY_range = 1.0f;
+			EmitterData temp_ed{};
+			temp_ed.position.x = p.x - 100.0f;
+			temp_ed.position.y = p.y - 100.0f;
+			temp_ed.size.width = 200;
+			temp_ed.size.height = 200;
+			temp_ed.sprd = nullptr;
+			ed.push_back(temp_ed);
+			emitters.push_back(new BubbleEmitter(&ed.back()));
+			emitters.back()->SetParticleSetting(&bs);
+		}
+	}
+
+	for (auto& elm : emitters)
+	{
+		elm->Update();
 	}
 
 	frameCount++;
@@ -80,5 +101,9 @@ void FillWithPlayer::Draw()
 			0xffffff66,
 			DrawMode_Center
 		);
+	}
+	for (auto& elm : emitters)
+	{
+		elm->Draw();
 	}
 }

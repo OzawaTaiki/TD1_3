@@ -2,12 +2,17 @@
 #include "JSON-Loader/JSON-Manager.h"
 #include "UI/UI_ToolKit_Defines.h"
 #include <vector>
+#include <list>
+#include "BubbleEmitter.h"
 
 class FillWithPlayer
 {
 private:
 	JsonL*	fcountData;
 	std::vector<Transform> bufferPos;
+	std::vector<BubbleEmitter*> emitters;
+	std::list<EmitterData> ed;
+	BubbleSetting bs;
 	// JSONで読み込むデータ
 	int		targetFrame_fill;
 	int		targetFrame_end;

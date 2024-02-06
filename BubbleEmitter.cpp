@@ -17,14 +17,14 @@ void BubbleEmitter::Update()
 	if (framecount % spawnInterval == 0)
 	{
 		ParticleData pd{};
-		pd.zeroPosition.x = float(rand() % pEd->size.width + pEd->position.x);
-		pd.zeroPosition.y = float(rand() % pEd->size.height + pEd->position.y);
-		pd.zeroVelocity.x = 0;
-		pd.zeroVelocity.x = float(rand() % int(setting.velocityX_range * 10.0f)) / 10.0f + setting.velocityX_offset;
-		pd.zeroVelocity.y = float(rand() % int(setting.velocityY_range * 10.0f)) / 10.0f + setting.velocityY_offset;
-		pd.zeroGravity = 0.05f;
-		pd.zeroAirResistance = 0.95f;
-		pd.sprd = pEd->sprd;
+		pd.zeroPosition.x		= float(rand() % pEd->size.width + pEd->position.x);
+		pd.zeroPosition.y		= float(rand() % pEd->size.height + pEd->position.y);
+		pd.zeroVelocity.x		= 0;
+		pd.zeroVelocity.x		= float(rand() % int(setting.velocityX_range * 10.0f)) / 10.0f + setting.velocityX_offset;
+		pd.zeroVelocity.y		= float(rand() % int(setting.velocityY_range * 10.0f)) / 10.0f + setting.velocityY_offset;
+		pd.zeroGravity			= setting.gravity;
+		pd.zeroAirResistance	= 0.95f;
+ 		pd.sprd					= pEd->sprd;
 		
 		bubbles.push_back(new Bubble(pd));
 	}
