@@ -643,8 +643,6 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
 		selectStage++;
-		if (selectStage == 4 || selectStage == 5 || selectStage == 8 || selectStage == 9)
-			selectStage++;
 		if (selectStage >= kMaxStage)
 			selectStage = 0;
 		Init(selectStage);
