@@ -50,6 +50,7 @@ public:
 
 	Sound* pickUpSound;
 	Sound* PutDownSound;
+	Sound* MoveSound;
 
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);

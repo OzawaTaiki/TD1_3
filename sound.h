@@ -14,7 +14,8 @@ private:
 	int frameCnt;
 public:
 
-	Sound(char* _path, float _volume, bool _isLoop = false);
+	Sound(const char* _path, float _volume, bool _isLoop = false);
+	Sound(int _handle, float _volume, bool _isLoop = false);
 
 	void printVolume(int x, int y);
 

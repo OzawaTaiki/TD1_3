@@ -96,6 +96,8 @@ Box::Box(int _x, int _y)
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 	boxTextrue = ResourceManager::Handle("soapTex");
+	// TODO : 
+	moveSound = new Sound(ResourceManager::Handle("boxMove"), 0.5f);
 }
 
 void Box::Update()
@@ -109,7 +111,7 @@ void Box::Update()
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
 	isdAddVelo = false;
-	isOnPlayer = false; 
+	isOnPlayer = false;
 	isOnBox = -1;
 	isLockedX = false;
 	isLockedY = false;
@@ -117,14 +119,15 @@ void Box::Update()
 	MoveDirUpdate();
 	Gravity();
 	Clamp();
-	//CollisionWithField(_collision);
-	//PosUpdate();
 }
 
 void Box::Draw(int _num)
 {
 	if (!isDraw)
 		return;
+
+	if (moveSound != nullptr)	moveSound->PlayAudio();
+
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
 
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);

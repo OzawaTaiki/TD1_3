@@ -50,6 +50,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	/// ピースつかんでるとき
 	else if (Novice::IsPressMouse(0) && !Novice::IsTriggerMouse(0) && isHave != -1)
 	{
+		//TODO : 確定後
+		//MoveSound->SoundEnable();
 		pos[isHave].x = cursor.x + p2mSub.x;
 		pos[isHave].y = cursor.y + p2mSub.y;
 
@@ -982,9 +984,9 @@ void Piece::Init()
 	color[4] = 0xc080c0d0;
 
 	//TODO : パス確定後
-	//pickUpSound = new Sound(/*path*/, 0.5f);
-	//PutDownSound = new Sound(/*path*/, 0.5f);
-
+	pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 0.5f);
+	PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 0.5f);
+	MoveSound = new Sound(ResourceManager::Handle("pieceMoveSound"), 0.5f);
 }
 
 void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
@@ -1002,8 +1004,9 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 
 void Piece::Draw(int _scrollY)
 {
-	if (pickUpSound != nullptr)		pickUpSound->PlayAudio();
+	if (pickUpSound != nullptr)			pickUpSound->PlayAudio();
 	if (PutDownSound != nullptr)		PutDownSound->PlayAudio();
+	if (MoveSound != nullptr)			MoveSound->PlayAudio();
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
