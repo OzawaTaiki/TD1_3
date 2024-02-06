@@ -21,9 +21,15 @@ void Player::Move(const char* _keys, const char* _preKeys)
 #endif // _DEBUG
 
 		if (_keys[DIK_A])
+		{
 			moveX = -1;
+			moveSound->SoundEnable();
+		}
 		if (_keys[DIK_D])
+		{
 			moveX = 1;
+			moveSound->SoundEnable();
+		}
 
 #ifdef _DEBUG
 	}
@@ -38,6 +44,7 @@ void Player::Jump(const char* _keys, const char* _preKeys)
 	{
 		velocity.y = kJumpVelocity;
 		isGround = false;
+		jumpSound->SoundEnable();
 	}
 }
 
@@ -97,6 +104,9 @@ Player::Player()
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
 	playerTexture = ResourceManager::Handle("playerTex");
+
+	moveSound = new Sound(ResourceManager::Handle("playerMoveSound"), 0.5f);
+	jumpSound = new Sound(ResourceManager::Handle("playerJumpSound"), 0.5f);
 }
 
 void Player::PosUpdate()
@@ -134,6 +144,11 @@ void Player::Update(const char* _keys, const char* _preKeys)
 
 void Player::Draw()
 {
+
+	if (moveSound != nullptr)		moveSound->PlayAudio();
+	if (jumpSound != nullptr)		jumpSound->PlayAudio();
+
+
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));

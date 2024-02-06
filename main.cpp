@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			wndModeCnt %= 2;
 		}
 
-		if (tutorial) 
+		if (tutorial)
 		{
 			tutorial->Update();
 			if (tutorial->Deletable() == 1)
@@ -126,12 +126,23 @@ void ResourceRegist()
 		ResourceManager::Regist(name, result);
 	}
 
+	/// オザワ追加分
+	// テクスチャ
 	ResourceManager::Regist("playerTex", "./Resources/img/player.png");
 	ResourceManager::Regist("soapTex", "./Resources/img/soap.png");
 	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
 	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
+	//サウンド
+	/*
+	ResourceManager::Regist("playerMoveSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("playerJumpSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.mp3",true);
+	*/
 }
 
 void JSONLoad()

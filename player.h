@@ -2,6 +2,7 @@
 #include <Vector2.h>
 #include "intVec2.h"
 #include <vector>
+#include "sound.h"
 
 
 class Player
@@ -40,6 +41,9 @@ public:
 	};
 
 	int playerTexture;
+
+	Sound* moveSound;
+	Sound* jumpSound;
 
 	void Move(const char* _keys , const char* _preKeys);
 	void Jump(const char* _keys, const char* _preKeys);

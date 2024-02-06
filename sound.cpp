@@ -2,9 +2,23 @@
 #include <Novice.h>
 #include <cassert>
 
-Sound::Sound(char* _path, float _volume, bool _isLoop)
+Sound::Sound(const char* _path, float _volume, bool _isLoop)
 {
 	soundHandle = Novice::LoadAudio(_path);
+
+	voiceHandle = -1;
+	isSound = false;
+	isLoop = _isLoop;
+	isPlaying = false;
+	isFade = true;
+	volume = _volume;
+	currentVolume = 0;
+	frameCnt = 0;
+}
+
+Sound::Sound(int _handle, float _volume, bool _isLoop)
+{
+	soundHandle = _handle;
 
 	voiceHandle = -1;
 	isSound = false;
@@ -57,7 +71,7 @@ void Sound::PlayAudio(bool _isFadeIn, int _fadeFrame)
 	}
 	else
 	{
-		if (isSound)
+		if (!Novice::IsPlayingAudio(voiceHandle) || voiceHandle == -1 && isSound)
 		{
 			voiceHandle = Novice::PlayAudio(soundHandle, isLoop, volume);
 			isSound = false;

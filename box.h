@@ -3,6 +3,7 @@
 #include <Vector2.h>
 #include "intVec2.h"
 #include <vector>
+#include "sound.h"
 
 
 class Box
@@ -28,6 +29,8 @@ public:
 	bool isLockedY;
 	bool isDraw;
 	bool isdAddVelo;
+
+	Sound* moveSound;
 
 	Box(int _x, int _y);
 

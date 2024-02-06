@@ -98,6 +98,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[0].x) / kTileSize + 1) * kTileSize + box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
+			box[i]->moveSound->SoundEnable();
 		}
 		/// 右の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->vertex[1].y) / kTileSize][int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize] != AIR ||
@@ -107,6 +108,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize) * kTileSize - box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
+			box[i]->moveSound->SoundEnable();
 		}
 		/// 上の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[0].x) / kTileSize] != AIR ||
@@ -116,6 +118,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.y = (int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize + 1) * kTileSize + box[i]->size.y / 2;
 			box[i]->velocity.y = 0;
 			box[i]->isLockedY = true;
+			box[i]->moveSound->SoundEnable();
 		}
 		/// 下の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[2].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[2].x) / kTileSize] != AIR ||
@@ -126,6 +129,7 @@ void Playground::CollisionWithBox()
 			box[i]->velocity.y = 0;
 			box[i]->moveDir.y = 0;
 			box[i]->isLockedY = true;
+			box[i]->moveSound->SoundEnable();
 		}
 		box[i]->PosUpdate();
 	}
@@ -159,6 +163,7 @@ void Playground::CollisionPlayerWithBox()
 
 				}
 				box[i]->PosUpdate();
+				box[i]->moveSound->SoundEnable();
 			}
 			else
 			{
@@ -332,6 +337,7 @@ void Playground::CollisionPieceWithBox()
 					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
+				box[i]->moveSound->SoundEnable();
 				box[i]->moveDir.x = collisionDir.x * -1;
 				box[i]->moveDir.y = collisionDir.y * -1;
 			}
@@ -367,6 +373,7 @@ void Playground::CollisionPieceWithBox()
 						box[i]->velocity.y = 0;
 					}
 
+					box[i]->moveSound->SoundEnable();
 					box[i]->moveDir.x = collisionDir.x * -1;
 					box[i]->moveDir.y = collisionDir.y * -1;
 				}
