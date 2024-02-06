@@ -6,23 +6,28 @@ class FillWithPlayer
 {
 private:
 	JsonL*	fcountData;
+	// JSONで読み込むデータ
 	int		targetFrame_fill;
 	int		targetFrame_end;
-	Transform targetPosition_fill;
-	Transform targetPosition_end;
+	Transform targetPosition_fill[3];
 
+	// 初期化必要
 	int		frameCount;
 	int		frameBuffer_end;
+	int		isChangeTiming;
+	int		fillCount;
+	float	constantT;
+	float	easedT;
+	Transform	p;
 
 	void	LoadFromJSON();
 
 public:
 	FillWithPlayer();
-	~FillWithPlayer();
 
 	void	Update();
 	void	Draw();
 
-	int		isChangeTiming;
+	int		IsChangeTiming() { return isChangeTiming; };
 
 };
