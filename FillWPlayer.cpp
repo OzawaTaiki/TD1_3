@@ -27,10 +27,25 @@ FillWithPlayer::FillWithPlayer()
 	constantT = 0.0f;
 	easedT = 0.0f;
 	handle = ResourceManager::Handle("dekaP");
+	alpha_bg = 0;
+	framecount_eraseBg = 0;
 }
 
 void FillWithPlayer::Update()
 {
+	if (frameCount_bg <= targetFrame_end)
+	{
+		//float ease = Phill::EaseInOutQuart();
+		alpha_bg = Phill::Lerp(128, 400, Phill::ConstantT(targetFrame_end, frameCount_bg));
+		sprd.trgSize = alpha_bg;
+	}
+	else if (framecount_eraseBg <= targetFrame_end)
+	{
+		float ease = Phill::EaseOutQuart(Phill::ConstantT(targetFrame_end, framecount_eraseBg));
+		alpha_bg = Phill::Lerp(400, 0, ease);
+		sprd.trgSize = alpha_bg;
+	}
+
 	if (frameCount < targetFrame_fill && isChangeTiming == 0)
 	{
 		Novice::ScreenPrintf(300, 15, "%d", frameCount);
@@ -46,7 +61,6 @@ void FillWithPlayer::Update()
 			p.x = Phill::Lerp(targetPosition_fill[fillCount - 1].x, targetPosition_fill[fillCount].x, constantT);
 			p.y = Phill::Lerp(targetPosition_fill[fillCount - 1].y, targetPosition_fill[fillCount].y, constantT);
 		}
-
 	}
 	if (frameCount == targetFrame_fill)
 	{
@@ -60,11 +74,11 @@ void FillWithPlayer::Update()
 	if (isChangeTiming == 0)
 	{
 		bufferPos.push_back(p);
-		if (frameCount % 20)
+		if (frameCount % 2 == 0)
 		{
 			sprd.srcPos = 0;
 			sprd.srcSize = 64;
-			sprd.trgSize = 256;
+			sprd.trgSize = 128;
 			sprd.drawMode = DrawMode_Center;
 			sprd.textureHandle = ResourceManager::Handle("bubble");
 			bs.gravity = 0.01f;
@@ -72,10 +86,10 @@ void FillWithPlayer::Update()
 			bs.velocityX_offset = -2.0f;
 			bs.velocityY_range = 1.0f;
 			EmitterData temp_ed{};
-			temp_ed.position.x = p.x - 300.0f;
-			temp_ed.position.y = p.y - 400.0f;
-			temp_ed.size.width = 600;
-			temp_ed.size.height = 800;
+			temp_ed.position.x = p.x - 40.0f;
+			temp_ed.position.y = p.y - 200.0f;
+			temp_ed.size.width = 200;
+			temp_ed.size.height = 400;
 			temp_ed.sprd = &sprd;
 			ed.push_back(temp_ed);
 			emitters.push_back(new BubbleEmitter(&ed.back()));
@@ -89,10 +103,17 @@ void FillWithPlayer::Update()
 	}
 
 	frameCount++;
+	if (isChangeTiming == 1) frameCount_bg++;
+	if (frameCount_bg > targetFrame_end) framecount_eraseBg++;
 }
 
 void FillWithPlayer::Draw()
 {
+	//Novice::DrawBox(0, 0, 1920, 1080, 0.0f, 0xffffff00 + alpha_bg, kFillModeSolid);
+	for (auto& elm : emitters)
+	{
+		elm->Draw();
+	}
 	if (isChangeTiming == 0)
 		Novice::DrawEllipse(p.x, p.y, 15, 15, 0.0f, 0x0000ffff,kFillModeSolid);
 	
@@ -107,8 +128,5 @@ void FillWithPlayer::Draw()
 		DrawMode_Center
 	);
 	
-	for (auto& elm : emitters)
-	{
-		elm->Draw();
-	}
+
 }

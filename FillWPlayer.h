@@ -21,6 +21,8 @@ private:
 
 	// 初期化必要
 	int		frameCount;
+	int		frameCount_bg;
+	int		framecount_eraseBg;
 	int		frameBuffer_end;
 	int		isChangeTiming;
 	int		fillCount;
@@ -28,6 +30,7 @@ private:
 	float	easedT;
 	Transform	p;
 	int		handle;
+	int		alpha_bg;
 
 
 	void	LoadFromJSON();
