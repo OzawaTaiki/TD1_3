@@ -4,6 +4,7 @@
 #include <Novice.h>
 #include "box.h"
 #include "ResourceManager.h"
+#include <cmath>
 
 void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY)
 {
@@ -30,7 +31,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 				/// クリックした位置にピースのブロックがあるか否か
 				if ((*piece)[i][int(-p2mSub.y * scale[i] / (kTileSize * scale[i]))][int(-p2mSub.x * scale[i] / (kTileSize * scale[i]))] != 0
-					/*&& !IsInPiece(_playerPos, i)*/)
+					&& !IsInPiece(_playerPos, i))
 				{
 					piecePrePos = pos[i];
 
@@ -63,6 +64,13 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			mapchipKeyPos.x = float((int)pos[i].x % kTileSize);
 			mapchipKeyPos.y = float((int)pos[i].y % kTileSize);
 		}
+
+		warningIconVisible = 0;
+		for (int k = 0; k < _box.size(); k++)
+			if (IsOverlap(_box[k]->pos, _box[k]->vertex, isHave))
+			{
+				warningIconVisible |= (int)powf(2.0f, (float)k);
+			}
 	}
 
 	else
@@ -70,9 +78,9 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 		for (int i = 0; i < (*piece).size(); i++)
 		{
-			bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
-			bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
-			bool isBoxOverlap = false;				// ピースに箱が重なってるか否か
+			isPlayerOverlap = false;
+			isHindranceBlockInside = false;
+			isBoxOverlap = -1;
 
 			scale[i] = kKeyScale[1];
 
@@ -125,18 +133,19 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 				for (int k = 0; k < _box.size(); k++)
 					if (IsOverlap(_box[k]->pos, _box[k]->vertex, i))
-						isBoxOverlap = true;
+					{
+						isBoxOverlap = k;
+					}
 
 				if (IsOverlap(_playerPos, _playerVertex, i))
 					isPlayerOverlap = true;
 			}
 
-
 			if (scale[i] != kKeyScale[0])
 				piecePrePos = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
 
 			/// ピースを置けなかったとき
-			if (isPlayerOverlap || isHindranceBlockInside || isBoxOverlap)
+			if (isPlayerOverlap || isHindranceBlockInside || isBoxOverlap != -1)
 				pos[i] = piecePrePos;
 		}
 
@@ -824,8 +833,6 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 
 bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum)
 {
-	if (isHave == _pieceNum)
-		return false;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -976,6 +983,8 @@ void Piece::Init()
 	runY = -1;
 	canMoveX = true;
 	canMoveY = true;
+
+	warningIconVisible = 0;
 
 	color[0] = 0xc08080d0;
 	color[1] = 0x80c080d0;

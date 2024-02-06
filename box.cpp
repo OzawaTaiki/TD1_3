@@ -121,13 +121,17 @@ void Box::Update()
 	Clamp();
 }
 
-void Box::Draw(int _num)
+void Box::Draw(int _num, int warningVisible)
 {
 	if (!isDraw)
 		return;
 
 	if (moveSound != nullptr)	moveSound->PlayAudio();
 
+	if (warningVisible & (int)powf(2.0f, (float)_num))
+	{
+		Phill::DrawQuadPlus(int(pos.x), int(pos.y - 100), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, 0xff3030d0, PhillDrawMode::DrawMode_Center);
+	}
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
 
 	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);

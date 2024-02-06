@@ -137,12 +137,12 @@ void ResourceRegist()
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
 	//サウンド
 	/*
-	ResourceManager::Regist("playerMoveSound", "./Resources/sound/.mp3",true);
-	ResourceManager::Regist("playerJumpSound", "./Resources/sound/.mp3",true);
-	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/.mp3",true);
-	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/.mp3",true);
-	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/.mp3",true);
-	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.mp3",true);
+	ResourceManager::Regist("playerMoveSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("playerJumpSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.mp3",false);
 	*/
 }
 

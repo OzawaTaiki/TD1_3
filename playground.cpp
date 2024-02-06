@@ -564,8 +564,8 @@ void Playground::Init(int _stageNo)
 			if ((*field)[y][x] == BOX)
 			{
 				(*field)[y][x] = 0;
-				if (box.empty())
-					box.push_back(new Box(x, y));
+				//if (box.empty())
+				box.push_back(new Box(x, y));
 			}
 			else if ((*field)[y][x] == HINDRANCE)
 			{
@@ -660,7 +660,7 @@ void Playground::Draw()
 	if (BGM != nullptr)			BGM->PlayAudio(true, 300);
 	if (goalSound != nullptr)	goalSound->PlayAudio();
 
-	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xffffffd0);
+	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
 
 	for (int y = 0; y < (*field).size(); y++)
 	{
@@ -687,7 +687,7 @@ void Playground::Draw()
 	}
 
 	for (int i = 0; i < box.size(); i++)
-		box[i]->Draw(i);
+		box[i]->Draw(i, piece->warningIconVisible);
 	piece->Draw(increaseY_scroll);
 	player->Draw();
 

@@ -90,7 +90,7 @@ void Player::Clamp()
 Player::Player()
 {
 	pos = { 64,64 };
-	size = { 54,70 };
+	size = { 54,60 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
@@ -151,7 +151,7 @@ void Player::Draw()
 	if (jumpSound != nullptr)		jumpSound->PlayAudio();
 
 
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y-8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)

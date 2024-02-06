@@ -43,5 +43,5 @@ public:
 	//void CollisionWithField(std::vector< std::vector<int>>* _collision);
 	//void CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround);//playgroundに移動予定
 	void Update();
-	void Draw(int _num);
+	void Draw(int _num, int warningVisible);
 };
