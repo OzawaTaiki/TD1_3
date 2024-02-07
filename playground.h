@@ -15,7 +15,6 @@ class Playground
 	const int kMaxStage = 10;
 
 	std::vector<std::vector<int>>* field;
-	std::vector<std::vector<int>>* collision;
 
 	std::vector<intVec2> hindrancePos;
 	Vector2 hindranceVertex[4];

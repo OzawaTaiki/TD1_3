@@ -29,6 +29,7 @@ public:
 	std::vector<std::vector<Vector2>> adjacencyCheckVertex;
 	std::vector<intVec2> adjacentPos;		//ピースが隣接してるときの左or上の座標
 	std::vector<char> adjacentDir;
+	std::vector<Vector2>isLocked;
 	const int kAdjacentNum = -1;
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
@@ -45,7 +46,6 @@ public:
 	int runY;
 	bool canMoveX;
 	bool canMoveY;
-	bool isLockedY;
 
 	int emitCnt;
 	const int kEmitEnableFrame = 5;

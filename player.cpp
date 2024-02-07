@@ -105,6 +105,8 @@ Player::Player()
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
+	color = 0xffffffff;
+
 	playerTexture = ResourceManager::Handle("playerTex");
 
 	//moveSound = new Sound(ResourceManager::Handle("playerMoveSound"), 0.5f);
@@ -130,6 +132,7 @@ void Player::Init(int _stageNo)
 
 	isAlive = true;
 	isGround = false;
+	color = 0xffffffff;
 }
 
 void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
@@ -147,14 +150,17 @@ void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 	}
 }
 
-void Player::Draw()
+void Player::Draw(bool _isOverlap)
 {
 
 	if (moveSound != nullptr)		moveSound->PlayAudio();
 	if (jumpSound != nullptr)		jumpSound->PlayAudio();
 
+	if (_isOverlap)
+		color = 0xff0000ff;
+	else color = 0xffffffff;
 
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y - 8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y - 8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, color, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)
