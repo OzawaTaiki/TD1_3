@@ -282,16 +282,16 @@ void StageSelect::Draw()
             if ((*field)[y][x] != 9)
             {
                 if ((*field)[y][x] == BLOCK || (*field)[y][x] == 11)
-                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 32, int(y * kTileSize) + 16, kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
                 else if ((*field)[y][x] == GOAL)
-                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 32, int((y - 1) * kTileSize) + 16, kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
                 else if ((*field)[y][x] == SPINE)///とげ
-                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, togeHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 32, int(y * kTileSize) + 16, kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, togeHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
                 else if ((*field)[y][x] == BlockKinds::BOX)///soap
-                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 32, int(y * kTileSize) + 16, kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
             }
         }
     }

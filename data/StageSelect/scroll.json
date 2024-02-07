@@ -1,10 +1,10 @@
 {
-    "scrollbarX": 1890,
+    "scrollbarX": 1820,
     "scrollbarY": 0,
     "scrollMarginTop": 120,
     "scrollbarWidth": 20,
     "scrollbarHeight": 1080,
-    "scrollboxWidth": 32,
-    "scrollboxHeight": 108,
+    "scrollboxWidth": 64,
+    "scrollboxHeight": 192,
     "scrollboxMargin": 120
 }

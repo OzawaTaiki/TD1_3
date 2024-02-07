@@ -2,6 +2,7 @@
 #include "UI_ToolKit_Defines.h"
 #include "PhilliaFunction/Phill.h"
 #include "CursorManager.h"
+#include "ResourceManager.h"
 
 Scroller::Scroller(SpriteData* _spr)
 {
@@ -12,6 +13,7 @@ Scroller::Scroller(SpriteData* _spr)
 	currentY = 0;
 	movable = false;
 	movedT = 0;
+	arrowHnd = ResourceManager::Handle("stgArrow");
 }
 
 void Scroller::SetPosition(Transform _pos)
@@ -29,6 +31,19 @@ void Scroller::SetBarSize(Size _size)
 
 void Scroller::Draw()
 {
+
+	Phill::DrawQuadPlus(
+		scrBox.position.x, scrBox.position.y - scrBox.size.height / 2 - 75,
+		64, 128,
+		1.0f, 1.0f,
+		float(3.1415926535),
+		0, 0,
+		64, 128,
+		arrowHnd,
+		0xffffffff,
+		PhillDrawMode::DrawMode_Center
+	);
+
 	Phill::DrawQuadPlus(
 		scrBox.position.x, scrBox.position.y,
 		scrBox.size.width, scrBox.size.height,
@@ -37,6 +52,18 @@ void Scroller::Draw()
 		sprite->srcPos.x, sprite->srcPos.y,
 		sprite->srcSize.width, sprite->srcSize.height,
 		sprite->textureHandle,
+		0xffffffff,
+		PhillDrawMode::DrawMode_Center
+	);
+
+	Phill::DrawQuadPlus(
+		scrBox.position.x, scrBox.position.y + scrBox.size.height / 2 + 75,
+		64, 128,
+		1.0f, 1.0f,
+		0.0f,
+		0, 0,
+		64, 128,
+		arrowHnd,
 		0xffffffff,
 		PhillDrawMode::DrawMode_Center
 	);

@@ -5,7 +5,7 @@
   "srcWidth": 196,
   "srcHeight": 196,
   "elementMargin": 5,
-  "elemToBarDiff" : 18,
+  "elemToBarDiff" : 64,
   "targFrame_turn": 6,
   "intervalFrame_jump": 40,
   "targetFrame_jump": 30,
