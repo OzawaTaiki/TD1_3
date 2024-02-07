@@ -699,7 +699,7 @@ void Playground::Draw()
 	if (BGM != nullptr)			BGM->PlayAudio(true, 300);
 	if (goalSound != nullptr)	goalSound->PlayAudio();
 
-	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
+	//Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
 
 	for (int y = 0; y < (*field).size(); y++)
 	{
