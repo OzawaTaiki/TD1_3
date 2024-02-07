@@ -30,6 +30,7 @@ FillWithPlayer::FillWithPlayer()
 	alpha_bg = 0;
 	framecount_eraseBg = 0;
 	deleteTiming = 0;
+	isBoom = 0;
 }
 
 void FillWithPlayer::Update()
@@ -42,6 +43,7 @@ void FillWithPlayer::Update()
 	}
 	else if (framecount_eraseBg <= targetFrame_end)
 	{
+		if (!isChangeTiming) isChangeTiming = 1;
 		float ease = Phill::EaseOutQuart(Phill::ConstantT(targetFrame_end, framecount_eraseBg));
 		alpha_bg = Phill::Lerp(400, 0, ease);
 		sprd.trgSize = alpha_bg;
@@ -52,7 +54,7 @@ void FillWithPlayer::Update()
 		deleteTiming = 1;
 	}
 
-	if (frameCount < targetFrame_fill && isChangeTiming == 0)
+	if (frameCount < targetFrame_fill && isBoom == 0)
 	{
 		Novice::ScreenPrintf(300, 15, "%d", frameCount);
 		constantT = Phill::ConstantT(targetFrame_fill, frameCount);
@@ -75,9 +77,9 @@ void FillWithPlayer::Update()
 	}
 	if (fillCount == 3)
 	{
-		isChangeTiming = 1;
+		isBoom = 1;
 	}
-	if (isChangeTiming == 0)
+	if (isBoom == 0)
 	{
 		bufferPos.push_back(p);
 		if (frameCount % 2 == 0)
@@ -109,7 +111,7 @@ void FillWithPlayer::Update()
 	}
 
 	frameCount++;
-	if (isChangeTiming == 1) frameCount_bg++;
+	if (isBoom == 1) frameCount_bg++;
 	if (frameCount_bg > targetFrame_end) framecount_eraseBg++;
 }
 

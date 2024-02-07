@@ -12,7 +12,7 @@ char* SceneManager::keys;
 int		SceneManager::ableSceneChange;
 int		SceneManager::stageNum;
 
-int* SceneManager::title;
+Title* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
 BackGround* SceneManager::backGround;
@@ -38,14 +38,16 @@ void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
 
 void SceneManager::Init()
 {
+
 	Scenes initialScene = SC_StageSelect;
 	existChangeRequest = 0;
 	isEndDraw = 0;
 	scene_current = initialScene;
 	scene_next = scene_current;
-	title = initialScene == SC_Title ? new int : nullptr;
+	title = initialScene == SC_Title ? new Title : nullptr;
 	stageSelect = initialScene == SC_StageSelect ? new StageSelect() : nullptr;
 	game = initialScene == SC_Game ? new Playground() : nullptr;
+  
 	backGround = initialScene == SC_Title ? new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight) :
 		(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
 	ableSceneChange = 0;
@@ -78,7 +80,7 @@ void SceneManager::Update()
 	switch (scene_current)
 	{
 	case SC_Title:
-		//if (title) title->Update();
+		if (title) title->Update();
 		if (backGround)backGround->Update();
 		break;
 
@@ -107,12 +109,21 @@ void SceneManager::Update()
 		break;
 	}
 
+	/// シーン遷移演出
 	if (existChangeRequest || tileChange)
 	{
 		switch (scene_next)
 		{
+		case SC_StageSelect:
+			ableSceneChange = 1;
+			break;
+
 		case SC_Game:
-			if (!tileChange) tileChange = new TileChange();
+			if (!tileChange)
+			{
+				tileChange = new TileChange();
+				ableSceneChange = 0;
+			}
 			if (tileChange) {
 				tileChange->Update();
 				if (tileChange->GetIsTileEnd())
@@ -135,7 +146,7 @@ void SceneManager::Draw()
 	switch (scene_current)
 	{
 	case SC_Title:
-		//if (title) title->Draw();
+		if (title) title->Draw();
 		if (backGround)backGround->Draw();
 		if (titleBGM)titleBGM->PlayAudio(true, 120);
 		break;
@@ -197,7 +208,7 @@ void SceneManager::ChangeScene()
 				switch (scene_next)
 				{
 				case SC_Title:
-					//title = new Title();
+					title = new Title();
 					backGround = new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight);
 					if (titleBGM) titleBGM->SoundEnable();
 					break;

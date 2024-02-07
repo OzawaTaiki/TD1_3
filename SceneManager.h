@@ -3,6 +3,7 @@
 #include "StageSelect.h"
 #include "playground.h"
 #include "backGround.h"
+#include "Title.h"
 
 #include "TileChange.h"
 #include "sound.h"
@@ -26,7 +27,7 @@ private:
     static  int     ableSceneChange;
 
     // TODO: 型を変更してください
-    static	int*	title;					// タイトルシーン
+    static	Title*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	Playground*	game;				// ゲームシーン
     static BackGround* backGround;

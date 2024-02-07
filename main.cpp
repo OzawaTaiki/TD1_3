@@ -179,4 +179,5 @@ void JSONLoad()
 	JSON_Manager::LoadJSON("stgSel-scroll", "./data/StageSelect/scroll.json");
 	JSON_Manager::LoadJSON("stgSel-back", "./data/StageSelect/backButton.json");
 	JSON_Manager::LoadJSON("fillWithPlayer", "./data/StageSelect/fillWithPlayer.json");
+	JSON_Manager::LoadJSON("title-startup", "./data/Title/startup.json");
 }

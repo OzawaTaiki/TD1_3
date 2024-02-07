@@ -26,6 +26,7 @@ private:
 	int		frameCount_bg;
 	int		framecount_eraseBg;
 	int		frameBuffer_end;
+	int		isBoom;
 	int		isChangeTiming;
 	int		fillCount;
 	float	constantT;
