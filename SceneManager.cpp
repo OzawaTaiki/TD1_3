@@ -39,7 +39,7 @@ void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
 void SceneManager::Init()
 {
 
-	Scenes initialScene = SC_StageSelect;
+	Scenes initialScene = SC_Title;
 	existChangeRequest = 0;
 	isEndDraw = 0;
 	scene_current = initialScene;
@@ -85,6 +85,7 @@ void SceneManager::Update()
 		break;
 
 	case SC_StageSelect:
+		if (backGround)backGround->Update();
 		if (stageSelect) stageSelect->Update();
 		break;
 
@@ -146,11 +147,12 @@ void SceneManager::Draw()
 	switch (scene_current)
 	{
 	case SC_Title:
-		if (title) title->Draw();
 		if (backGround)backGround->Draw();
+		if (title) title->Draw();
 		if (titleBGM)titleBGM->PlayAudio(true, 120);
 		break;
 	case SC_StageSelect:
+		if (backGround)backGround->Draw();
 		if (stageSelect) stageSelect->Draw();
 		if (selectBGM)selectBGM->PlayAudio(true, 120);
 		break;
@@ -191,6 +193,8 @@ void SceneManager::ChangeScene()
 				case SC_StageSelect:
 					delete stageSelect;
 					stageSelect = nullptr;
+					delete backGround;
+					backGround = nullptr;
 					if (selectBGM) selectBGM->StopAudio(true, 120);
 					break;
 				case SC_Game:
@@ -213,6 +217,7 @@ void SceneManager::ChangeScene()
 					if (titleBGM) titleBGM->SoundEnable();
 					break;
 				case SC_StageSelect:
+					backGround = new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight);
 					stageSelect = new StageSelect();
 					if (selectBGM) selectBGM->SoundEnable();
 					break;

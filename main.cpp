@@ -135,6 +135,7 @@ void ResourceRegist()
 	ResourceManager::Regist("dekaP", "./img/dekaP.png");
 	ResourceManager::Regist("stgNumElement", "./resources/img/stageNumBlock.png");
 	ResourceManager::Regist("stgArrow", "./Resources/img/arrow.png");
+	ResourceManager::Regist("title", "./Resources/img/gameTitle.png");
 
 	for (int i = 0; i < 1; i++)
 	{
