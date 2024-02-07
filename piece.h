@@ -6,6 +6,7 @@
 #include "definition.h"
 #include "sound.h"
 #include "BubbleEmitter.h"
+#include <list>
 
 
 class Box;
@@ -49,7 +50,7 @@ public:
 	bool canMoveY;
 
 	int emitCnt;
-	const int kEmitEnableFrame = 5;
+	const int kEmitEnableFrame = 15;
 
 	bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
 	bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
@@ -67,8 +68,9 @@ public:
 	Sound* MoveSound;
 
 	/// ぱーちくる
-	EmitterData emitdata;
-	std::vector<BubbleEmitter*> bubbleEmit;
+	std::list<std::list<EmitterData>> emitdata;
+	BubbleSetting bubbleSet[8];
+	std::vector < std::vector<BubbleEmitter*>> bubbleEmitter;
 
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
@@ -91,7 +93,7 @@ public:
 	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity);
 	void CollisionPieceWithPiece();
 
-	void AddBubbleEmitter(int _pieceNum, int _x, int _y);
+	void AddEmitter(int _pieceNum, int _x, int _y);
 	void BubbleUpdDraw();
 
 	void PiecePosInit(int _x, int _y);

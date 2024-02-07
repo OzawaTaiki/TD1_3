@@ -82,21 +82,26 @@ void FillWithPlayer::Update()
 		bufferPos.push_back(p);
 		if (frameCount % 2 == 0)
 		{
+			// 画像について定義するなら、SpriteData型の変数を用意して
+			// EmitterDataのsprdメンバにポインタを格納する。
 			sprd.srcPos = 0;
 			sprd.srcSize = 64;
 			sprd.trgSize = 128;
 			sprd.drawMode = DrawMode_Center;
 			sprd.textureHandle = ResourceManager::Handle("bubble");
+			// BubbleEmitter型 bs変数
 			bs.gravity = 0.01f;
 			bs.velocityX_range = 4.0f;
 			bs.velocityX_offset = -2.0f;
 			bs.velocityY_range = 1.0f;
+			
 			EmitterData temp_ed{};
 			temp_ed.position.x = p.x - 40.0f;
 			temp_ed.position.y = p.y - 200.0f;
 			temp_ed.size.width = 200;
 			temp_ed.size.height = 400;
 			temp_ed.sprd = &sprd;
+			// temp_ed を EmitterData型配列にプッシュ
 			ed.push_back(temp_ed);
 			emitters.push_back(new BubbleEmitter(&ed.back()));
 			emitters.back()->SetParticleSetting(&bs);

@@ -126,7 +126,6 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 				isPieceOverlap = IsOverlap();
 
 				isHave = -1;
-				bubbleEmit.clear();
 				emitCnt = 0;
 
 				/*******************
@@ -322,12 +321,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] > 0)
 					{
 						(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
+						AddEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
 					}
 					if ((*piece)[_pieceNum2][0][temp2 + count2])
 					{
 						(*piece)[_pieceNum2][0][temp2 + count2] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, temp2 + count2++, 0);
+						AddEmitter(_pieceNum2, temp2 + count2++, 0);
 					}
 
 				}
@@ -341,12 +340,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][0][temp1 + count1])
 					{
 						(*piece)[_pieceNum1][0][temp1 + count1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, temp1 + count1++, 0);
+						AddEmitter(_pieceNum1, temp1 + count1++, 0);
 					}
 					if ((*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2])
 					{
 						(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
+						AddEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
 					}
 				}
 			}
@@ -365,12 +364,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][temp1 + count1][0] > 0)
 					{
 						(*piece)[_pieceNum1][temp1 + count1][0] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, 0, temp1 + count1++);
+						AddEmitter(_pieceNum1, 0, temp1 + count1++);
 					}
 					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
 					{
 						(*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
+						AddEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
 					}
 				}
 			}
@@ -383,12 +382,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
 					{
 						(*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
+						AddEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
 					}
 					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
 					{
 						(*piece)[_pieceNum2][temp2 + count2][0] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, 0, temp2 + count2++);
+						AddEmitter(_pieceNum2, 0, temp2 + count2++);
 					}
 				}
 			}
@@ -913,27 +912,57 @@ void Piece::CollisionPieceWithPiece()
 		}
 	}
 }
-void Piece::AddBubbleEmitter(int _pieceNum, int _x, int _y)
-{
-	emitdata.position.x = pos[_pieceNum].x + _x + kTileSize;
-	emitdata.position.y = pos[_pieceNum].y + _y + kTileSize;
 
-	bubbleEmit.push_back(new BubbleEmitter(&emitdata));
+void Piece::AddEmitter(int _pieceNum, int _x, int _y)
+{
+	if (emitCnt != 0)
+		return;
+
+	EmitterData temp;
+	temp.position.x = pos[_pieceNum].x + _x * kTileSize;
+	temp.position.y = pos[_pieceNum].y + _y * kTileSize;
+	temp.size.height = 32;
+	temp.size.width = 32;
+	temp.sprd = nullptr;
+
+	// 新しい行を追加
+	emitdata.push_back(std::list<EmitterData>());
+	bubbleEmitter.push_back(std::vector<BubbleEmitter*>());
+
+	// 初めの要素を追加
+	emitdata.back().push_back(temp);
+	bubbleEmitter.back().push_back(new BubbleEmitter(&emitdata.back().back()));
+	bubbleEmitter.back().back()->SetParticleSetting(&bubbleSet[0]);
+
+	// 残りの要素を追加
+	for (int i = 1; i < 8; i++) {
+		emitdata.back().push_back(temp);
+		bubbleEmitter.back().push_back(new BubbleEmitter(&emitdata.back().back()));
+		bubbleEmitter.back().back()->SetParticleSetting(&bubbleSet[i]);
+	}
 }
 
 void Piece::BubbleUpdDraw()
 {
+	if (bubbleEmitter.empty())
+		return;
 	if (emitCnt != -1)
-	{
 		emitCnt++;
-		if (emitCnt / kEmitEnableFrame)
-			emitCnt = -1;
 
-		for (int i = 0; i < bubbleEmit.size(); i++)
+	for (int i = 0; i < bubbleEmitter.size(); i++)
+	{
+		for (int j = 0; j < bubbleEmitter[i].size(); j++)
 		{
-			bubbleEmit[i]->Update();
-			bubbleEmit[i]->Draw();
+			if (emitCnt != -1)
+				bubbleEmitter[i][j]->Update();
+			bubbleEmitter[i][j]->Draw();
 		}
+	}
+	if (emitCnt % kEmitEnableFrame == 0)
+	{
+		emitCnt = -1;
+		bubbleEmitter.clear();
+		emitdata.clear();
 	}
 }
 
@@ -941,12 +970,38 @@ Piece::Piece()
 {
 	pieceTexture = ResourceManager::Handle("pieceTex");
 
-	emitdata.size.width = 10;
-	emitdata.size.height = 10;
-	if (!bubbleEmit.empty()) bubbleEmit.clear();
+	for (int i = 0; i < 8; i++)
+	{
+		bubbleSet[i].gravity = 0.0f;
+		bubbleSet[i].velocityX_range = 1.0f;
+		bubbleSet[i].velocityY_range = 1.0f;
+	}
+
+	bubbleSet[0].velocityX_offset = 0.0f;
+	bubbleSet[0].velocityY_offset = -5.0f;
+
+	bubbleSet[1].velocityX_offset = -3.5f;
+	bubbleSet[1].velocityY_offset = -3.5f;
+
+	bubbleSet[2].velocityX_offset = -5.0f;
+	bubbleSet[2].velocityY_offset = 0.0f;
+
+	bubbleSet[3].velocityX_offset = -3.5f;
+	bubbleSet[3].velocityY_offset = 3.5f;
+
+	bubbleSet[4].velocityX_offset = 0.0f;
+	bubbleSet[4].velocityY_offset = 5.0f;
+
+	bubbleSet[5].velocityX_offset = 3.5f;
+	bubbleSet[5].velocityY_offset = 3.5f;
+
+	bubbleSet[6].velocityX_offset = 5.0f;
+	bubbleSet[6].velocityY_offset = 0.0f;
+
+	bubbleSet[7].velocityX_offset = -3.5f;
+	bubbleSet[7].velocityY_offset = 3.5f;
 
 	Init();
-
 }
 
 void Piece::PiecePosInit(int _x, int _y)
@@ -966,6 +1021,7 @@ void Piece::Init()
 	velocity.resize(piece->size());
 	moveDir.resize(piece->size());
 	isLocked.resize(piece->size(), { 0,0 });
+
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
@@ -1024,6 +1080,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
 	adjacentDir.clear();
+	//emitdata.clear();
 
 	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex, _scrollY);
 }
