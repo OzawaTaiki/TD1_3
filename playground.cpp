@@ -643,7 +643,6 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	/// コマ送りモードは入力しながらenter
 	if (!frameSlow || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN])
 	{
-
 		plbo = false;
 		plpi = false;
 		pibo = false;

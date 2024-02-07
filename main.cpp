@@ -140,7 +140,7 @@ void ResourceRegist()
 
 	/// オザワ追加分
 	// テクスチャ
-	ResourceManager::Regist("playerTex", "./Resources/img/player.png");
+	ResourceManager::Regist("playerTex", "./Resources/img/player-sheet.png");
 	ResourceManager::Regist("soapTex", "./Resources/img/soap.png");
 	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
 	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");
