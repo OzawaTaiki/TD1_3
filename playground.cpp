@@ -714,10 +714,10 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 			}
 		}
 	}
-	
 
-	if (!player->isAlive)
-	{		
+
+	if (!player->isAlive || _keys[DIK_R])
+	{
 		Init(selectStage);
 	}
 }
@@ -761,5 +761,5 @@ void Playground::Draw()
 	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0xa0, kFillModeSolid);
 	// ナイトウが勝手に追加
 	if (fwp) fwp->Draw();
-	
+
 }
