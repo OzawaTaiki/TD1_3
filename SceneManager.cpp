@@ -15,6 +15,7 @@ int		SceneManager::stageNum;
 int* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
+BackGround* SceneManager::backGround;
 
 TileChange* SceneManager::tileChange;
 
