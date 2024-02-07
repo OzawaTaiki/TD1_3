@@ -134,8 +134,8 @@ void Box::Draw(int _num, int warningVisible)
 
 	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
 
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
 	//Novice::ScreenPrintf(-100, -100, "%d", _num);
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
+	Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }

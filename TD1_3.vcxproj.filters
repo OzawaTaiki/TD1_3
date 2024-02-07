@@ -80,6 +80,27 @@
     <Filter Include="シーン\シーンクラス\StageSelect">
       <UniqueIdentifier>{8f62346a-6a4c-49f2-8651-2707976d6a63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{2ff0ea48-21af-4d1c-ab8a-a7c50ecdc138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Bubble">
+      <UniqueIdentifier>{86acc3ca-66da-443b-bee0-51a5b953d416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Emitter">
+      <UniqueIdentifier>{022f563c-c992-44ee-844f-8090d760a530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle\Emitter\BubbleEmitter">
+      <UniqueIdentifier>{84601111-1d76-4dce-9784-4d45e29afef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーンチェンジ">
+      <UniqueIdentifier>{90c9b95a-ccac-43fe-a886-02b890a3e346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーンチェンジ\旧作">
+      <UniqueIdentifier>{a1ae3383-407b-4af4-ac39-0f5eb6c8a681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーンチェンジ\Playerで塗りつぶし">
+      <UniqueIdentifier>{77416209-a0e2-496d-bb88-ead3f74c0284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -169,6 +190,24 @@
     </ClCompile>
     <ClCompile Include="StageSelect.cpp">
       <Filter>シーン\シーンクラス\StageSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>Particle\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI_ToolKit_Defines.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEmitter.cpp">
+      <Filter>Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleEmitter.cpp">
+      <Filter>Particle\Emitter\BubbleEmitter</Filter>
+    </ClCompile>
+    <ClCompile Include="TileChange.cpp">
+      <Filter>シーンチェンジ\旧作</Filter>
+    </ClCompile>
+    <ClCompile Include="FillWPlayer.cpp">
+      <Filter>シーンチェンジ\Playerで塗りつぶし</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +355,24 @@
     </ClInclude>
     <ClInclude Include="StageSelect.h">
       <Filter>シーン\シーンクラス\StageSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>Particle\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleDefines.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEmitter.h">
+      <Filter>Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleEmitter.h">
+      <Filter>Particle\Emitter\BubbleEmitter</Filter>
+    </ClInclude>
+    <ClInclude Include="TileChange.h">
+      <Filter>シーンチェンジ\旧作</Filter>
+    </ClInclude>
+    <ClInclude Include="FillWPlayer.h">
+      <Filter>シーンチェンジ\Playerで塗りつぶし</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

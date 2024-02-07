@@ -4,6 +4,7 @@
 #include "JSON-Loader/JSON-Manager.h"
 #include "SceneManager.h"
 
+#include <time.h>
 #include <Novice.h>
 #include "playground.h"
 #include "definition.h"
@@ -25,6 +26,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Tutorial* tutorial = nullptr;
+
+	srand(unsigned int(time(nullptr)));
 
 	JSONLoad();
 	ResourceRegist();
@@ -114,6 +117,8 @@ void ResourceRegist()
 	ResourceManager::Regist("white1x1", "white1x1.png");
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
+	ResourceManager::Regist("bubble", "./img/bubble.png");
+	ResourceManager::Regist("dekaP", "./img/dekaP.png");
 
 	for (int i = 0; i < 1; i++)
 	{
@@ -135,14 +140,15 @@ void ResourceRegist()
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
+	
 	//サウンド
+	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/SE/put.mp3", false);
+	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/SE/grip.mp3", false);
 	/*
-	ResourceManager::Regist("playerMoveSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("playerJumpSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("playerMoveSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("playerJumpSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.SE/mp3",false);
 	*/
 }
 
@@ -152,4 +158,5 @@ void JSONLoad()
 	JSON_Manager::LoadJSON("stgSel-main", "./data/StageSelect/stageSelect.json");
 	JSON_Manager::LoadJSON("stgSel-scroll", "./data/StageSelect/scroll.json");
 	JSON_Manager::LoadJSON("stgSel-back", "./data/StageSelect/backButton.json");
+	JSON_Manager::LoadJSON("fillWithPlayer", "./data/StageSelect/fillWithPlayer.json");
 }
