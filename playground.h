@@ -5,6 +5,7 @@
 #include "JSON-Loader/JSON-Manager.h"
 #include "UI/UI_Manager.h"
 #include "sound.h"
+#include "FillWPlayer.h"
 
 class Piece;
 class Player;
@@ -65,6 +66,8 @@ class Playground
 	Transform	scrollbarPosition;
 	int			scrollMarginTop;        // スクロール要素 上マージン
 	int			increaseY_scroll;		// スクロールによるy増加分（マイナス値へ変化する）
+	FillWithPlayer* fwp;
+	int			isChangetm;
 
 	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 

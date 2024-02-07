@@ -9,6 +9,7 @@
 #include "player.h"
 #include "box.h"
 #include "ResourceManager.h"
+#include "SceneManager.h"
 
 
 void Playground::CollisionWithPlayer()
@@ -582,7 +583,8 @@ Playground::Playground()
 	scrollBar->SetBarSize(Size(scrollBarSize.width, scrollBarSize.height - scrollboxSize.height - scrollboxMargin)); // 54はスクロールボックスの縦幅 80は縦マージンx2
 	scrollBar->SetBoxSize(scrollboxSize);
 	scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
-
+	fwp = nullptr;
+	isChangetm = 0;
 	/// - - - ナイトウが勝手に実装 おわり - - - ///
 
 	//TODO : 確定後
@@ -674,6 +676,35 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		//CollisionPlayerWithBox();
 		//CollisionPlayerWithPiece();
 		//CollisionWithPiece();
+
+		if (isClear && !fwp)
+		{
+			fwp = new FillWithPlayer();
+		}
+
+		if (fwp)
+		{
+			fwp->Update();
+			if (fwp->IsChangeTiming() && !isChangetm)
+			{
+				selectStage++;
+				if (selectStage >= kMaxStage)
+				{
+					selectStage = 0;
+					SceneManager::ChangeRequest(Scenes::SC_StageSelect);
+					return;
+				}
+
+				Init(selectStage);
+				isChangetm = 1;
+			}
+			if (fwp->DeleteTiming())
+			{
+				delete fwp;
+				fwp = nullptr;
+				isChangetm = 0;
+			}
+		}
 	}
 
 	if (_keys[DIK_R] && _preKeys[DIK_R] || !player->isAlive)
@@ -684,11 +715,13 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 
 	/// shift + enter で次のステージ
 	// DEBUG: 削除対象
-	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
+	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
 		selectStage++;
 		if (selectStage >= kMaxStage)
+		{
 			selectStage = 0;
+		}
 		Init(selectStage);
 	}
 }
@@ -731,5 +764,6 @@ void Playground::Draw()
 
 	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0xa0, kFillModeSolid);
 	// ナイトウが勝手に追加
-	scrollBar->Draw();
+	if (fwp) fwp->Draw();
+	
 }
