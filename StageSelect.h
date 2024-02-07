@@ -32,28 +32,35 @@ private:
     JsonL*	json_scroll;
     JsonL*	json_back;
 
-    SpriteData  scrSpr;                         // スクロールデータ
-    SpriteData  backSpr;                        // スクロールデータ
-    Scroller*   scrollBar;                      // スクロールバー実体
 
+    // ステージ選択要素(15個のやつ)
     Size	    srcSize;                        // 画像解像度 (px)
     Size	    elementSize;                    // 通常時の要素サイズ (px)
     int		    targetFrame_turn;               // 目標 ホバー時にかかるフレーム数 
     float       targetTheta_jump;               // 目標 要素ジャンプの角度
     int		    elementMargin;                  // 要素同士のマージン(px)
 
+    // フレーム系
     int		    IntervalFrame_jump;			    // 要素のジャンプ間隔(f)
     int         targetFrame_jump;               // 目標 要素のジャンプにかかるフレーム数
     int         isInterval;                     // インターバルかどうか
     float       theta_jump[15];                 // ジャンプ角度
     
+    // スクロール系
+    SpriteData  scrSpr;                         // スクロールデータ
+    Scroller*   scrollBar;                      // スクロールバー実体
     Size        scrollBarSize;                  // スクロールバーのサイズ
     Size        scrollboxSize;                  // スクロールボックスのサイズ
     int         scrollboxMargin;
     Transform   scrollbarPosition;
     int         scrollMarginTop;                // スクロール要素 上マージン
 
+    // 戻るボタン
+    SpriteData  backSpr;                        // スクロールデータ
     Transform   backPos;                        // 戻るボタン座標
+
+    Transform   thumbnailPos;                   // ステージサムネの座標
+    Size        thumbnailSize;                  // ステージサムネのサイズ
 
     unsigned int bgColor;                       // 背景色 (画像に差し替え予定)
 
