@@ -9,10 +9,13 @@ Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
 char*	SceneManager::preKeys;
 char*	SceneManager::keys;
+int		SceneManager::ableSceneChange;
 
 int* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
+
+TileChange* SceneManager::tileChange;
 
 void SceneManager::ChangeRequest(Scenes _nextScene)
 {
@@ -22,7 +25,7 @@ void SceneManager::ChangeRequest(Scenes _nextScene)
 
 void SceneManager::Init()
 {
-	Scenes initialScene = SC_Game;
+	Scenes initialScene = SC_StageSelect;
 	existChangeRequest	= 0;
 	isEndDraw			= 0;
 	scene_current		= initialScene;
@@ -30,6 +33,8 @@ void SceneManager::Init()
 	title				= initialScene == SC_Title ? new int : nullptr;
 	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
 	game				= initialScene == SC_Game ? new Playground() : nullptr;
+	ableSceneChange		= 0;
+	tileChange			= nullptr;
 	if (game) game->Init(0);
 }
 
@@ -37,7 +42,6 @@ void SceneManager::Update()
 {
 	keys = KeyManager::GetKeysPtr();
 	preKeys = KeyManager::GetpreKeysPtr();
-
 
 	switch (scene_current)
 	{
@@ -68,6 +72,23 @@ void SceneManager::Update()
 	default:
 		break;
 	}
+
+	if (existChangeRequest || tileChange)
+	{
+		switch (scene_next)
+		{
+		case SC_Game:
+			if (!tileChange) tileChange = new TileChange();
+			if (tileChange) {
+				tileChange->Update();
+				if (tileChange->GetIsTileEnd())
+				{
+					ableSceneChange = 1;
+				}
+			}
+			break;
+		}
+	}
 }
 
 void SceneManager::Draw()
@@ -87,6 +108,8 @@ void SceneManager::Draw()
 	default:
 		break;
 	}
+
+	if (tileChange) tileChange->Draw();
 	isEndDraw = 1;
 }
 

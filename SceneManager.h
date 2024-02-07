@@ -3,6 +3,8 @@
 #include "StageSelect.h"
 #include "playground.h"
 
+#include "TileChange.h"
+
 enum Scenes
 {
     SC_Title,
@@ -25,6 +27,8 @@ private:
     static	int*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	Playground*	game;				// ゲームシーン
+
+    static  TileChange* tileChange;
 
     static  char*   preKeys;
     static  char*   keys;
