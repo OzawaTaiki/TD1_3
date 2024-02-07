@@ -122,6 +122,7 @@ void ResourceRegist()
 	ResourceManager::Regist("bubble", "./img/bubble.png");
 	ResourceManager::Regist("foam", "./Resources/img/foam.png");
 	ResourceManager::Regist("dekaP", "./img/dekaP.png");
+	ResourceManager::Regist("stgNumElement", "./resources/img/stageNumBlock.png");
 
 	for (int i = 0; i < 1; i++)
 	{

@@ -47,7 +47,7 @@ StageSelect::StageSelect()
     selectElm_pre           = -1;
     Calculation();
 
-    for (int index = 0; index < 15; index++)
+    for (int index = 0; index < kMax; index++)
     {
         frameCount_turn[index]		= 0;
         constantT_turn[index]		= 0.0f;
@@ -74,8 +74,8 @@ StageSelect::StageSelect()
 void StageSelect::ScrollCalc()
 {
     float   scrT = scrollBar->GetValue();
-    int     lerpValue = 1080 - (elementSize.height + elementMargin) * 15 - scrollMarginTop*2;
-    for (int index = 0; index < 15; index++)
+    int     lerpValue = 1080 - (elementSize.height + elementMargin) * kMax - scrollMarginTop*2;
+    for (int index = 0; index < kMax; index++)
     {
         screenElements[index].pos.x = elements[index].pos.x;
         screenElements[index].pos.y = elements[index].pos.y + int(lerpValue * scrT);
@@ -95,17 +95,13 @@ StageSelect::~StageSelect()
 
 void StageSelect::LoadHandle()
 {
-    ssElementHandle = ResourceManager::Handle("white1x1");
-    for (int i = 0; i < 15; i++)
-    {
-        //thumbHandle[i] = ResourceManager::Handle(resourceName[i]);
-    }
+    ssElementHandle = ResourceManager::Handle("stgNumElement");
 }
 
 void StageSelect::Init()
 {
     // 初期位置の算出
-    for (int index = 0; index < 15; index++)
+    for (int index = 0; index < kMax; index++)
     {
         elements[index].pos.x           = elementStandard.x + elementSize.width / 2;
         elements[index].pos.y		    = elementStandard.y + (elementSize.height + elementMargin) * index;
@@ -138,7 +134,7 @@ void StageSelect::Update()
 
 
     selectElm_pre = selectElm;
-    for (int index = 0; index < 15; index++)
+    for (int index = 0; index < kMax; index++)
     {
         // 押印
         if (CursorManager::Pressed(&screenElements[index].pos, &screenElements[index].size) == 1)
@@ -252,13 +248,13 @@ void StageSelect::Draw()
 
 
     // 要素
-    for (int index = 0; index < 15; index++)
+    for (int index = 0; index < kMax; index++)
     {
         Phill::DrawQuadPlus(
             screenElements[index].pos.x, screenElements[index].pos.y,
             elements[index].size.width, elements[index].size.height,
             1.0f, 1.0f, theta_jump[index],
-            0, 0,
+            196 * index, 0,
             srcSize.width, srcSize.height,
             ssElementHandle,
             0xffffffff,
