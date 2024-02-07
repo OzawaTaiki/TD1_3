@@ -9,6 +9,7 @@
 #include "playground.h"
 #include "definition.h"
 #include "Tutorial.h"
+#include "backGround.h"
 
 const char kWindowTitle[] = "1304_がめちｔぇ";
 
@@ -26,6 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Tutorial* tutorial = nullptr;
+	BackGround bg(0x8080f0d0);
 
 	srand(unsigned int(time(nullptr)));
 
@@ -79,6 +81,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
+		bg.Update();
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -86,6 +90,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+
+		bg.Draw();
 
 		if (tutorial) tutorial->Draw();
 
