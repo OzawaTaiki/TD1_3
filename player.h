@@ -19,7 +19,7 @@ public:
 
 	Vector2 vertex[4];
 
-	const float kMoveSpd = 7.0f;
+	const float kMoveSpd =	7.0f;
 	const float kJumpVelocity = -12.0f;
 	const float kMaxVeloY = 15.0f;
 
