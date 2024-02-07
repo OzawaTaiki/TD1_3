@@ -104,6 +104,7 @@ void StageSelect::LoadHandle()
     goalHandle = ResourceManager::Handle("goalTex");
     togeHandle = ResourceManager::Handle("togeTex");
     boxHandle = ResourceManager::Handle("soapTex");
+    whiteHnd = ResourceManager::Handle("white1x1");
 }
 
 void StageSelect::Init()
@@ -166,6 +167,7 @@ void StageSelect::Update()
                 EasingHover(index); // イージング
                 if (frameCount_turn[index] < targetFrame_turn)
                     frameCount_turn[index]++;
+
                 break;
             case FCS_PRESS:
                 selectElm = index;
@@ -272,6 +274,18 @@ void StageSelect::Draw()
             0xffffffff,
             DrawMode_Center
         );
+
+        if (elements[index].fcStatus == FCS_HOVER)
+            Phill::DrawQuadPlus(
+                screenElements[index].pos.x, screenElements[index].pos.y,
+                elements[index].size.width, elements[index].size.height,
+                1.0f, 1.0f, theta_jump[index],
+                0, 0,
+                1, 1,
+                whiteHnd,
+                0x00000044,
+                DrawMode_Center
+            );
     }
 
     //// 抜粋

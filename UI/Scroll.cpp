@@ -34,7 +34,7 @@ void Scroller::Draw()
 
 	Phill::DrawQuadPlus(
 		scrBox.position.x, scrBox.position.y - scrBox.size.height / 2 - 75,
-		64, 128,
+		48, 96,
 		1.0f, 1.0f,
 		float(3.1415926535),
 		0, 0,
@@ -58,7 +58,7 @@ void Scroller::Draw()
 
 	Phill::DrawQuadPlus(
 		scrBox.position.x, scrBox.position.y + scrBox.size.height / 2 + 75,
-		64, 128,
+		48, 96,
 		1.0f, 1.0f,
 		0.0f,
 		0, 0,

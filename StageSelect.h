@@ -127,6 +127,7 @@ private:
 
     int         elm2barDiff;
 
+    int         whiteHnd;
 
     void	    EasingHover(int _index);
     void        LoadFromJSON();
