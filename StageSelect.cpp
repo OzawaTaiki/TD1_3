@@ -5,6 +5,7 @@
 #include "JSON-Loader/JSON-Manager.h"
 #include "KeyManager.h"
 #include "UI/UI_ToolKit.h"
+#include "SceneManager.h"
 
 StageSelect::StageSelect()
 {
@@ -36,8 +37,10 @@ StageSelect::StageSelect()
     targetTheta_jump	    = 0.0f;
     isInterval			    = 0;
 
-    ssElementHandle		    = ResourceManager::Handle("white1x1");
+    clickCnt                = 0;
 
+    selectElm               = -1;
+    selectElm_pre           = -1;
     Calculation();
 
     for (int index = 0; index < 15; index++)
@@ -52,7 +55,16 @@ StageSelect::StageSelect()
         elements[index].size.height	= elementSize.height;
         elements[index].alpha		= 0;
         elements[index].fcStatus	= FCS_NONE;
+        
+        // 実際にスクロールするのはこっち
+        screenElements[index].pos.x = elementStandard.x + elementSize.width / 2;
+        screenElements[index].pos.y = elementStandard.y + (elementSize.height + elementMargin) * index;
+        screenElements[index].size.width = elementSize.width;
+        screenElements[index].size.height = elementSize.height;
+        screenElements[index].alpha = 0;
+        screenElements[index].fcStatus = FCS_NONE;
     }
+    LoadHandle();
 }
 
 void StageSelect::ScrollCalc()
@@ -61,10 +73,13 @@ void StageSelect::ScrollCalc()
     int     lerpValue = 1080 - (elementSize.height + elementMargin) * 15 - scrollMarginTop*2;
     for (int index = 0; index < 15; index++)
     {
-        elements[index].pos.x = elementStandard.x + elementSize.width / 2;
-        elements[index].pos.y = elementStandard.y + (elementSize.height + elementMargin) * index + int(lerpValue * scrT);
-        elements[index].size.width = elementSize.width;
-        elements[index].size.height = elementSize.height;
+        screenElements[index].pos.x = elements[index].pos.x;
+        screenElements[index].pos.y = elements[index].pos.y + int(lerpValue * scrT);
+
+        defaultElm[index].pos.x = elementStandard.x + elementSize.width / 2;
+        defaultElm[index].pos.y = elementStandard.y + (elementSize.height + elementMargin) * index;
+        defaultElm[index].size.width = elementSize.width;
+        defaultElm[index].size.height = elementSize.height;
     }
 }
 
@@ -74,15 +89,29 @@ StageSelect::~StageSelect()
     scrollBar = nullptr;
 }
 
+void StageSelect::LoadHandle()
+{
+    ssElementHandle = ResourceManager::Handle("white1x1");
+    for (int i = 0; i < 15; i++)
+    {
+        thumbHandle[i] = ResourceManager::Handle(resourceName[i]);
+    }
+}
+
 void StageSelect::Init()
 {
     // 初期位置の算出
     for (int index = 0; index < 15; index++)
     {
-        elements[index].pos.x       = elementStandard.x + elementSize.width / 2;
-        elements[index].pos.y		= elementStandard.y + (elementSize.height + elementMargin) * index;
-        elements[index].size.width	= elementSize.width;
-        elements[index].size.height	= elementSize.height;
+        elements[index].pos.x           = elementStandard.x + elementSize.width / 2;
+        elements[index].pos.y		    = elementStandard.y + (elementSize.height + elementMargin) * index;
+        elements[index].size.width	    = elementSize.width;
+        elements[index].size.height	    = elementSize.height;
+
+        defaultElm[index].pos.x         = elementStandard.x + elementSize.width / 2;
+        defaultElm[index].pos.y         = elementStandard.y + (elementSize.height + elementMargin) * index;
+        defaultElm[index].size.width    = elementSize.width;
+        defaultElm[index].size.height   = elementSize.height;
     }
 }
 
@@ -102,15 +131,19 @@ void StageSelect::Update()
     CursorManager::GetCursorPos(&cur);
     scrollBar->UpdateStatus();
     ScrollCalc();
+
+
+    selectElm_pre = selectElm;
     for (int index = 0; index < 15; index++)
     {
         // 押印
-        if (CursorManager::Pressing(&elements[index].pos, &elements[index].size) == 1)
+        if (CursorManager::Pressed(&screenElements[index].pos, &screenElements[index].size) == 1)
         {
             elements[index].fcStatus = FCS_PRESS;
+            clickCnt++;
         }
         // ホバー
-        else if (CursorManager::Hover(&elements[index].pos, &elements[index].size) == 1)
+        else if (CursorManager::Hover(&screenElements[index].pos, &screenElements[index].size) == 1)
         {
             elements[index].fcStatus = FCS_HOVER;
         }
@@ -124,7 +157,9 @@ void StageSelect::Update()
             EasingHover(index); // イージング
             if (frameCount_turn[index] < targetFrame_turn)
                 frameCount_turn[index]++;
+            break;
         case FCS_PRESS:
+            selectElm = index;
             break;
         case FCS_NONE:
             EasingHover(index);
@@ -132,6 +167,24 @@ void StageSelect::Update()
         default:
             break;
         }
+    }
+    if (selectElm != -1)
+    {
+        if (selectElm != selectElm_pre)
+        {
+            clickCnt = 1;
+            if (selectElm_pre != -1)
+            {
+                elements[selectElm_pre].pos = defaultElm[selectElm_pre].pos;
+            }
+            elements[selectElm].pos -= 15;
+        }
+
+    }
+
+    if (clickCnt == 2)
+    {
+        SceneManager::ChangeRequest(Scenes::SC_Game);
     }
 
     // 要素ジャンプ
@@ -191,11 +244,13 @@ void StageSelect::Draw()
     // スクロールバー
     //Novice::DrawBox(1920 - );
 
+
+
     // 要素
     for (int index = 0; index < 15; index++)
     {
         Phill::DrawQuadPlus(
-            elements[index].pos.x, elements[index].pos.y,
+            screenElements[index].pos.x, screenElements[index].pos.y,
             elements[index].size.width, elements[index].size.height,
             1.0f, 1.0f, theta_jump[index],
             0, 0,

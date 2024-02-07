@@ -29,6 +29,24 @@ private:
         "stgSel-scroll", 
         "stgSel-back"
     };
+    const char* resourceName[15] = 
+    {
+        //"thmb_stg0",
+        //"thmb_stg1",
+        //"thmb_stg2",
+        //"thmb_stg3",
+        //"thmb_stg4",
+        //"thmb_stg5",
+        //"thmb_stg6",
+        //"thmb_stg7",
+        //"thmb_stg8",
+        //"thmb_stg9",
+        //"thmb_stg10",
+        //"thmb_stg11",
+        //"thmb_stg12",
+        //"thmb_stg13",
+        //"thmb_stg14"
+    };
 
     JsonL*	json_main;
     JsonL*	json_scroll;
@@ -66,12 +84,20 @@ private:
     SpriteData  backSpr;                        // スクロールデータ
     Transform   backPos;                        // 戻るボタン座標
 
+    int         thumbHandle[15];                // テクスチャハンドル
     Transform   thumbnailPos;                   // ステージサムネの座標
     Size        thumbnailSize;                  // ステージサムネのサイズ
+
+    int         selectElm;                      // 現在選択中の要素
+    int         selectElm_pre;                  // 選択してた要素
 
     unsigned int bgColor;                       // 背景色 (画像に差し替え予定)
 
     StageSelectElement elements[15];
+    StageSelectElement screenElements[15];
+    StageSelectElement defaultElm[15];
+
+    int         clickCnt;
 
     int		    ssElementHandle;
 
@@ -97,7 +123,7 @@ private:
     void	    Calculation();
     void	    Init();
     void        ScrollCalc();
-
+    void        LoadHandle();
 public:
     StageSelect();
     ~StageSelect();
