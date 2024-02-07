@@ -21,16 +21,21 @@ void Player::Move(const char* _keys, const char* _preKeys, int _isHave)
 	else
 	{
 #endif // _DEBUG
+		isAnimation = false;
 		if (_isHave == -1)
 		{
 			if (_keys[DIK_A])
 			{
 				moveX = -1;
+				drawDir = -1;
+				isAnimation = true;
 				//moveSound->SoundEnable();
 			}
 			if (_keys[DIK_D])
 			{
 				moveX = 1;
+				drawDir = 1;
+				isAnimation = true;
 				//moveSound->SoundEnable();
 			}
 		}
@@ -98,6 +103,7 @@ Player::Player()
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
 	GHSize = { 64, 80 };
+	drawSize = GHSize;
 	isAlive = true;
 	isGround = false;
 	isOnBox = false;
@@ -109,6 +115,11 @@ Player::Player()
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
 	color = 0xffffffff;
+
+	drawDir = 1;
+	isAnimation = false;
+	cntUp = 0;
+	animationCurrentIndex = 0;
 
 	playerTexture = ResourceManager::Handle("playerTex");
 
@@ -132,10 +143,14 @@ void Player::Init(int _stageNo)
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
-
+	drawSize = GHSize;
 	isAlive = true;
 	isGround = false;
 	color = 0xffffffff;
+	drawDir = 1;
+	cntUp = 0;
+	animationCurrentIndex = 0;
+	isAnimation = false;
 }
 
 void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
@@ -148,6 +163,21 @@ void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 	Gravity();
 	Clamp();
 	MoveDirUpdate();
+
+	if (isAnimation)
+		cntUp++;
+	else
+	{
+		cntUp = 0;
+		animationCurrentIndex = 0;
+	}
+	if (cntUp % kGoNextCnt == 0 && cntUp != 0)
+	{
+		cntUp = 0;
+		animationCurrentIndex++;
+		if (animationCurrentIndex >= kAnimationIndex)
+			animationCurrentIndex = 0;
+	}
 }
 
 void Player::Draw(bool _isOverlap)
@@ -160,7 +190,11 @@ void Player::Draw(bool _isOverlap)
 		color = 0xff0000ff;
 	else color = 0xffffffff;
 
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y - 8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, color, PhillDrawMode::DrawMode_Center);
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y + 2), int(GHSize.x * drawDir), int(GHSize.y),
+		1.0f, 1.0f, 0.0f,
+		GHSize.x * animationCurrentIndex, 0,
+		int(GHSize.x), int(GHSize.y),
+		playerTexture, color, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)

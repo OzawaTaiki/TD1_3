@@ -108,6 +108,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="backGround.cpp" />
     <ClCompile Include="box.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp" />
@@ -122,6 +123,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="JSON-Loader\json.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="particle_SP.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="PhilliaFunction\Phill.cpp" />
@@ -147,6 +149,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="backGround.h" />
     <ClInclude Include="box.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Matrix4x4.h" />
@@ -178,6 +181,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="JSON-Loader\JSON-Manager.h" />
     <ClInclude Include="JSON-Loader\json.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="particle_SP.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="CSVLoader.h" />
     <ClInclude Include="CursorManager.h" />

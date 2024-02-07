@@ -79,6 +79,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -86,6 +87,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
+
 
 		if (tutorial) tutorial->Draw();
 
@@ -118,6 +120,7 @@ void ResourceRegist()
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
 	ResourceManager::Regist("bubble", "./img/bubble.png");
+	ResourceManager::Regist("foam", "./Resources/img/foam.png");
 	ResourceManager::Regist("dekaP", "./img/dekaP.png");
 
 	for (int i = 0; i < 1; i++)
@@ -133,7 +136,7 @@ void ResourceRegist()
 
 	/// オザワ追加分
 	// テクスチャ
-	ResourceManager::Regist("playerTex", "./Resources/img/player.png");
+	ResourceManager::Regist("playerTex", "./Resources/img/player-sheet.png");
 	ResourceManager::Regist("soapTex", "./Resources/img/soap.png");
 	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
 	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");

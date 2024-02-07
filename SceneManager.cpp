@@ -15,6 +15,7 @@ int		SceneManager::stageNum;
 Title* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
+BackGround* SceneManager::backGround;
 
 TileChange* SceneManager::tileChange;
 
@@ -41,6 +42,8 @@ void SceneManager::Init()
 	title				= initialScene == SC_Title ? new Title() : nullptr;
 	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
 	game				= initialScene == SC_Game ? new Playground() : nullptr;
+	backGround = initialScene == SC_Title ? new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight) :
+					(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
 	ableSceneChange		= 0;
 	tileChange			= nullptr;
 	stageNum			= 0;
@@ -56,6 +59,7 @@ void SceneManager::Update()
 	{
 	case SC_Title:
 		if (title) title->Update();
+		if (backGround)backGround->Update();
 		break;
 
 	case SC_StageSelect:
@@ -75,6 +79,7 @@ void SceneManager::Update()
 		if (KeyManager::GetKeys(DIK_8)) game->Init(7);
 		if (KeyManager::GetKeys(DIK_9)) game->Init(8);
 #endif // _DEBUG
+		if (backGround)backGround->Update();
 		if (game) game->Update(keys, preKeys);
 		break;
 
@@ -120,11 +125,13 @@ void SceneManager::Draw()
 	{
 	case SC_Title:
 		if (title) title->Draw();
+		if (backGround)backGround->Draw();
 		break;
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Draw();
 		break;
 	case SC_Game:
+		if (backGround)backGround->Draw();
 		if (game) game->Draw();
 		break;
 
@@ -152,6 +159,8 @@ void SceneManager::ChangeScene()
 				case SC_Title:
 					delete title;
 					title = nullptr;
+					delete backGround;
+					backGround = nullptr;
 					break;
 				case SC_StageSelect:
 					delete stageSelect;
@@ -160,6 +169,8 @@ void SceneManager::ChangeScene()
 				case SC_Game:
 					delete game;
 					game = nullptr;
+					delete backGround;
+					backGround = nullptr;
 					break;
 				default:
 					break;
@@ -169,12 +180,14 @@ void SceneManager::ChangeScene()
 				switch (scene_next)
 				{
 				case SC_Title:
+					backGround = new BackGround(0xcadde9f0,kWindowWidth,kWindowHeight);
 					title = new Title();
 					break;
 				case SC_StageSelect:
 					stageSelect = new StageSelect();
 					break;
 				case SC_Game:
+					backGround = new BackGround(0xcadde9f0);
 					game = new Playground();
 					game->Init(stageNum);
 					break;
