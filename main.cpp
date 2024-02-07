@@ -79,7 +79,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-		bg.Update();
 
 		///
 		/// ↑更新処理ここまで
@@ -89,7 +88,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		bg.Draw();
 
 		if (tutorial) tutorial->Draw();
 
