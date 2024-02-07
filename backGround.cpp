@@ -1,14 +1,13 @@
 #include "backGround.h"
-#include "definition.h"
 #include <Novice.h>
 #include "particle_SP.h"
 #include <stdlib.h>
 
-BackGround::BackGround(unsigned int _color)
+BackGround::BackGround(unsigned int _color, int _width, int _height)
 {
 	color = _color;
-	width = kStageAreaWidth;
-	height = kStageAreaHeight;
+	width = _width;
+	height = _height;
 
 	pNumRange = 3;
 	pPosXrange = kStageAreaWidth / kTileSize - 1;
@@ -16,11 +15,11 @@ BackGround::BackGround(unsigned int _color)
 	pPosMarginScale = kTileSize;
 
 	randRange[0] = 100;
-	randRange[1] = 150;
+	randRange[1] = 100;
 	randNum[0] = 0;
 	randNum[1] = 0;
 
-	particleMax = 4;
+	particleMax = 1;
 	particle.clear();
 }
 
@@ -31,7 +30,7 @@ void BackGround::Update()
 
 	if (randNum[0] == randNum[1])
 	{
-		int pNum = rand() % pNumRange + 2;
+		int pNum = rand() % pNumRange + 1;
 		Vector2 pos;
 		pos.x = float(rand() % pPosXrange * pPosMarginScale + kTileSize / 2);
 		pos.y = float(rand() % pPosYrange * pPosMarginScale + kTileSize / 2);
@@ -44,7 +43,7 @@ void BackGround::Update()
 		//if(!particle.empty())
 		//for (int i = 0; i < 1; i++)
 	{
-		if (!particle[i]->Update())
+		if (!particle[i]->Update(width))
 			particle.erase(particle.begin() + i);
 	}
 }

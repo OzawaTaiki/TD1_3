@@ -1,6 +1,7 @@
 #pragma once
 #include <Vector2.h>
 #include <vector>
+#include "definition.h"
 
 class particle_SP;
 
@@ -24,7 +25,7 @@ private:
 	std::vector<particle_SP*> particle;
 
 public:
-	BackGround(unsigned int _color);
+	BackGround(unsigned int _color, int _width = kStageAreaWidth, int _height = kStageAreaHeight);
 
 	void Update();
 	void Draw();

@@ -12,41 +12,54 @@ particle_SP::particle_SP(Vector2 _pos, int _num)
 	{
 		pati* newPati = new pati();
 
-		newPati->pos.x = float(rand() % posRange + _pos.x);
-		newPati->pos.y = float(rand() % posRange + _pos.y);
+		newPati->pos.x = _pos.x;
+		newPati->pos.y = _pos.y;
 
-		newPati->theta = float(rand() % 100) / 100.0f * 6.14f;
-
-		newPati->drawTime = rand() % 5 + 10;
+		newPati->drawTime = float(rand() % 20 / 10 + 1);
 		newPati->currentTime = 0;
 
-		newPati->maxSize = rand() % 10 * 12;
-		newPati->size = 4;
+		newPati->maxSize = rand() % 3 * 50 + 50;
+		newPati->size = (float)newPati->maxSize;
 
-		newPati->veloY = (rand() % 3 + 1) * -1;
+		newPati->veloX = float(rand() % 27 / 9) - 1.0f;
+		newPati->veloY = float(rand() % 5 / 2.0f + 2) * -1.0f;
 
-		newPati->color = 0xffffff40;
+		newPati->color = 0xffffff00;
 
 		p.push_back(newPati);
 	}
 
 	GHsize = { 64,64 };
-	pGH = ResourceManager::Handle("bubble");
+	pGH = rand() % 2;
+	pGH = pGH ? ResourceManager::Handle("bubble") : ResourceManager::Handle("foam");
 }
 
-bool particle_SP::Update()
+bool particle_SP::Update(int _areaWidth)
 {
 	for (int i = 0; i < p.size(); i++)
 	{
+		p[i]->pos.x += p[i]->veloX;
 		p[i]->pos.y += p[i]->veloY;
 
-		float val = (float)p[i]->currentTime / float(p[i]->drawTime * 60) * 2 / 3;
-		if (p[i]->currentTime > float(p[i]->drawTime * 60) * 2 / 3)
-			val = 1.0f - val;
+		float val = float(p[i]->currentTime) / ((float)p[i]->drawTime * 60.0f);
 
-		p[i]->color = unsigned int(64.0f * val + 255.0f * val) + 0xffffff00;
+		if (p[i]->pos.x < -p[i]->size || p[i]->pos.x > _areaWidth + p[i]->size)
+			val = 0;
 
-		p[i]->size = int(4 * val + p[i]->maxSize * val);
+			if (val < 0.6f)
+				val /= 0.6f;
+			else if (val > 0.9f)
+			{
+				val = (1.0f - val) / 0.2f;
+				p[i]->size += 2.0f;
+			}
+			else if (val > 0.97f)
+				val = 0;
+			else
+				val = 1;
+
+		p[i]->color = unsigned int(96.0f * val) + 0xffffff00;
+
 
 		p[i]->currentTime++;
 
@@ -78,5 +91,4 @@ void particle_SP::a(int i)
 {
 	for (int j = 0; j < p.size(); j++)
 		Novice::ScreenPrintf(i * 100, 20 * j, "%x", p[j]->color);
-
 }

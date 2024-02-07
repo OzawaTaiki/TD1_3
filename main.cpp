@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Tutorial* tutorial = nullptr;
-	BackGround bg(0x8080f0d0);
+	BackGround bg(0xa0b0f0f0);
 
 	srand(unsigned int(time(nullptr)));
 
@@ -124,6 +124,7 @@ void ResourceRegist()
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
 	ResourceManager::Regist("bubble", "./img/bubble.png");
+	ResourceManager::Regist("foam", "./Resources/img/foam.png");
 	ResourceManager::Regist("dekaP", "./img/dekaP.png");
 
 	for (int i = 0; i < 1; i++)

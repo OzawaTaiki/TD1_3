@@ -7,13 +7,13 @@ class particle_SP
 	struct pati
 	{
 		Vector2			pos;
-		int				size;
 		int				maxSize;
-		float			theta;
+		float			size;
 		unsigned int	color;
-		int				drawTime;
+		float			drawTime;
 		int				currentTime;
-		int				veloY;
+		float			veloX;
+		float			veloY;
 	};
 
 	std::vector<pati*> p;
@@ -25,7 +25,7 @@ class particle_SP
 public:
 	particle_SP(Vector2 _pos, int _num);
 
-	bool Update();
+	bool Update(int _areaWidth);
 	void Draw();
 
 	void a(int i);
