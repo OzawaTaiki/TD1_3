@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (keys[DIK_0] && !preKeys[DIK_0])
 		{
 			// シーンをセレクト画面に変更
-			SceneManager::ChangeRequest(Scenes::SC_StageSelect);
+			SceneManager::ChangeRequest(Scenes::SC_Title);
 		}
 
 		if (keys[DIK_F11] && !preKeys[DIK_F11])
@@ -136,7 +136,8 @@ void ResourceRegist()
 	ResourceManager::Regist("stgNumElement", "./Resources/img/stageNumBlock.png");
 	ResourceManager::Regist("stgArrow", "./Resources/img/arrow.png");
 	ResourceManager::Regist("title", "./Resources/img/gameTitle.png");
-	ResourceManager::Regist("tfp", "./Resources/img/tfp.png");
+	ResourceManager::Regist("scrollBar", "./Resources/img/scrollBar.png");
+	ResourceManager::Regist("tfp", "./Resources/img/Thank.png");
 
 	/// オザワ追加分
 	// テクスチャ
