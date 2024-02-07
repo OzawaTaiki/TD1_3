@@ -94,7 +94,7 @@ void StageSelect::LoadHandle()
     ssElementHandle = ResourceManager::Handle("white1x1");
     for (int i = 0; i < 15; i++)
     {
-        thumbHandle[i] = ResourceManager::Handle(resourceName[i]);
+        //thumbHandle[i] = ResourceManager::Handle(resourceName[i]);
     }
 }
 
