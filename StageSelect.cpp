@@ -6,6 +6,7 @@
 #include "KeyManager.h"
 #include "UI/UI_ToolKit.h"
 #include "SceneManager.h"
+#include "CSVLoader.h"
 
 StageSelect::StageSelect()
 {
@@ -69,6 +70,9 @@ StageSelect::StageSelect()
         screenElements[index].fcStatus = FCS_NONE;
     }
     LoadHandle();
+    CSV_Loader::LoadFromCSV_s(stageFilePath[0], '\n');
+    field = CSV_Loader::GetPointerMapchip();
+
 }
 
 void StageSelect::ScrollCalc()
@@ -96,6 +100,10 @@ StageSelect::~StageSelect()
 void StageSelect::LoadHandle()
 {
     ssElementHandle = ResourceManager::Handle("stgNumElement");
+    blockHandle = ResourceManager::Handle("blockTex");
+    goalHandle = ResourceManager::Handle("goalTex");
+    togeHandle = ResourceManager::Handle("togeTex");
+    boxHandle = ResourceManager::Handle("soapTex");
 }
 
 void StageSelect::Init()
@@ -134,39 +142,41 @@ void StageSelect::Update()
 
 
     selectElm_pre = selectElm;
-    for (int index = 0; index < kMax; index++)
-    {
-        // 押印
-        if (CursorManager::Pressed(&screenElements[index].pos, &screenElements[index].size) == 1)
+    if (clickCnt < 2) {
+        for (int index = 0; index < kMax; index++)
         {
-            elements[index].fcStatus = FCS_PRESS;
-            clickCnt++;
-        }
-        // ホバー
-        else if (CursorManager::Hover(&screenElements[index].pos, &screenElements[index].size) == 1)
-        {
-            elements[index].fcStatus = FCS_HOVER;
-        }
-        // unpoint
-        else elements[index].fcStatus = FCS_NONE;
-        
-        // それぞれの状態時の操作
-        switch (elements[index].fcStatus)
-        {
-        case FCS_HOVER:
-            EasingHover(index); // イージング
-            if (frameCount_turn[index] < targetFrame_turn)
-                frameCount_turn[index]++;
-            break;
-        case FCS_PRESS:
-            selectElm = index;
-            break;
-        case FCS_NONE:
-            EasingHover(index);
-            if (frameCount_turn[index] > 0) frameCount_turn[index]--;
-            break;
-        default:
-            break;
+            // 押印
+            if (CursorManager::Pressed(&screenElements[index].pos, &screenElements[index].size) == 1)
+            {
+                elements[index].fcStatus = FCS_PRESS;
+                clickCnt++;
+            }
+            // ホバー
+            else if (CursorManager::Hover(&screenElements[index].pos, &screenElements[index].size) == 1)
+            {
+                elements[index].fcStatus = FCS_HOVER;
+            }
+            // unpoint
+            else elements[index].fcStatus = FCS_NONE;
+
+            // それぞれの状態時の操作
+            switch (elements[index].fcStatus)
+            {
+            case FCS_HOVER:
+                EasingHover(index); // イージング
+                if (frameCount_turn[index] < targetFrame_turn)
+                    frameCount_turn[index]++;
+                break;
+            case FCS_PRESS:
+                selectElm = index;
+                break;
+            case FCS_NONE:
+                EasingHover(index);
+                if (frameCount_turn[index] > 0) frameCount_turn[index]--;
+                break;
+            default:
+                break;
+            }
         }
     }
     if (selectElm != -1)
@@ -179,6 +189,8 @@ void StageSelect::Update()
                 elements[selectElm_pre].pos = defaultElm[selectElm_pre].pos;
             }
             elements[selectElm].pos -= 15;
+            CSV_Loader::LoadFromCSV_s(stageFilePath[selectElm], '\n');
+            field = CSV_Loader::GetPointerMapchip();
         }
 
     }
@@ -261,6 +273,29 @@ void StageSelect::Draw()
             DrawMode_Center
         );
     }
+
+    //// 抜粋
+    for (int y = 1; y < (*field).size(); y++)
+    {
+        for (int x = 0; x < (*field)[y].size(); x++)
+        {
+            if ((*field)[y][x] != 9)
+            {
+                if ((*field)[y][x] == BLOCK || (*field)[y][x] == 11)
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+
+                else if ((*field)[y][x] == GOAL)
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+
+                else if ((*field)[y][x] == SPINE)///とげ
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, togeHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+
+                else if ((*field)[y][x] == BlockKinds::BOX)///soap
+                    Phill::DrawQuadPlus(int(x * kTileSize) + 15, int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxHandle, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+            }
+        }
+    }
+    ////
 
     // 戻るボタン
     GUI_Toolkit::Button("stgSel-back", backPos.x, backPos.y, &backSpr);

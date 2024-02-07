@@ -24,6 +24,30 @@ struct StageSelectElement
 class StageSelect
 {
 private:
+    // 
+
+    std::vector<std::vector<int>>* field;
+    int         blockHandle;
+    int         goalHandle;
+    int         togeHandle;
+    int         boxHandle;
+
+    //ファイル名一括管理 すべてここに入力
+    const char* stageFilePath[64] = {
+        "./data/stage1.csv",
+        "./data/stage2.csv",
+        "./data/stage3.csv",
+        "./data/stage4.csv",
+        "./data/stage5.csv",
+        "./data/stage6.csv",
+        "./data/stage7.csv",
+        "./data/stage8.csv",
+        "./data/stage9.csv",
+        "./data/stage10.csv"
+    };
+
+    //
+
     static const int kMax = 10;
     const char* jsonName[3] = { 
         "stgSel-main", 
