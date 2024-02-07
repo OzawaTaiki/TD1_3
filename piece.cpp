@@ -760,8 +760,8 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 	if (o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
 		o2pSub.x >= size[_pieceNum].x * kTileSize ||
-		o2pSub.y >= size[_pieceNum].y * kTileSize ||
-		(*piece)[_pieceNum][base.y][base.x] > 0)
+		o2pSub.y >= size[_pieceNum].y * kTileSize /*||
+		(*piece)[_pieceNum][base.y][base.x] > 0*/)
 		return false;
 
 	for (int dir = 0; dir < 4; dir++)
@@ -953,6 +953,7 @@ void Piece::Init()
 	adjacencyCheckVertex.resize(piece->size(), std::vector<Vector2>(4));
 	velocity.resize(piece->size());
 	moveDir.resize(piece->size());
+	isLocked.resize(piece->size(), { 0,0 });
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
@@ -977,7 +978,6 @@ void Piece::Init()
 	isHave = -1;
 	mapchipKeyPos = { 0,0 };
 	p2mSub = { 0,0 };
-	isLockedY = false;
 	isHave = -1;
 	runX = -1;
 	runY = -1;
@@ -1002,7 +1002,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 {
 	canMoveX = true;
 	canMoveY = true;
-	isLockedY = false;
+	std::fill(isLocked.begin(), isLocked.end(), Vector2{ 0,0 });
 	std::fill(moveDir.begin(), moveDir.end(), Vector2{ 0,0 });
 	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
