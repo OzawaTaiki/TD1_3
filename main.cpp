@@ -4,6 +4,7 @@
 #include "JSON-Loader/JSON-Manager.h"
 #include "SceneManager.h"
 
+#include <time.h>
 #include <Novice.h>
 #include "playground.h"
 #include "definition.h"
@@ -25,6 +26,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	Tutorial* tutorial = nullptr;
+
+	srand(unsigned int(time(nullptr)));
 
 	JSONLoad();
 	ResourceRegist();
@@ -114,6 +117,8 @@ void ResourceRegist()
 	ResourceManager::Regist("white1x1", "white1x1.png");
 	ResourceManager::Regist("rule1", "./img/rule1.png");
 	ResourceManager::Regist("rule2", "./img/rule2.png");
+	ResourceManager::Regist("bubble", "./img/bubble.png");
+	ResourceManager::Regist("dekaP", "./img/dekaP.png");
 
 	for (int i = 0; i < 1; i++)
 	{
@@ -152,4 +157,5 @@ void JSONLoad()
 	JSON_Manager::LoadJSON("stgSel-main", "./data/StageSelect/stageSelect.json");
 	JSON_Manager::LoadJSON("stgSel-scroll", "./data/StageSelect/scroll.json");
 	JSON_Manager::LoadJSON("stgSel-back", "./data/StageSelect/backButton.json");
+	JSON_Manager::LoadJSON("fillWithPlayer", "./data/StageSelect/fillWithPlayer.json");
 }

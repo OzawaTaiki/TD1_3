@@ -129,6 +129,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="PhilliaFunction\TCPIP.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="playground.cpp" />
+    <ClCompile Include="TileChange.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="UI\Button.cpp" />
     <ClCompile Include="UI\Checkbox.cpp" />
@@ -138,6 +139,11 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="StageSelect.cpp" />
+    <ClCompile Include="Bubble.cpp" />
+    <ClCompile Include="UI\UI_ToolKit_Defines.cpp" />
+    <ClCompile Include="BaseEmitter.cpp" />
+    <ClCompile Include="BubbleEmitter.cpp" />
+    <ClCompile Include="FillWPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="box.h" />
@@ -181,6 +187,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="playground.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="TileChange.h" />
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="UI\Checkbox.h" />
     <ClInclude Include="UI\Scroll.h" />
@@ -190,6 +197,11 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Bubble.h" />
+    <ClInclude Include="ParticleDefines.h" />
+    <ClInclude Include="BaseEmitter.h" />
+    <ClInclude Include="BubbleEmitter.h" />
+    <ClInclude Include="FillWPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

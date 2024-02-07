@@ -14,7 +14,16 @@ StageSelect::StageSelect()
 
     LoadFromJSON();
 
+    // DEBUG: 終わったら消す
+    fwp = nullptr;
+
     UI_Manager::Init();
+
+    cursor = Transform(0,0);
+    ed.position = cursor;       // エミッターの座標
+    ed.size.width = 10;         // エミッターのwidth
+    ed.size.height = 10;        // エミッターのheight
+    bubbleEmit = new BubbleEmitter(&ed);
 
     scrSpr.srcPos           = Transform(0, 0);
     scrSpr.srcSize          = Size(1, 1);
@@ -83,6 +92,17 @@ void StageSelect::Init()
 
 void StageSelect::Update()
 {
+    // DEBUG 終わったら消す
+    CursorManager::GetCursorPos(&cursor);
+    ed.position = cursor;
+    bubbleEmit->Update();
+
+    if (KeyManager::GetKeys(DIK_SPACE) && !KeyManager::GetPreKeys(DIK_SPACE))
+    {
+        fwp = new FillWithPlayer();
+    }
+    if (fwp) fwp->Update();
+
     CursorManager::GetCursorPos(&cur);
     scrollBar->UpdateStatus();
     ScrollCalc();
@@ -198,6 +218,10 @@ void StageSelect::Draw()
     Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
 
     scrollBar->Draw();
+
+    // DEBUG 終わったら消す
+    bubbleEmit->Draw();
+    if (fwp) fwp->Draw();
 }
 
 void StageSelect::EasingHover(int _index)

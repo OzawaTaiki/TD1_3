@@ -3,6 +3,8 @@
 #include "CursorManager.h"
 #include "JSON-Loader/json.h"
 #include "UI/UI_Manager.h"
+#include "BubbleEmitter.h"
+#include "FillWPlayer.h"
 
 enum ForCursorStatus
 {
@@ -32,6 +34,11 @@ private:
     JsonL*	json_scroll;
     JsonL*	json_back;
 
+    EmitterData ed;
+    BubbleEmitter*    bubbleEmit;
+    FillWithPlayer* fwp;
+
+    Transform   cursor;
 
     // ステージ選択要素(15個のやつ)
     Size	    srcSize;                        // 画像解像度 (px)
