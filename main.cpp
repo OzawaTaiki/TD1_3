@@ -140,14 +140,15 @@ void ResourceRegist()
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
+	
 	//サウンド
+	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/SE/put.mp3", false);
+	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/SE/grip.mp3", false);
 	/*
-	ResourceManager::Regist("playerMoveSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("playerJumpSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/.mp3",false);
-	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.mp3",false);
+	ResourceManager::Regist("playerMoveSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("playerJumpSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("pieceMoveSound", "./Resources/sound/SE/.mp3",false);
+	ResourceManager::Regist("boxMoveSound", "./Resources/sound/.SE/mp3",false);
 	*/
 }
 

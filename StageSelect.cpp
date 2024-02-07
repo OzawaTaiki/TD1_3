@@ -128,11 +128,13 @@ void StageSelect::Update()
             EasingHover(index); // イージング
             if (frameCount_turn[index] < targetFrame_turn)
                 frameCount_turn[index]++;
+            break;
         case FCS_PRESS:
             break;
         case FCS_NONE:
             EasingHover(index);
             if (frameCount_turn[index] > 0) frameCount_turn[index]--;
+            break;
         default:
             break;
         }
