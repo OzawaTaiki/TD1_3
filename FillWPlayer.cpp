@@ -29,6 +29,7 @@ FillWithPlayer::FillWithPlayer()
 	handle = ResourceManager::Handle("dekaP");
 	alpha_bg = 0;
 	framecount_eraseBg = 0;
+	deleteTiming = 0;
 }
 
 void FillWithPlayer::Update()
@@ -44,6 +45,11 @@ void FillWithPlayer::Update()
 		float ease = Phill::EaseOutQuart(Phill::ConstantT(targetFrame_end, framecount_eraseBg));
 		alpha_bg = Phill::Lerp(400, 0, ease);
 		sprd.trgSize = alpha_bg;
+	}
+
+	if (framecount_eraseBg > targetFrame_end)
+	{
+		deleteTiming = 1;
 	}
 
 	if (frameCount < targetFrame_fill && isChangeTiming == 0)

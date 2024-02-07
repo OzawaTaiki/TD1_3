@@ -33,6 +33,7 @@ private:
 	Transform	p;
 	int		handle;
 	int		alpha_bg;
+	int		deleteTiming;
 
 
 	void	LoadFromJSON();
@@ -44,5 +45,6 @@ public:
 	void	Draw();
 
 	int		IsChangeTiming() { return isChangeTiming; };
+	int		DeleteTiming() { return deleteTiming; };
 
 };
