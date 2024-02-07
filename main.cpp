@@ -135,6 +135,7 @@ void ResourceRegist()
 	ResourceManager::Regist("dekaP", "./Resources/img/dekaP.png");
 	ResourceManager::Regist("stgNumElement", "./Resources/img/stageNumBlock.png");
 	ResourceManager::Regist("stgArrow", "./Resources/img/arrow.png");
+	ResourceManager::Regist("title", "./Resources/img/gameTitle.png");
 
 	/// オザワ追加分
 	// テクスチャ
