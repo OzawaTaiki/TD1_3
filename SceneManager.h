@@ -5,6 +5,7 @@
 #include "backGround.h"
 
 #include "TileChange.h"
+#include "sound.h"
 
 enum Scenes
 {
@@ -36,6 +37,9 @@ private:
     static  char*   preKeys;
     static  char*   keys;
 
+    static Sound* titleBGM;
+    static Sound* selectBGM;
+    static Sound* gameBGM;
 
 public:
     /// <summary>

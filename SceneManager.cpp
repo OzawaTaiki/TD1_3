@@ -19,6 +19,10 @@ BackGround* SceneManager::backGround;
 
 TileChange* SceneManager::tileChange;
 
+Sound* SceneManager::titleBGM;
+Sound* SceneManager::selectBGM;
+Sound* SceneManager::gameBGM;
+
 void SceneManager::ChangeRequest(Scenes _nextScene)
 {
 	existChangeRequest = 1;
@@ -48,6 +52,22 @@ void SceneManager::Init()
 	tileChange			= nullptr;
 	stageNum			= 0;
 	if (game) game->Init(0);
+
+	titleBGM = new Sound(ResourceManager::Handle("titleBGM"), 0.5f);
+	selectBGM = new Sound(ResourceManager::Handle("selectBGM"), 0.5f);
+	gameBGM = new Sound(ResourceManager::Handle("gameBGM"), 0.5f);
+	switch (initialScene)
+	{
+	case SC_Title:
+		if (titleBGM) titleBGM->SoundEnable();
+		break;
+	case SC_StageSelect:
+		if (selectBGM) selectBGM->SoundEnable();
+		break;
+	case SC_Game:
+		if (gameBGM) gameBGM->SoundEnable();
+		break;
+	}
 }
 
 void SceneManager::Update()
@@ -117,13 +137,16 @@ void SceneManager::Draw()
 	case SC_Title:
 		//if (title) title->Draw();
 		if (backGround)backGround->Draw();
+		if (titleBGM)titleBGM->PlayAudio(true, 120);
 		break;
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Draw();
+		if (selectBGM)selectBGM->PlayAudio(true, 120);
 		break;
 	case SC_Game:
 		if (backGround)backGround->Draw();
 		if (game) game->Draw();
+		if (gameBGM)gameBGM->PlayAudio(true, 120);
 		break;
 
 	default:
@@ -152,16 +175,19 @@ void SceneManager::ChangeScene()
 					title = nullptr;
 					delete backGround;
 					backGround = nullptr;
+					if (titleBGM) titleBGM->StopAudio(true, 120);
 					break;
 				case SC_StageSelect:
 					delete stageSelect;
 					stageSelect = nullptr;
+					if (selectBGM) selectBGM->StopAudio(true, 120);
 					break;
 				case SC_Game:
 					delete game;
 					game = nullptr;
 					delete backGround;
 					backGround = nullptr;
+					if (gameBGM) gameBGM->StopAudio(true, 120);
 					break;
 				default:
 					break;
@@ -173,14 +199,17 @@ void SceneManager::ChangeScene()
 				case SC_Title:
 					//title = new Title();
 					backGround = new BackGround(0xcadde9f0,kWindowWidth,kWindowHeight);
+					if (titleBGM) titleBGM->SoundEnable();
 					break;
 				case SC_StageSelect:
 					stageSelect = new StageSelect();
+					if (selectBGM) selectBGM->SoundEnable();
 					break;
 				case SC_Game:
 					backGround = new BackGround(0xcadde9f0);
 					game = new Playground();
 					game->Init(stageNum);
+					if (gameBGM) gameBGM->SoundEnable();
 					break;
 				default:
 					break;

@@ -143,8 +143,11 @@ void ResourceRegist()
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
-	
+
 	//サウンド
+	ResourceManager::Regist("titleBGM", "./Resources/sound/BGM/title.mp3", false);
+	ResourceManager::Regist("selectBGM", "./Resources/sound/BGM/select.mp3", false);
+	ResourceManager::Regist("gameBGM", "./Resources/sound/BGM/game.mp3", false);
 	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/SE/put.mp3", false);
 	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/SE/grip.mp3", false);
 	/*
