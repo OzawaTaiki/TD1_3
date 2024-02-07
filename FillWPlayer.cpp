@@ -56,7 +56,6 @@ void FillWithPlayer::Update()
 
 	if (frameCount < targetFrame_fill && isBoom == 0)
 	{
-		Novice::ScreenPrintf(300, 15, "%d", frameCount);
 		constantT = Phill::ConstantT(targetFrame_fill, frameCount);
 		//easedT = Phill::EaseOutQuart(constantT);
 		if (fillCount == 0)

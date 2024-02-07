@@ -44,7 +44,6 @@ void BubbleEmitter::Update()
 
 void BubbleEmitter::Draw()
 {
-	// DEBUG: 削除する
 	Novice::DrawBox(
 		int(pEd->position.x), int(pEd->position.y),
 		pEd->size.width, pEd->size.height,
@@ -56,8 +55,6 @@ void BubbleEmitter::Draw()
 	{
 		elm->Draw();
 	}
-	// DEBUG: 削除する
-	Novice::ScreenPrintf(15, 70, "%d", bubbles.size());
 }
 
 void BubbleEmitter::ChangeIsGenerate(bool _isGenerate)

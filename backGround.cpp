@@ -57,6 +57,8 @@ void BackGround::Draw()
 		//for (int i = 0; i < 1; i++)
 	{
 		particle[i]->Draw();
+#ifdef DEBUG
 		particle[i]->a(i);
+#endif // DEBUG
 	}
 }

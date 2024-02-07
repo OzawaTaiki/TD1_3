@@ -35,6 +35,4 @@ void UI_Manager::Draw()
 	Novice::DrawBox(pos.x, pos.y, 120, 120, 0.0f, 0xdfdfdfff, kFillModeSolid);
 	
 	scroll->Draw();
-	Novice::ScreenPrintf(15, 15, "%.4f", t);
-	Novice::ScreenPrintf(15, 45, "%d, %d", curpos.x, curpos.y);
 }
