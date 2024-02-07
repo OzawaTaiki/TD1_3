@@ -18,8 +18,10 @@ Bubble::Bubble(ParticleData _pd)
 	airResist				= _pd.zeroAirResistance;
 	if (_pd.sprd)
 	{
-		sprData = *(_pd.sprd);
+		pSprData = _pd.sprd;
 	}
+	else pSprData = nullptr;
+
 
 	// 
 	framecount = 0;
@@ -34,26 +36,42 @@ void Bubble::Update()
 	// 座標に適用
 	velocity += acceleration;
 	position += velocity;
-	if (framecount < 10)
-		scale = Phill::ConstantT(10, framecount);
-	if (framecount >= 10 && framecount < targetFrame_erase)
-		scale = 1.0f - Phill::ConstantT(targetFrame_erase-10, framecount-10);
+	if (framecount < 15)
+		scale = Phill::ConstantT(15, framecount);
+	if (framecount >= 15 && framecount < targetFrame_erase)
+		scale = 1.0f - Phill::ConstantT(targetFrame_erase-15, framecount-15);
 
 	framecount++;
 }
 
 void Bubble::Draw()
 {
-	Phill::DrawQuadPlus(
-		int(position.x), int(position.y),
-		sprData.trgSize.width, sprData.trgSize.height,
-		scale, scale, 0.0f,
-		sprData.srcPos.x, sprData.srcPos.y,
-		sprData.srcSize.width, sprData.srcSize.height,
-		sprData.textureHandle,
-		0xffffffff,
-		DrawMode_Center
-	);
+	if (!pSprData) {
+		// デフォルトを使用
+		Phill::DrawQuadPlus(
+			int(position.x), int(position.y),
+			sprData.trgSize.width, sprData.trgSize.height,
+			scale, scale, 0.0f,
+			sprData.srcPos.x, sprData.srcPos.y,
+			sprData.srcSize.width, sprData.srcSize.height,
+			sprData.textureHandle,
+			0xffffffff,
+			DrawMode_Center
+		);
+	}
+	else
+	{
+		Phill::DrawQuadPlus(
+			int(position.x), int(position.y),
+			pSprData->trgSize.width, pSprData->trgSize.height,
+			scale, scale, 0.0f,
+			pSprData->srcPos.x, pSprData->srcPos.y,
+			pSprData->srcSize.width, pSprData->srcSize.height,
+			pSprData->textureHandle,
+			0xffffffff,
+			DrawMode_Center
+		);
+	}
 }
 
 int Bubble::ableDelete()

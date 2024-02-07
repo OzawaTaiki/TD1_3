@@ -683,6 +683,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	}
 
 	/// shift + enter で次のステージ
+	// DEBUG: 削除対象
 	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
 		selectStage++;
@@ -697,7 +698,7 @@ void Playground::Draw()
 	if (BGM != nullptr)			BGM->PlayAudio(true, 300);
 	if (goalSound != nullptr)	goalSound->PlayAudio();
 
-	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
+	//Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
 
 	for (int y = 0; y < (*field).size(); y++)
 	{

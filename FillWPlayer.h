@@ -10,10 +10,12 @@ class FillWithPlayer
 private:
 	JsonL*	fcountData;
 	std::vector<Transform> bufferPos;
+
 	std::vector<BubbleEmitter*> emitters;
 	std::list<EmitterData> ed;
 	BubbleSetting bs;
 	SpriteData sprd;
+
 	// JSONで読み込むデータ
 	int		targetFrame_fill;
 	int		targetFrame_end;
@@ -21,6 +23,8 @@ private:
 
 	// 初期化必要
 	int		frameCount;
+	int		frameCount_bg;
+	int		framecount_eraseBg;
 	int		frameBuffer_end;
 	int		isChangeTiming;
 	int		fillCount;
@@ -28,6 +32,8 @@ private:
 	float	easedT;
 	Transform	p;
 	int		handle;
+	int		alpha_bg;
+	int		deleteTiming;
 
 
 	void	LoadFromJSON();
@@ -39,5 +45,6 @@ public:
 	void	Draw();
 
 	int		IsChangeTiming() { return isChangeTiming; };
+	int		DeleteTiming() { return deleteTiming; };
 
 };

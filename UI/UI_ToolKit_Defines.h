@@ -6,7 +6,11 @@ struct Transform {
 	int x; 
 	int y;
 	void operator = (Vector2 _vec2);
+	void operator = (Transform _tf);
 	void operator = (int _i);
+	Transform operator + (int&& _i);
+	Transform operator - (int&& _i);
+	Transform operator -= (int&& _i);
 };
 struct Size {
 	int width; 
