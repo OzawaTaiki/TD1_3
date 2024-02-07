@@ -87,6 +87,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			isPlayerOverlap = false;
 			isHindranceBlockInside = false;
 			isBoxOverlap = -1;
+			isPieceOverlap = -1;
 
 			scale[i] = kKeyScale[1];
 
@@ -149,7 +150,6 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 				if (IsOverlap(_playerPos, _playerVertex, i))
 					isPlayerOverlap = true;
-
 			}
 
 			if (scale[i] != kKeyScale[0])
@@ -320,15 +320,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] > 0)
-					{
-						(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
-					}
+						(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] *= kAdjacentNum;
 					if ((*piece)[_pieceNum2][0][temp2 + count2])
-					{
-						(*piece)[_pieceNum2][0][temp2 + count2] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum2, temp2 + count2++, 0);
-					}
+						(*piece)[_pieceNum2][0][temp2 + count2++] *= kAdjacentNum;
 
 				}
 			}
@@ -339,15 +333,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][0][temp1 + count1])
-					{
-						(*piece)[_pieceNum1][0][temp1 + count1] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum1, temp1 + count1++, 0);
-					}
+						(*piece)[_pieceNum1][0][temp1 + count1++] *= kAdjacentNum;
 					if ((*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2])
-					{
-						(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
-					}
+						(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -363,15 +351,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][0] > 0)
-					{
-						(*piece)[_pieceNum1][temp1 + count1][0] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum1, 0, temp1 + count1++);
-					}
+						(*piece)[_pieceNum1][temp1 + count1++][0] *= kAdjacentNum;
 					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
-					{
-						(*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
-					}
+						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
 				}
 			}
 			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
@@ -381,15 +363,9 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
-					{
-						(*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
-					}
+						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
 					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
-					{
-						(*piece)[_pieceNum2][temp2 + count2][0] *= kAdjacentNum;
-						//AddBubbleEmitter(_pieceNum2, 0, temp2 + count2++);
-					}
+						(*piece)[_pieceNum2][temp2 + count2++][0] *= kAdjacentNum;
 				}
 			}
 			break;
@@ -987,7 +963,7 @@ void Piece::Init()
 		adjacencyCheckVertex[i][3] = { size[i].x * kTileSize + kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
 
 		vertex[i][0] = { 0,0 };
-		vertex[i][1] = { size[i].x*kTileSize,0 };
+		vertex[i][1] = { size[i].x * kTileSize,0 };
 		vertex[i][2] = { 0,size[i].y * kTileSize };
 		vertex[i][3] = { size[i].x * kTileSize,size[i].y * kTileSize };
 	}
