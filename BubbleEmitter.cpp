@@ -15,7 +15,7 @@ BubbleEmitter::BubbleEmitter(EmitterData* _ed)
 
 void BubbleEmitter::Update()
 {
-	if (framecount % spawnInterval == 0)
+	if (framecount % spawnInterval == 0 && ableGenerate)
 	{
 		ParticleData pd{};
 		pd.zeroPosition.x		= float(rand() % pEd->size.width + pEd->position.x);
@@ -26,8 +26,7 @@ void BubbleEmitter::Update()
 		pd.zeroGravity			= setting.gravity;
 		pd.zeroAirResistance	= 0.95f;
  		pd.sprd					= pEd->sprd;
-		if (ableGenerate)
-			bubbles.push_back(new Bubble(pd));
+		bubbles.push_back(new Bubble(pd));
 	}
 
 	for (int i = 0; i < bubbles.size(); i++)
