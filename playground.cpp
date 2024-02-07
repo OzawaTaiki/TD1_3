@@ -569,6 +569,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	}
 
 	/// shift + enter で次のステージ
+	// DEBUG: 削除対象
 	if (isClear || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
 	{
 		selectStage++;
