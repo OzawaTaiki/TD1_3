@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class SceneChange
+class TileChange
 {
 private:
     bool    initialized;                // 初期化されているか
@@ -51,7 +51,7 @@ private:
 
 public:
 
-    SceneChange();
+    TileChange();
 
     void    Update();
     void    Draw();

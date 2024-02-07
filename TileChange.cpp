@@ -10,7 +10,7 @@
 
 */
 
-void SceneChange::shuffle(int* arr, int len)
+void TileChange::shuffle(int* arr, int len)
 {
     for (int i = len - 1; i > 0; i--)
     {
@@ -21,7 +21,7 @@ void SceneChange::shuffle(int* arr, int len)
     }
 }
 
-SceneChange::SceneChange()
+TileChange::TileChange()
 {
     // しょきか
     initialized                 = false;
@@ -65,7 +65,7 @@ SceneChange::SceneChange()
     /// ランダムが不具合だって？シードを渡したかい？
 }
 
-void SceneChange::Update()
+void TileChange::Update()
 {
     /// 初期化時に...
     if (!initialized)
@@ -158,7 +158,7 @@ void SceneChange::Update()
     frameCount_current++;
 }
 
-void SceneChange::Draw()
+void TileChange::Draw()
 {
     /// 描画のみ
     for (int rows = 0; rows < 9; rows++)
@@ -181,12 +181,12 @@ void SceneChange::Draw()
 
 }
 
-int SceneChange::GetIsTileEnd() const
+int TileChange::GetIsTileEnd() const
 {
     return seqOrderFinished;
 }
 
-int SceneChange::GetIsEnd() const
+int TileChange::GetIsEnd() const
 {
     return isEnd;
 }
