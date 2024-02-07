@@ -25,9 +25,9 @@ StageSelect::StageSelect()
     bubbleEmit = new BubbleEmitter(&ed);
 
     scrSpr.srcPos           = Transform(0, 0);
-    scrSpr.srcSize          = Size(1, 1);
-    scrSpr.trgSize          = Size(14,54);
-    scrSpr.textureHandle    = ResourceManager::Handle("white1x1");
+    scrSpr.srcSize          = Size(64, 192);
+    scrSpr.trgSize          = Size(64,192);
+    scrSpr.textureHandle    = ResourceManager::Handle("scrollBar");
 
     scrollBar               = new Scroller(&scrSpr);
     
@@ -301,8 +301,8 @@ void StageSelect::Draw()
     }
     ////
 
-    // 戻るボタン
-    GUI_Toolkit::Button("stgSel-back", backPos.x, backPos.y, &backSpr);
+    //// 戻るボタン
+    //GUI_Toolkit::Button("stgSel-back", backPos.x, backPos.y, &backSpr);
 
     scrollBar->Draw();
 

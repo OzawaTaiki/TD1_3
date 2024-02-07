@@ -5,6 +5,7 @@
 class Title
 {
 private:
+
 	JsonL*	startup;
 	
 	// JSONでロード
@@ -14,7 +15,7 @@ private:
 	int		handle_player;
 	int		handle_soap;
 	int		handle_title;
-	int		handle_click2start;
+	int		handle_tfp;
 
 	// 初期化必要
 	int		framecount;

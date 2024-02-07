@@ -4,6 +4,7 @@
 #include "KeyManager.h"
 #include "CursorManager.h"
 #include "SceneManager.h"
+#include "playground.h"
 
 void Title::LoadFromResMg()
 {
@@ -11,7 +12,7 @@ void Title::LoadFromResMg()
 	handle_player = RM::Handle("playerTex");
 	handle_soap = RM::Handle("soapTex");
 	handle_title = RM::Handle("title");
-	handle_click2start;
+	handle_tfp = RM::Handle("tfp");
 }
 
 void Title::LoadFromJSON()
@@ -52,7 +53,11 @@ void Title::Update()
 		isReturn = 1;
 	}
 
-	if (isReturn) SM::ChangeRequest(Scenes::SC_StageSelect);
+	if (isReturn)
+	{
+		SM::ChangeRequest(Scenes::SC_StageSelect);
+		Playground::allClear = 0;
+	}
 
 	framecount++;
 }
@@ -72,6 +77,21 @@ void Title::Draw()
 		0xffffffff,
 		DrawMode_Center
 	);
+
+	if (Playground::allClear == 1)
+	{
+		Phill::DrawQuadPlus(
+			1920 - 340 -15, 1080 - 120-15,
+			340, 120,
+			1.0f, 1.0f,
+			0.0f,
+			0, 0,
+			340, 120,
+			handle_tfp,
+			0xffffffff,
+			DrawMode_LeftTop
+		);
+	}
 
 }
 

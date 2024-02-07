@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include "SceneManager.h"
 
+int	Playground::allClear;
 
 void Playground::CollisionWithPlayer()
 {
@@ -563,6 +564,7 @@ void Playground::ScrollCalculation()
 
 Playground::Playground()
 {
+	allClear = 0;
 	piece = new Piece;
 	player = new Player;
 
@@ -698,7 +700,8 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 				if (selectStage >= kMaxStage)
 				{
 					selectStage = 0;
-					SceneManager::ChangeRequest(Scenes::SC_StageSelect);
+					SceneManager::ChangeRequest(Scenes::SC_Title);
+					allClear = 1;
 					return;
 				}
 
