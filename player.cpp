@@ -5,7 +5,7 @@
 #include "definition.h"
 #include "ResourceManager.h"
 
-void Player::Move(const char* _keys, const char* _preKeys)
+void Player::Move(const char* _keys, const char* _preKeys, int _isHave)
 {
 	int moveX = 0;
 	if (_preKeys[DIK_1])
@@ -21,16 +21,18 @@ void Player::Move(const char* _keys, const char* _preKeys)
 	else
 	{
 #endif // _DEBUG
-
-		if (_keys[DIK_A])
+		if (_isHave == -1)
 		{
-			moveX = -1;
-			//moveSound->SoundEnable();
-		}
-		if (_keys[DIK_D])
-		{
-			moveX = 1;
-			//moveSound->SoundEnable();
+			if (_keys[DIK_A])
+			{
+				moveX = -1;
+				//moveSound->SoundEnable();
+			}
+			if (_keys[DIK_D])
+			{
+				moveX = 1;
+				//moveSound->SoundEnable();
+			}
 		}
 
 #ifdef _DEBUG
@@ -40,14 +42,15 @@ void Player::Move(const char* _keys, const char* _preKeys)
 	velocity.x = moveX * kMoveSpd;
 }
 
-void Player::Jump(const char* _keys, const char* _preKeys)
+void Player::Jump(const char* _keys, const char* _preKeys, int _isHave)
 {
-	if ((_keys[DIK_W] /*&& !_preKeys[DIK_W]*/ || _keys[DIK_SPACE] && !_preKeys[DIK_SPACE]) && isGround)
-	{
-		velocity.y = kJumpVelocity;
-		isGround = false;
-		//jumpSound->SoundEnable();
-	}
+	if (_isHave == -1)
+		if ((_keys[DIK_W] /*&& !_preKeys[DIK_W]*/ || _keys[DIK_SPACE] && !_preKeys[DIK_SPACE]) && isGround)
+		{
+			velocity.y = kJumpVelocity;
+			isGround = false;
+			//jumpSound->SoundEnable();
+		}
 }
 
 void Player::Gravity()
@@ -140,14 +143,11 @@ void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 	isOnBox = false;
 	isAddVelo = false;
 
-	if (_isHave == -1)
-	{
-		Move(_keys, _preKeys);
-		Jump(_keys, _preKeys);
-		Gravity();
-		Clamp();
-		MoveDirUpdate();
-	}
+	Move(_keys, _preKeys, _isHave);
+	Jump(_keys, _preKeys, _isHave);
+	Gravity();
+	Clamp();
+	MoveDirUpdate();
 }
 
 void Player::Draw(bool _isOverlap)
