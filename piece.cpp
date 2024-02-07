@@ -44,7 +44,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					isHave = i;
 
 					//TODO : path確定後
-					//pickUpSound->SoundEnable();
+					pickUpSound->SoundEnable();
 				}
 			}
 		}
@@ -119,7 +119,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			if (isHave == i)
 			{
 				//TODO : path確定後 
-				//PutDownSound->SoundEnable();
+				PutDownSound->SoundEnable();
+
 				isHave = -1;
 				bubbleEmit.clear();
 				emitCnt = 0;
@@ -792,7 +793,6 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 
 bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum)
 {
-
 	for (int i = 0; i < 4; i++)
 	{
 		Vector2 o2pSub;
@@ -980,8 +980,8 @@ void Piece::Init()
 	color[4] = 0xc080c0d0;
 
 	//TODO : パス確定後
-	//pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 0.5f);
-	//PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 0.5f);
+	pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 0.5f);
+	PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 0.5f);
 	//MoveSound = new Sound(ResourceManager::Handle("pieceMoveSound"), 0.5f);
 }
 
@@ -1000,9 +1000,12 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 
 void Piece::Draw(int _scrollY)
 {
-	if (pickUpSound != nullptr)			pickUpSound->PlayAudio();
-	if (PutDownSound != nullptr)		PutDownSound->PlayAudio();
-	if (MoveSound != nullptr)			MoveSound->PlayAudio();
+	if (pickUpSound != nullptr)
+		pickUpSound->PlayAudio();
+	if (PutDownSound != nullptr)
+		PutDownSound->PlayAudio();
+	if (MoveSound != nullptr)
+		MoveSound->PlayAudio();
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{
