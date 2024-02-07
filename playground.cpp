@@ -698,7 +698,7 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 				if (selectStage >= kMaxStage)
 				{
 					selectStage = 0;
-					SceneManager::ChangeRequest(Scenes::SC_StageSelect);
+					SceneManager::ChangeRequest(Scenes::SC_Title);
 					return;
 				}
 

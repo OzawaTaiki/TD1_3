@@ -47,7 +47,7 @@ private:
 
     //
 
-    static const int kMax = 10;
+    static const int kMax = 8;
     const char* jsonName[3] = { 
         "stgSel-main", 
         "stgSel-scroll", 

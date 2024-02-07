@@ -13,7 +13,7 @@ class Box;
 
 class Playground
 {
-	const int kMaxStage = 10;
+	const int kMaxStage = 8;
 
 	std::vector<std::vector<int>>* field;
 
