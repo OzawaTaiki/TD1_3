@@ -5,6 +5,15 @@
 #include "CursorManager.h"
 #include "SceneManager.h"
 
+void Title::LoadFromResMg()
+{
+	using RM = ResourceManager;
+	handle_player = RM::Handle("playerTex");
+	handle_soap = RM::Handle("soapTex");
+	handle_title;
+	handle_click2start;
+}
+
 void Title::LoadFromJSON()
 {
 	startup = JSON_Manager::GetJSON("title-startup");
