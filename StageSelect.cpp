@@ -184,7 +184,7 @@ void StageSelect::Update()
 
     if (clickCnt == 2)
     {
-        SceneManager::ChangeRequest(Scenes::SC_Game);
+        SceneManager::ChangeRequest(Scenes::SC_Game, selectElm);
     }
 
     // 要素ジャンプ

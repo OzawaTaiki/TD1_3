@@ -10,6 +10,7 @@ Scenes	SceneManager::scene_next;				// リクエストが来たら代入
 char*	SceneManager::preKeys;
 char*	SceneManager::keys;
 int		SceneManager::ableSceneChange;
+int		SceneManager::stageNum;
 
 int* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
@@ -21,6 +22,13 @@ void SceneManager::ChangeRequest(Scenes _nextScene)
 {
 	existChangeRequest = 1;
 	scene_next = _nextScene;
+}
+
+void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
+{
+	existChangeRequest = 1;
+	scene_next = _nextScene;
+	stageNum = _stage;
 }
 
 void SceneManager::Init()
@@ -35,6 +43,7 @@ void SceneManager::Init()
 	game				= initialScene == SC_Game ? new Playground() : nullptr;
 	ableSceneChange		= 0;
 	tileChange			= nullptr;
+	stageNum			= 0;
 	if (game) game->Init(0);
 }
 
@@ -158,7 +167,7 @@ void SceneManager::ChangeScene()
 					break;
 				case SC_Game:
 					game = new Playground();
-					game->Init(0);
+					game->Init(stageNum);
 					break;
 				default:
 					break;

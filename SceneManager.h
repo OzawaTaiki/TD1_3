@@ -29,6 +29,7 @@ private:
     static	Playground*	game;				// ゲームシーン
 
     static  TileChange* tileChange;
+    static  int     stageNum;
 
     static  char*   preKeys;
     static  char*   keys;
@@ -40,6 +41,7 @@ public:
     /// </summary>
     /// <param name="_nextScene">次のシーン</param>
     static  void	ChangeRequest(Scenes _nextScene);
+    static  void	ChangeRequest(Scenes _nextScene, int _stage);
 
     // 初期化処理
     static  void    Init();
