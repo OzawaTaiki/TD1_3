@@ -7,6 +7,7 @@ class Bubble
 {
 private:
 	SpriteData	sprData;
+	SpriteData*	pSprData;
 	VECTOR2		position;
 	VECTOR2		velocity;
 	VECTOR2		acceleration;
