@@ -4,6 +4,7 @@
 #include "intVec2.h"
 #include "JSON-Loader/JSON-Manager.h"
 #include "UI/UI_Manager.h"
+#include "sound.h"
 
 class Piece;
 class Player;
@@ -54,10 +55,10 @@ class Playground
 
 	/// - - - ナイトウが勝手に宣言 はじめ - - - ///
 
-	JsonL*		json_scr;
+	JsonL* json_scr;
 
 	SpriteData	scrSpr;					// スクロールバーのリソース
-	Scroller*	scrollBar;              // スクロールバー実体
+	Scroller* scrollBar;              // スクロールバー実体
 
 	Size		scrollBarSize;          // スクロールバーのサイズ
 	Size		scrollboxSize;          // スクロールボックスのサイズ
@@ -68,12 +69,18 @@ class Playground
 
 	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 
-	/// 仮の者たち
 	int blockTexture;
 	int goalTexture;
-	int obstacleTexture;
+	//int obstacleTexture;
+	int backGroundTexture;
+	int togeTexture;
+
+	Sound* BGM;
+	Sound* goalSound;
+
 
 	bool frameSlow = false;
+
 
 	bool isFill(const Vector2& _pos, const Vector2* _vertex);
 
@@ -87,17 +94,9 @@ class Playground
 
 	void CollisionWithBox();			//box		field
 	void CollisionPieceWithBox();		//box		piece
-	//void CollisionBoxWithBox();			//box		box
 
-	/// お邪魔との判定とりたい関数 piece field
 	void CollisionWithPiece();
 	void CollisionPieceWithPiece();
-
-	void CollisionReset();
-
-	/*void PiecePlayerCollision();
-	void BoxPieceCollision();
-	void BoxBoxCollision();*/
 
 
 	void LoadFromJSON();

@@ -2,6 +2,7 @@
 #include "definition.h"
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
+#include "ResourceManager.h"
 
 void Box::Gravity()
 {
@@ -94,7 +95,9 @@ Box::Box(int _x, int _y)
 	vertex[1] = { size.x / 2 - 1,-size.y / 2 };
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
-	GH = Novice::LoadTexture("./Resources/img/soap.png");
+	boxTextrue = ResourceManager::Handle("soapTex");
+	// TODO : 
+	//moveSound = new Sound(ResourceManager::Handle("boxMove"), 0.5f);
 }
 
 void Box::Update()
@@ -108,7 +111,7 @@ void Box::Update()
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
 	isdAddVelo = false;
-	isOnPlayer = false; 
+	isOnPlayer = false;
 	isOnBox = -1;
 	isLockedX = false;
 	isLockedY = false;
@@ -116,18 +119,23 @@ void Box::Update()
 	MoveDirUpdate();
 	Gravity();
 	Clamp();
-	//CollisionWithField(_collision);
-	//PosUpdate();
 }
 
-void Box::Draw(int _num)
+void Box::Draw(int _num, int warningVisible)
 {
 	if (!isDraw)
 		return;
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x - 1, (int)size.y - 1, 1.0f, 1.0f, 0.0f, 0, 0, 63, 63, GH, color, PhillDrawMode::DrawMode_Center);
 
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 10), "%d", _num);
-	Novice::ScreenPrintf(-100, -100, "%d", _num);
-	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y + 10), "%d,%d", int(pos.x), int(pos.y));
+	if (moveSound != nullptr)	moveSound->PlayAudio();
+
+	if (warningVisible & (int)powf(2.0f, (float)_num))
+		color = 0xff0000d0;
+	else color = WHITE;
+
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y), (int)size.x, (int)size.y, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, boxTextrue, color, PhillDrawMode::DrawMode_Center);
+
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 70), "%d", _num);
+	//Novice::ScreenPrintf(-100, -100, "%d", _num);
+	//Novice::ScreenPrintf(int(pos.x - 30), int(pos.y - 50), "%d,%d", int(pos.x), int(pos.y));
 	//Novice::DrawSprite(int(pos.x), int(pos.y), GH, size.x, size.y, 0, 0xc03030ff);
 }

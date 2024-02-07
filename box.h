@@ -3,6 +3,7 @@
 #include <Vector2.h>
 #include "intVec2.h"
 #include <vector>
+#include "sound.h"
 
 
 class Box
@@ -19,7 +20,7 @@ public:
 
 
 	const float kMaxVeloY = 15.0f;
-	int GH;
+	int boxTextrue;
 	int isOnBox;
 	unsigned int color;
 
@@ -28,6 +29,8 @@ public:
 	bool isLockedY;
 	bool isDraw;
 	bool isdAddVelo;
+
+	Sound* moveSound;
 
 	Box(int _x, int _y);
 
@@ -40,5 +43,5 @@ public:
 	//void CollisionWithField(std::vector< std::vector<int>>* _collision);
 	//void CollisionWithPlayer(Vector2& _pos, const Vector2& _size, Vector2& _velo, bool& _isGround);//playgroundに移動予定
 	void Update();
-	void Draw(int _num);
+	void Draw(int _num, int warningVisible);
 };

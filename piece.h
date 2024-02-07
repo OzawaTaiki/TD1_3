@@ -4,6 +4,9 @@
 #include <vector>
 #include "intVec2.h"
 #include "definition.h"
+#include "sound.h"
+#include "BubbleEmitter.h"
+
 
 class Box;
 
@@ -30,8 +33,8 @@ public:
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
 	Vector2 piecePrePos;					// pieceの前の座標
-
 	Vector2 mapchipKeyPos;
+
 
 	/// piece初期位置
 	const Vector2 kPieceStartKeyPos = { kStageAreaWidth + 50.0f,65.0f };			// pieceの初期基準座標
@@ -40,13 +43,31 @@ public:
 	int isHave;								// piece所持フラグ -1:もってない 0~:番号のピース所持
 	int runX;
 	int runY;
-
 	bool canMoveX;
 	bool canMoveY;
+	bool isLockedY;
+
+	int emitCnt;
+	const int kEmitEnableFrame = 5;
+
+	bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
+	bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
+	int  isBoxOverlap = -1;				// ピースに箱が重なってるか否か
+
+	int warningIconVisible;
+
+	unsigned int color[5];
 
 	int pieceTexture;
 
-	bool isLockedY;
+	Sound* pickUpSound;
+	Sound* PutDownSound;
+	Sound* MoveSound;
+
+	/// ぱーちくる
+	EmitterData emitdata;
+	std::vector<BubbleEmitter*> bubbleEmit;
+
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
 
@@ -66,6 +87,9 @@ public:
 
 	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity);
 	void CollisionPieceWithPiece();
+
+	void AddBubbleEmitter(int _pieceNum,int _x, int _y);
+	void BubbleUpdDraw();
 
 	void PiecePosInit(int _x, int _y);
 	void Init();

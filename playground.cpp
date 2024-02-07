@@ -98,6 +98,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[0].x) / kTileSize + 1) * kTileSize + box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 右の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->vertex[1].y) / kTileSize][int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize] != AIR ||
@@ -107,6 +108,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.x = (int(box[i]->pos.x + box[i]->velocity.x + box[i]->vertex[1].x) / kTileSize) * kTileSize - box[i]->size.x / 2;
 			box[i]->velocity.x = 0;
 			box[i]->isLockedX = true;
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 上の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[0].x) / kTileSize] != AIR ||
@@ -116,6 +118,7 @@ void Playground::CollisionWithBox()
 			box[i]->pos.y = (int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[0].y) / kTileSize + 1) * kTileSize + box[i]->size.y / 2;
 			box[i]->velocity.y = 0;
 			box[i]->isLockedY = true;
+			//box[i]->moveSound->SoundEnable();
 		}
 		/// 下の判定
 		if (((*field)[int(box[i]->pos.y + box[i]->velocity.y + box[i]->vertex[2].y) / kTileSize][int(box[i]->pos.x + box[i]->vertex[2].x) / kTileSize] != AIR ||
@@ -126,6 +129,7 @@ void Playground::CollisionWithBox()
 			box[i]->velocity.y = 0;
 			box[i]->moveDir.y = 0;
 			box[i]->isLockedY = true;
+			//box[i]->moveSound->SoundEnable();
 		}
 		box[i]->PosUpdate();
 	}
@@ -159,6 +163,7 @@ void Playground::CollisionPlayerWithBox()
 
 				}
 				box[i]->PosUpdate();
+				//box[i]->moveSound->SoundEnable();
 			}
 			else
 			{
@@ -269,8 +274,7 @@ void Playground::CollisionPlayerWithPiece()
 		/// piece-player間に箱があるときの処理
 		else
 		{
-			int i;
-			for (i = 0; i < box.size(); i++)
+			for (int i = 0; i < box.size(); i++)
 			{
 				if (player->pos.x - player->size.x / 2.0f <= box[i]->pos.x + box[i]->size.x / 2.0f &&
 					player->pos.x + player->size.x / 2.0f >= box[i]->pos.x - box[i]->size.x / 2.0f &&
@@ -283,7 +287,10 @@ void Playground::CollisionPlayerWithPiece()
 
 					if (collidedNum != -1)
 					{
-						if (collisionDir.x < 0)
+						piece->MoveOnCollision(collisionDir, collidedNum + kTileKinds, box[i]->velocity);
+
+
+						/*if (collisionDir.x < 0)
 							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize - box[i]->size.x / 2 - kTileSize;
 						if (collisionDir.x > 0)
 							piece->pos[collidedNum].x = box[i]->pos.x - piece->runX * kTileSize + box[i]->size.x / 2;
@@ -291,6 +298,9 @@ void Playground::CollisionPlayerWithPiece()
 							piece->pos[collidedNum].y = box[i]->pos.y + piece->runY * kTileSize + kTileSize + box[i]->vertex[2].y;
 						if (collisionDir.y > 0)
 							piece->pos[collidedNum].y = box[i]->pos.y - piece->runY * kTileSize + box[i]->size.y / 2;
+
+						piece->moveDir[collidedNum].x = collisionDir.x;
+						piece->moveDir[collidedNum].y = collisionDir.y;*/
 					}
 				}
 			}
@@ -327,6 +337,7 @@ void Playground::CollisionPieceWithBox()
 					box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 					box[i]->velocity.y = 0;
 				}
+				//box[i]->moveSound->SoundEnable();
 				box[i]->moveDir.x = collisionDir.x * -1;
 				box[i]->moveDir.y = collisionDir.y * -1;
 			}
@@ -341,27 +352,6 @@ void Playground::CollisionPieceWithBox()
 				if (collisionDir.y > 0)
 					piece->pos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
 			}
-
-			/* /// 埋まってないとき
-			if (!isFill(check, box[i]->vertex))
-			{
-				box[i]->pos = check;
-			}
-			 埋まってるとき
-			else
-			{
-				box[i]->isLockedX = true;
-				box[i]->isLockedY = true;
-
-				if (collisionDir.x < 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x - box[i]->size.x / 2 - (piece->runX + 1) * kTileSize;
-				if (collisionDir.x > 0)
-					piece->piecePos[collidedNum].x = box[i]->pos.x + box[i]->size.x / 2 - piece->runX * kTileSize;
-				if (collisionDir.y < 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y - box[i]->size.y / 2 - (piece->runY + 1) * kTileSize;
-				if (collisionDir.y > 0)
-					piece->piecePos[collidedNum].y = box[i]->pos.y + box[i]->size.y / 2 - piece->runY * kTileSize;
-			}*/
 		}
 		else
 		{
@@ -383,6 +373,7 @@ void Playground::CollisionPieceWithBox()
 						box[i]->velocity.y = 0;
 					}
 
+					//box[i]->moveSound->SoundEnable();
 					box[i]->moveDir.x = collisionDir.x * -1;
 					box[i]->moveDir.y = collisionDir.y * -1;
 				}
@@ -442,12 +433,6 @@ void Playground::CollisionPieceWithPiece()
 	piece->CollisionPieceWithPiece();
 }
 
-void Playground::CollisionReset()
-{
-	collision->clear();
-	collision = new std::vector<std::vector<int>>(*field);
-}
-
 bool Playground::isFill(const Vector2& _pos, const Vector2* _vertex)
 {
 	for (int i = 0; i < 4; i++)
@@ -474,14 +459,17 @@ bool Playground::isFill(const Vector2& _pos, const Vector2* _vertex)
 void Playground::GoalCheck()
 {
 	if (
-		(*field)[int(player->pos.y) / kTileSize][int(player->pos.x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] == 2 ||
-		(*field)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] == 2
+		(*field)[int(player->pos.y) / kTileSize][int(player->pos.x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[0].y) / kTileSize][int(player->pos.x + player->vertex[0].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[1].y) / kTileSize][int(player->pos.x + player->vertex[1].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[2].y) / kTileSize][int(player->pos.x + player->vertex[2].x) / kTileSize] == GOAL ||
+		(*field)[int(player->pos.y + player->vertex[3].y) / kTileSize][int(player->pos.x + player->vertex[3].x) / kTileSize] == GOAL
 		)
 	{
 		isClear = true;
+		//TODO : 確定後
+		//goalSound = new Sound(/*path*/, 0.5f);
+		//goalSound->SoundEnable();
 	}
 }
 
@@ -515,7 +503,7 @@ void Playground::ScrollCalculation()
 {
 	// ナイトウが追加
 	float value = scrollBar->GetValue();
-	increaseY_scroll = int(value * (-512)); // TODO: この値を使用してy値を変化させてほしい。(0 ~ -512)
+	increaseY_scroll = int(value * (-512));
 	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
 }
 
@@ -524,9 +512,11 @@ Playground::Playground()
 	piece = new Piece;
 	player = new Player;
 
-	blockTexture = Novice::LoadTexture("./Resources/img/block.png");
-	goalTexture = Novice::LoadTexture("./Resources/img/goal.png");
-	obstacleTexture = Novice::LoadTexture("./img/obstacleBlock.png");
+	blockTexture = ResourceManager::Handle("blockTex");
+	goalTexture = ResourceManager::Handle("goalTex");
+	//obstacleTexture = ResourceManager::Handle("");
+	backGroundTexture = ResourceManager::Handle("backGround");
+	togeTexture = ResourceManager::Handle("togeTex");
 
 	hindranceVertex[0] = { 0,0 };
 	hindranceVertex[1] = { kTileSize,0 };
@@ -548,6 +538,12 @@ Playground::Playground()
 	scrollBar->SetPosition(Transform(scrollbarPosition.x, scrollbarPosition.y + scrollboxSize.height / 2 + scrollboxMargin / 2)); // 27はずらすため 40は縦マージン
 
 	/// - - - ナイトウが勝手に実装 おわり - - - ///
+
+	//TODO : 確定後
+	// 要検討事項 ： goalは判定時にインスタンスを作り，鳴らしたらデリートするべきか
+	//				ここでインスタンスを作って判定時にフラグを立てるか
+	//BGM = new Sound(path, 0.5f, true);
+	//goalSound = nullptr;
 }
 
 void Playground::Init(int _stageNo)
@@ -568,8 +564,8 @@ void Playground::Init(int _stageNo)
 			if ((*field)[y][x] == BOX)
 			{
 				(*field)[y][x] = 0;
-				if (box.empty())
-					box.push_back(new Box(x, y));
+				//if (box.empty())
+				box.push_back(new Box(x, y));
 			}
 			else if ((*field)[y][x] == HINDRANCE)
 			{
@@ -586,6 +582,8 @@ void Playground::Init(int _stageNo)
 
 	isClear = false;
 	player->Init(selectStage);
+	//TODO : 確定後
+	//BGM->SoundEnable();
 }
 
 void Playground::Update(const char* _keys, const char* _preKeys)
@@ -601,22 +599,22 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 	/// コマ送りモードは入力しながらenter
 	if (!frameSlow || _keys[DIK_RETURN] && !_preKeys[DIK_RETURN])
 	{
+
 		plbo = false;
 		plpi = false;
 		pibo = false;
 
-		CollisionReset();
-		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex,increaseY_scroll);
+		piece->Update(player->pos, player->vertex, box, hindrancePos, hindranceVertex, increaseY_scroll);
 		for (int i = 0; i < box.size(); i++)
 			box[i]->Update();
-		player->Update(_keys, _preKeys);
+		player->Update(_keys, _preKeys, piece->isHave);
 
 		/// 衝突判定たち
 		CollisionWithPlayer();
 		CollisionPlayerWithBox();
 		CollisionWithBox();
-		CollisionPlayerWithPiece();//
-		CollisionWithPiece();
+		CollisionPlayerWithPiece();
+		//CollisionWithPiece();
 		CollisionPieceWithBox();
 		CollisionWithBox();
 		CollisionPieceWithBox();
@@ -634,7 +632,6 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 		//CollisionPlayerWithPiece();
 		//CollisionWithPiece();
 	}
-
 
 	if (_keys[DIK_R] && _preKeys[DIK_R] || !player->isAlive)
 	{
@@ -654,6 +651,11 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 
 void Playground::Draw()
 {
+	if (BGM != nullptr)			BGM->PlayAudio(true, 300);
+	if (goalSound != nullptr)	goalSound->PlayAudio();
+
+	Novice::DrawSprite(0, 0, backGroundTexture, 1, 1, 0, 0xd0d0d0d0);
+
 	for (int y = 0; y < (*field).size(); y++)
 	{
 		for (int x = 0; x < (*field)[y].size(); x++)
@@ -661,25 +663,25 @@ void Playground::Draw()
 			if ((*field)[y][x] != 9)
 			{
 				if ((*field)[y][x] == BLOCK)
-					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize , kTileSize , 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, blockTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
 				else if ((*field)[y][x] == GOAL)
-					Phill::DrawQuadPlus(int((x - 1) * kTileSize), int((y - 1) * kTileSize), kTileSize*2, kTileSize*2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+					Phill::DrawQuadPlus(int(x * kTileSize), int((y - 1) * kTileSize), kTileSize * 2, kTileSize * 2, 1.0f, 1.0f, 0.0f, 0, 0, 128, 128, goalTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
-				else if ((*field)[y][x] == HINDRANCE)///お邪魔
-					Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
+				//else if ((*field)[y][x] == HINDRANCE)///お邪魔
+					//Phill::DrawQuadPlus(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, obstacleTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 				else if ((*field)[y][x] == SPINE)///とげ
-					Novice::DrawBox(int(x * kTileSize), int(y * kTileSize), kTileSize - 1, kTileSize - 1, 0, 0x2020d0ff, kFillModeSolid);
+					Phill::DrawQuadPlus(int(x * kTileSize), int(y * kTileSize), kTileSize, kTileSize, 1.0f, 1.0f, 0.0f, 0, 0, 64, 64, togeTexture, 0xffffffff, PhillDrawMode::DrawMode_LeftTop);
 
-				else if ((*field)[y][x] != 9 && (*field)[y][x] != 0)
-					Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
+				//else if ((*field)[y][x] != 0)
+					//Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
 			}
 			//Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
 		}
 	}
 
 	for (int i = 0; i < box.size(); i++)
-		box[i]->Draw(i);
+		box[i]->Draw(i, piece->warningIconVisible);
 	piece->Draw(increaseY_scroll);
 	player->Draw();
 

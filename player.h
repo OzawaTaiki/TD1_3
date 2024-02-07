@@ -2,6 +2,7 @@
 #include <Vector2.h>
 #include "intVec2.h"
 #include <vector>
+#include "sound.h"
 
 
 class Player
@@ -12,6 +13,7 @@ public:
 	Vector2 velocity;
 	Vector2 acceleratiion;
 	Vector2 moveDir;
+	intVec2 GHSize;
 
 
 	Vector2 vertex[4];
@@ -28,17 +30,20 @@ public:
 	intVec2 startPos[10] = {
 		{3,10},
 		{2,12},
-		{1,11},
-		{1,8},
-		{7,7},
 		{2,11},
-		{1,11},
-		{1,2},
-		{1,10},
-		{2,11}
+		{2,8},
+		{2,4},//5
+		{8,8},
+		{2,2},
+		{3,10},
+		{2,6},
+		{2,1}
 	};
 
-	int GH;
+	int playerTexture;
+
+	Sound* moveSound;
+	Sound* jumpSound;
 
 	void Move(const char* _keys , const char* _preKeys);
 	void Jump(const char* _keys, const char* _preKeys);
@@ -51,6 +56,6 @@ public:
 	Player();
 
 	void Init(int _stageNo);
-	void Update(const char* _keys, const char* _preKeys);
+	void Update(const char* _keys, const char* _preKeys,int _isHave);
 	void Draw();
 };

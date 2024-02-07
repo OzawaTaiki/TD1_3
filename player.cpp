@@ -3,10 +3,14 @@
 #include "PhilliaFunction/Phill.h"
 #include <Novice.h>
 #include "definition.h"
+#include "ResourceManager.h"
 
 void Player::Move(const char* _keys, const char* _preKeys)
 {
 	int moveX = 0;
+	if (_preKeys[DIK_1])
+		moveX = 0;
+#ifdef _DEBUG
 	if (_keys[DIK_LSHIFT])
 	{
 		if (_keys[DIK_A] && !_preKeys[DIK_A])
@@ -16,11 +20,22 @@ void Player::Move(const char* _keys, const char* _preKeys)
 	}
 	else
 	{
+#endif // _DEBUG
+
 		if (_keys[DIK_A])
+		{
 			moveX = -1;
+			//moveSound->SoundEnable();
+		}
 		if (_keys[DIK_D])
+		{
 			moveX = 1;
+			//moveSound->SoundEnable();
+		}
+
+#ifdef _DEBUG
 	}
+#endif // _DEBUG
 
 	velocity.x = moveX * kMoveSpd;
 }
@@ -31,6 +46,7 @@ void Player::Jump(const char* _keys, const char* _preKeys)
 	{
 		velocity.y = kJumpVelocity;
 		isGround = false;
+		//jumpSound->SoundEnable();
 	}
 }
 
@@ -74,14 +90,14 @@ void Player::Clamp()
 Player::Player()
 {
 	pos = { 64,64 };
-	size = { 64,96 };
+	size = { 54,60 };
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
-
+	GHSize = { 64, 80 };
 	isAlive = true;
 	isGround = false;
-	isOnBox=false;
+	isOnBox = false;
 	isAddVelo = false;
 
 	vertex[0] = { -size.x / 2,-size.y / 2 };
@@ -89,7 +105,10 @@ Player::Player()
 	vertex[2] = { -size.x / 2,size.y / 2 - 1 };
 	vertex[3] = { size.x / 2 - 1,size.y / 2 - 1 };
 
-	GH = Novice::LoadTexture("./Resources/img/player.png");
+	playerTexture = ResourceManager::Handle("playerTex");
+
+	//moveSound = new Sound(ResourceManager::Handle("playerMoveSound"), 0.5f);
+	//jumpSound = new Sound(ResourceManager::Handle("playerJumpSound"), 0.5f);
 }
 
 void Player::PosUpdate()
@@ -113,21 +132,29 @@ void Player::Init(int _stageNo)
 	isGround = false;
 }
 
-void Player::Update(const char* _keys, const char* _preKeys)
+void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 {
 	isOnBox = false;
 	isAddVelo = false;
 
-	Move(_keys, _preKeys);
-	Jump(_keys, _preKeys);
-	Gravity();
-	Clamp();
-	MoveDirUpdate();
+	if (_isHave == -1)
+	{
+		Move(_keys, _preKeys);
+		Jump(_keys, _preKeys);
+		Gravity();
+		Clamp();
+		MoveDirUpdate();
+	}
 }
 
 void Player::Draw()
 {
-	Phill::DrawQuadPlus(int(pos.x), int(pos.y), int(size.x), int(size.y), 1.0f, 1.0f, 0.0f, 0, 0, int(size.x), int(size.y), GH, 0xffffffff, PhillDrawMode::DrawMode_Center);
+
+	if (moveSound != nullptr)		moveSound->PlayAudio();
+	if (jumpSound != nullptr)		jumpSound->PlayAudio();
+
+
+	Phill::DrawQuadPlus(int(pos.x), int(pos.y - 8), int(GHSize.x), int(GHSize.y), 1.0f, 1.0f, 0.0f, 0, 0, int(GHSize.x), int(GHSize.y), playerTexture, 0xffffffff, PhillDrawMode::DrawMode_Center);
 
 	//Novice::ScreenPrintf(int(pos.x - 20), int(pos.y - 40), "%d,%d", int(pos.x), int(pos.y));
 	/*for (int i = 0; i < 4; i++)
