@@ -6,8 +6,12 @@ class Title
 private:
 	JsonL*	startup;
 	
+	// JSONでロード
 	int		targetFrame_startup;
+
+	// 初期化必要
 	int		framecount;
+	int		alpha_startup;
 
 	void	LoadFromJSON();
 public:

@@ -2,6 +2,7 @@
 // シーンクラス
 #include "StageSelect.h"
 #include "playground.h"
+#include "Title.h"
 
 #include "TileChange.h"
 
@@ -24,7 +25,7 @@ private:
     static  int     ableSceneChange;
 
     // TODO: 型を変更してください
-    static	int*	title;					// タイトルシーン
+    static	Title*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	Playground*	game;				// ゲームシーン
 

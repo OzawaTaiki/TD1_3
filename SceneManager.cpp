@@ -12,7 +12,7 @@ char*	SceneManager::keys;
 int		SceneManager::ableSceneChange;
 int		SceneManager::stageNum;
 
-int* SceneManager::title;
+Title* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
 
@@ -33,12 +33,12 @@ void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
 
 void SceneManager::Init()
 {
-	Scenes initialScene = SC_StageSelect;
+	Scenes initialScene = SC_Title;
 	existChangeRequest	= 0;
 	isEndDraw			= 0;
 	scene_current		= initialScene;
 	scene_next			= scene_current;
-	title				= initialScene == SC_Title ? new int : nullptr;
+	title				= initialScene == SC_Title ? new Title() : nullptr;
 	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
 	game				= initialScene == SC_Game ? new Playground() : nullptr;
 	ableSceneChange		= 0;
@@ -55,7 +55,7 @@ void SceneManager::Update()
 	switch (scene_current)
 	{
 	case SC_Title:
-		//if (title) title->Update();
+		if (title) title->Update();
 		break;
 
 	case SC_StageSelect:
@@ -82,10 +82,15 @@ void SceneManager::Update()
 		break;
 	}
 
+	/// シーン遷移演出
 	if (existChangeRequest || tileChange)
 	{
 		switch (scene_next)
 		{
+		case SC_StageSelect:
+
+			break;
+
 		case SC_Game:
 			if (!tileChange) tileChange = new TileChange();
 			if (tileChange) {
@@ -110,7 +115,7 @@ void SceneManager::Draw()
 	switch (scene_current)
 	{
 	case SC_Title:
-		//if (title) title->Draw();
+		if (title) title->Draw();
 		break;
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Draw();
@@ -160,7 +165,7 @@ void SceneManager::ChangeScene()
 				switch (scene_next)
 				{
 				case SC_Title:
-					//title = new Title();
+					title = new Title();
 					break;
 				case SC_StageSelect:
 					stageSelect = new StageSelect();
