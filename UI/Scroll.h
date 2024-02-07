@@ -11,6 +11,7 @@ private:
 	int			currentY;
 	bool		movable;
 	float		movedT;
+	int			arrowHnd;
 public:
 	Scroller(SpriteData* _spr);
 

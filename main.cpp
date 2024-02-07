@@ -10,7 +10,7 @@
 #include "definition.h"
 #include "Tutorial.h"
 
-const char kWindowTitle[] = "1304_がめちｔぇ";
+const char kWindowTitle[] = "1304_framy";
 
 void ResourceRegist();
 void JSONLoad();
@@ -33,6 +33,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ResourceRegist();
 	SceneManager::Init();
 	int wndModeCnt = 0;
+
+	Novice::SetMouseCursorVisibility(false);
+	int mGH = ResourceManager::Handle("cursor");
+	int mX = 0;
+	int mY = 0;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -46,7 +52,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+
 		CursorManager::UpdateCursorStatus();
+		CursorManager::GetCursorPosX(&mX);
+		CursorManager::GetCursorPosY(&mY);
 
 		SceneManager::Update();
 
@@ -93,6 +102,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		SceneManager::Draw();
 
+		Novice::DrawSpriteRect(mX, mY, CursorManager::GetClickFlag() ? 64 : 0, 0, 64, 64, mGH, 0.5f, 1, 0, WHITE);
+
 		///
 		/// ↑描画処理ここまで
 		///
@@ -122,6 +133,8 @@ void ResourceRegist()
 	ResourceManager::Regist("bubble", "./img/bubble.png");
 	ResourceManager::Regist("foam", "./Resources/img/foam.png");
 	ResourceManager::Regist("dekaP", "./img/dekaP.png");
+	ResourceManager::Regist("stgNumElement", "./resources/img/stageNumBlock.png");
+	ResourceManager::Regist("stgArrow", "./Resources/img/arrow.png");
 
 	for (int i = 0; i < 1; i++)
 	{
@@ -143,8 +156,12 @@ void ResourceRegist()
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");
 	ResourceManager::Regist("backGround", "./Resources/img/stageBackGround.png");
-	
+	ResourceManager::Regist("cursor", "./Resources/img/cursor.png");
+
 	//サウンド
+	ResourceManager::Regist("titleBGM", "./Resources/sound/BGM/title.mp3", false);
+	ResourceManager::Regist("selectBGM", "./Resources/sound/BGM/select.mp3", false);
+	ResourceManager::Regist("gameBGM", "./Resources/sound/BGM/game.mp3", false);
 	ResourceManager::Regist("piecePutDownSound", "./Resources/sound/SE/put.mp3", false);
 	ResourceManager::Regist("piecePickUpSound", "./Resources/sound/SE/grip.mp3", false);
 	/*

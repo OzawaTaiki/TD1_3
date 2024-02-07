@@ -7,8 +7,8 @@ int		SceneManager::existChangeRequest;		// シーン変更の要求が存在す�
 int		SceneManager::isEndDraw;				// 描画処理が終了したかどうか
 Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
-char*	SceneManager::preKeys;
-char*	SceneManager::keys;
+char* SceneManager::preKeys;
+char* SceneManager::keys;
 int		SceneManager::ableSceneChange;
 int		SceneManager::stageNum;
 
@@ -18,6 +18,10 @@ Playground* SceneManager::game;
 BackGround* SceneManager::backGround;
 
 TileChange* SceneManager::tileChange;
+
+Sound* SceneManager::titleBGM;
+Sound* SceneManager::selectBGM;
+Sound* SceneManager::gameBGM;
 
 void SceneManager::ChangeRequest(Scenes _nextScene)
 {
@@ -34,20 +38,38 @@ void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
 
 void SceneManager::Init()
 {
-	Scenes initialScene = SC_Title;
-	existChangeRequest	= 0;
-	isEndDraw			= 0;
-	scene_current		= initialScene;
-	scene_next			= scene_current;
-	title				= initialScene == SC_Title ? new Title() : nullptr;
-	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
-	game				= initialScene == SC_Game ? new Playground() : nullptr;
+
+	Scenes initialScene = SC_StageSelect;
+	existChangeRequest = 0;
+	isEndDraw = 0;
+	scene_current = initialScene;
+	scene_next = scene_current;
+	title = initialScene == SC_Title ? new Title : nullptr;
+	stageSelect = initialScene == SC_StageSelect ? new StageSelect() : nullptr;
+	game = initialScene == SC_Game ? new Playground() : nullptr;
+  
 	backGround = initialScene == SC_Title ? new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight) :
-					(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
-	ableSceneChange		= 0;
-	tileChange			= nullptr;
-	stageNum			= 0;
+		(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
+	ableSceneChange = 0;
+	tileChange = nullptr;
+	stageNum = 0;
 	if (game) game->Init(0);
+
+	titleBGM = new Sound(ResourceManager::Handle("titleBGM"), 0.5f, true);
+	selectBGM = new Sound(ResourceManager::Handle("selectBGM"), 0.5f, true);
+	gameBGM = new Sound(ResourceManager::Handle("gameBGM"), 0.5f, true);
+	switch (initialScene)
+	{
+	case SC_Title:
+		if (titleBGM) titleBGM->SoundEnable();
+		break;
+	case SC_StageSelect:
+		if (selectBGM) selectBGM->SoundEnable();
+		break;
+	case SC_Game:
+		if (gameBGM) gameBGM->SoundEnable();
+		break;
+	}
 }
 
 void SceneManager::Update()
@@ -126,13 +148,16 @@ void SceneManager::Draw()
 	case SC_Title:
 		if (title) title->Draw();
 		if (backGround)backGround->Draw();
+		if (titleBGM)titleBGM->PlayAudio(true, 120);
 		break;
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Draw();
+		if (selectBGM)selectBGM->PlayAudio(true, 120);
 		break;
 	case SC_Game:
 		if (backGround)backGround->Draw();
 		if (game) game->Draw();
+		if (gameBGM)gameBGM->PlayAudio(true, 120);
 		break;
 
 	default:
@@ -161,16 +186,19 @@ void SceneManager::ChangeScene()
 					title = nullptr;
 					delete backGround;
 					backGround = nullptr;
+					if (titleBGM) titleBGM->StopAudio(true, 120);
 					break;
 				case SC_StageSelect:
 					delete stageSelect;
 					stageSelect = nullptr;
+					if (selectBGM) selectBGM->StopAudio(true, 120);
 					break;
 				case SC_Game:
 					delete game;
 					game = nullptr;
 					delete backGround;
 					backGround = nullptr;
+					if (gameBGM) gameBGM->StopAudio(true, 120);
 					break;
 				default:
 					break;
@@ -180,16 +208,19 @@ void SceneManager::ChangeScene()
 				switch (scene_next)
 				{
 				case SC_Title:
-					backGround = new BackGround(0xcadde9f0,kWindowWidth,kWindowHeight);
 					title = new Title();
+					backGround = new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight);
+					if (titleBGM) titleBGM->SoundEnable();
 					break;
 				case SC_StageSelect:
 					stageSelect = new StageSelect();
+					if (selectBGM) selectBGM->SoundEnable();
 					break;
 				case SC_Game:
 					backGround = new BackGround(0xcadde9f0);
 					game = new Playground();
 					game->Init(stageNum);
+					if (gameBGM) gameBGM->SoundEnable();
 					break;
 				default:
 					break;
