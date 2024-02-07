@@ -1043,7 +1043,7 @@ void Piece::Init()
 		adjacencyCheckVertex[i][3] = { size[i].x * kTileSize + kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
 
 		vertex[i][0] = { 0,0 };
-		vertex[i][1] = { size[i].x*kTileSize,0 };
+		vertex[i][1] = { size[i].x * kTileSize,0 };
 		vertex[i][2] = { 0,size[i].y * kTileSize };
 		vertex[i][3] = { size[i].x * kTileSize,size[i].y * kTileSize };
 	}
