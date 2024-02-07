@@ -887,6 +887,9 @@ void Piece::CollisionPieceWithPiece()
 
 void Piece::AddEmitter(int _pieceNum, int _x, int _y)
 {
+	if (emitCnt != 0)
+		return;
+
 	EmitterData temp;
 	temp.position.x = pos[_pieceNum].x + _x * kTileSize;
 	temp.position.y = pos[_pieceNum].y + _y * kTileSize;
@@ -915,21 +918,23 @@ void Piece::BubbleUpdDraw()
 {
 	if (bubbleEmitter.empty())
 		return;
-
-	if (emitCnt != -1) {
-
+	if (emitCnt != -1)
 		emitCnt++;
-		if (emitCnt / kEmitEnableFrame)
-			emitCnt = -1;
 
-		for (int i = 0; i < bubbleEmitter.size(); i++)
+	for (int i = 0; i < bubbleEmitter.size(); i++)
+	{
+		for (int j = 0; j < bubbleEmitter[i].size(); j++)
 		{
-			for (int j = 0; j < bubbleEmitter[i].size(); j++)
-			{
-			//	bubbleEmitter[i][j]->Update();
-			//	bubbleEmitter[i][j]->Draw();
-			}
+			if (emitCnt != -1)
+				bubbleEmitter[i][j]->Update();
+			bubbleEmitter[i][j]->Draw();
 		}
+	}
+	if (emitCnt % kEmitEnableFrame == 0)
+	{
+		emitCnt = -1;
+		bubbleEmitter.clear();
+		emitdata.clear();
 	}
 }
 
@@ -968,10 +973,7 @@ Piece::Piece()
 	bubbleSet[7].velocityX_offset = -3.5f;
 	bubbleSet[7].velocityY_offset = 3.5f;
 
-
-
 	Init();
-
 }
 
 void Piece::PiecePosInit(int _x, int _y)
@@ -1044,7 +1046,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
 	adjacentDir.clear();
-	emitdata.clear();
+	//emitdata.clear();
 
 	PieceMove(_playerPos, _playerVertex, _box, _hindrancePos, _hindVertex, _scrollY);
 }

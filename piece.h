@@ -49,7 +49,7 @@ public:
 	bool isLockedY;
 
 	int emitCnt;
-	const int kEmitEnableFrame = 5;
+	const int kEmitEnableFrame = 15;
 
 	bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
 	bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
