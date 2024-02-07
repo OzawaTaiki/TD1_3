@@ -164,8 +164,13 @@ void Player::Update(const char* _keys, const char* _preKeys, int _isHave)
 	Clamp();
 	MoveDirUpdate();
 
-	if (isAnimation || cntUp != 0)
+	if (isAnimation)
 		cntUp++;
+	else
+	{
+		cntUp = 0;
+		animationCurrentIndex = 0;
+	}
 	if (cntUp % kGoNextCnt == 0 && cntUp != 0)
 	{
 		cntUp = 0;
