@@ -188,38 +188,38 @@ void StageSelect::Update()
         SceneManager::ChangeRequest(Scenes::SC_Game, selectElm);
     }
 
-    // 要素ジャンプ
-    if (frameCount_current > frameOffset_jump)
-    {
-        // フレームカウントの一時保存
-        if (frameBuffer_jump == 0) frameBuffer_jump = frameCount_current;
-        frameCount_jump = frameCount_current - frameBuffer_jump;
+    //// 要素ジャンプ
+    //if (frameCount_current > frameOffset_jump)
+    //{
+    //    // フレームカウントの一時保存
+    //    if (frameBuffer_jump == 0) frameBuffer_jump = frameCount_current;
+    //    frameCount_jump = frameCount_current - frameBuffer_jump;
 
-        if (isInterval == 0)
-        {
-            if (frameCount_jump == targetFrame_jump / 2)
-            {
-                theta_jump[elmCnt_jump] = -0.1f * float(3.1415926535);
-            }
-            if (frameCount_jump == targetFrame_jump)
-            {
-                theta_jump[elmCnt_jump] = 0.0f;
-            }
-        }
+    //    if (isInterval == 0)
+    //    {
+    //        if (frameCount_jump == targetFrame_jump / 2)
+    //        {
+    //            theta_jump[elmCnt_jump] = -0.1f * float(3.1415926535);
+    //        }
+    //        if (frameCount_jump == targetFrame_jump)
+    //        {
+    //            theta_jump[elmCnt_jump] = 0.0f;
+    //        }
+    //    }
 
-        if (frameCount_jump == targetFrame_jump && isInterval == 0)
-        {
-            isInterval = 1;
-            frameBuffer_jump = 0;
-        }
-        if (frameCount_jump == IntervalFrame_jump && isInterval == 1)
-        {
-            elmCnt_jump++;
-            elmCnt_jump %= 15;
-            frameBuffer_jump = 0;
-            isInterval = 0;
-        }
-    }
+    //    if (frameCount_jump == targetFrame_jump && isInterval == 0)
+    //    {
+    //        isInterval = 1;
+    //        frameBuffer_jump = 0;
+    //    }
+    //    if (frameCount_jump == IntervalFrame_jump && isInterval == 1)
+    //    {
+    //        elmCnt_jump++;
+    //        elmCnt_jump %= 15;
+    //        frameBuffer_jump = 0;
+    //        isInterval = 0;
+    //    }
+    //}
     frameCount_current++;
 
     if (cur.x < 0) cur.x = 0;
@@ -322,12 +322,13 @@ void StageSelect::LoadFromJSON()
 
     backPos.x               = atoi((*json_back)["x"]);
     backPos.y               = atoi((*json_back)["y"]);
+    elm2barDiff             = atoi((*json_main)["elemToBarDiff"]);
 }
 
 void StageSelect::Calculation()
 {
     // 基準点を算出する
-    elementStandard.x = scrollbarPosition.x - elementSize.width - scrollBarSize.width / 2;
+    elementStandard.x = scrollbarPosition.x - elementSize.width - scrollBarSize.width / 2 - elm2barDiff;
     elementStandard.y = elementSize.height / 2 + scrollMarginTop;
 
     // スクロールバー初期化

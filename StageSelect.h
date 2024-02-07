@@ -101,6 +101,9 @@ private:
     Transform   elementStandard = { 192,92 };   // 要素の基準座標
     Transform   cur;                            // カーソル座標
 
+    int         elm2barDiff;
+
+
     void	    EasingHover(int _index);
     void        LoadFromJSON();
     void	    Calculation();
