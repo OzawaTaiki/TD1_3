@@ -44,7 +44,7 @@ public:
 	bool canMoveX;
 	bool canMoveY;
 
-	bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
+	int isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
 	bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
 	int  isBoxOverlap = -1;				// ピースに箱が重なってるか否か
 

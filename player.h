@@ -27,6 +27,8 @@ public:
 	bool isOnBox;
 	bool isAddVelo;
 
+	unsigned int color;
+
 	intVec2 startPos[10] = {
 		{3,10},
 		{2,12},
@@ -57,5 +59,5 @@ public:
 
 	void Init(int _stageNo);
 	void Update(const char* _keys, const char* _preKeys,int _isHave);
-	void Draw();
+	void Draw(bool _isOverlap);
 };

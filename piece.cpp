@@ -11,6 +11,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
 	warningIconVisible = 0;
+	isPlayerOverlap = false;
 
 	if (Novice::IsTriggerMouse(0))
 	{
@@ -71,6 +72,9 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			{
 				warningIconVisible |= (int)powf(2.0f, (float)k);
 			}
+
+		if (IsOverlap(_playerPos, _playerVertex, isHave))
+			isPlayerOverlap = true;
 	}
 
 	else

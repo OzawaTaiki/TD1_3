@@ -727,7 +727,7 @@ void Playground::Draw()
 	for (int i = 0; i < box.size(); i++)
 		box[i]->Draw(i, piece->warningIconVisible);
 	piece->Draw(increaseY_scroll);
-	player->Draw();
+	player->Draw(piece->isPlayerOverlap);
 
 	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0xa0, kFillModeSolid);
 	// ナイトウが勝手に追加
