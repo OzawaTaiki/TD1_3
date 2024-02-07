@@ -2,6 +2,7 @@
 // シーンクラス
 #include "StageSelect.h"
 #include "playground.h"
+#include "backGround.h"
 
 #include "TileChange.h"
 
@@ -27,6 +28,7 @@ private:
     static	int*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	Playground*	game;				// ゲームシーン
+    static BackGround* backGround;
 
     static  TileChange* tileChange;
     static  int     stageNum;
