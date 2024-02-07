@@ -128,30 +128,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 void ResourceRegist()
 {
 	ResourceManager::Regist("white1x1", "white1x1.png");
-	ResourceManager::Regist("rule1", "./img/rule1.png");
-	ResourceManager::Regist("rule2", "./img/rule2.png");
-	ResourceManager::Regist("bubble", "./img/bubble.png");
+	ResourceManager::Regist("rule1", "./Resources/img/rule1.png");
+	ResourceManager::Regist("rule2", "./Resources/img/rule2.png");
+	ResourceManager::Regist("bubble", "./Resources/img/bubble.png");
 	ResourceManager::Regist("foam", "./Resources/img/foam.png");
-	ResourceManager::Regist("dekaP", "./img/dekaP.png");
-	ResourceManager::Regist("stgNumElement", "./resources/img/stageNumBlock.png");
+	ResourceManager::Regist("dekaP", "./Resources/img/dekaP.png");
+	ResourceManager::Regist("stgNumElement", "./Resources/img/stageNumBlock.png");
 	ResourceManager::Regist("stgArrow", "./Resources/img/arrow.png");
-
-	for (int i = 0; i < 1; i++)
-	{
-		char path[] = "./img/thumbnails/stg";
-		char result[128]{};
-		char name[32]{};
-		sprintf_s(result, "%s%d%s", path, i, ".png");
-		sprintf_s(name, "thmb_stg%d", i);
-
-		ResourceManager::Regist(name, result);
-	}
 
 	/// オザワ追加分
 	// テクスチャ
 	ResourceManager::Regist("playerTex", "./Resources/img/player-sheet.png");
 	ResourceManager::Regist("soapTex", "./Resources/img/soap.png");
-	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock.png");
+	ResourceManager::Regist("pieceTex", "./Resources/img/pieceBlock1.png");
 	ResourceManager::Regist("goalTex", "./Resources/img/goal.png");
 	ResourceManager::Regist("blockTex", "./Resources/img/block.png");
 	ResourceManager::Regist("togeTex", "./Resources/img/toge.png");

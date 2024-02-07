@@ -31,7 +31,7 @@ TileChange::TileChange()
     tileSize                    = 120;
     seqOrderIndex               = 0;        
     openPerOnce                 = 4;                            // 一度に開くタイル数を指定する
-    imgPath                     = "./img/pieceBlock.png";       // ブロックの画像データのパスを指定する
+    imgPath                     = "./Resources/img/pieceBlock.png";       // ブロックの画像データのパスを指定する
     posX_interpo                = 0;
     frameTarget_open            = 60;
     beginExit                   = 0;

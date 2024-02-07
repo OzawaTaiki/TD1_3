@@ -126,7 +126,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 				isPieceOverlap = IsOverlap();
 
 				isHave = -1;
-				bubbleEmit.clear();
+				//bubbleEmit.clear();
 				emitCnt = 0;
 
 				/*******************
@@ -322,12 +322,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] > 0)
 					{
 						(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
+						//AddBubbleEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
 					}
 					if ((*piece)[_pieceNum2][0][temp2 + count2])
 					{
 						(*piece)[_pieceNum2][0][temp2 + count2] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, temp2 + count2++, 0);
+						//AddBubbleEmitter(_pieceNum2, temp2 + count2++, 0);
 					}
 
 				}
@@ -341,12 +341,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][0][temp1 + count1])
 					{
 						(*piece)[_pieceNum1][0][temp1 + count1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, temp1 + count1++, 0);
+						//AddBubbleEmitter(_pieceNum1, temp1 + count1++, 0);
 					}
 					if ((*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2])
 					{
 						(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
+						//AddBubbleEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
 					}
 				}
 			}
@@ -365,12 +365,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][temp1 + count1][0] > 0)
 					{
 						(*piece)[_pieceNum1][temp1 + count1][0] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, 0, temp1 + count1++);
+						//AddBubbleEmitter(_pieceNum1, 0, temp1 + count1++);
 					}
 					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
 					{
 						(*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
+						//AddBubbleEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
 					}
 				}
 			}
@@ -383,12 +383,12 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
 					{
 						(*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
+						//AddBubbleEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
 					}
 					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
 					{
 						(*piece)[_pieceNum2][temp2 + count2][0] *= kAdjacentNum;
-						AddBubbleEmitter(_pieceNum2, 0, temp2 + count2++);
+						//AddBubbleEmitter(_pieceNum2, 0, temp2 + count2++);
 					}
 				}
 			}
@@ -912,13 +912,13 @@ void Piece::CollisionPieceWithPiece()
 			}
 		}
 	}
-}
-void Piece::AddBubbleEmitter(int _pieceNum, int _x, int _y)
+}/*
+void Piece:://AddBubbleEmitter(int _pieceNum, int _x, int _y)
 {
 	emitdata.position.x = pos[_pieceNum].x + _x + kTileSize;
 	emitdata.position.y = pos[_pieceNum].y + _y + kTileSize;
 
-	bubbleEmit.push_back(new BubbleEmitter(&emitdata));
+	//bubbleEmit.push_back(new BubbleEmitter(&emitdata));
 }
 
 void Piece::BubbleUpdDraw()
@@ -929,21 +929,21 @@ void Piece::BubbleUpdDraw()
 		if (emitCnt / kEmitEnableFrame)
 			emitCnt = -1;
 
-		for (int i = 0; i < bubbleEmit.size(); i++)
+		for (int i = 0; i < //bubbleEmit.size(); i++)
 		{
-			bubbleEmit[i]->Update();
-			bubbleEmit[i]->Draw();
+			//bubbleEmit[i]->Update();
+			//bubbleEmit[i]->Draw();
 		}
 	}
-}
+}*/
 
 Piece::Piece()
 {
 	pieceTexture = ResourceManager::Handle("pieceTex");
 
-	emitdata.size.width = 10;
-	emitdata.size.height = 10;
-	if (!bubbleEmit.empty()) bubbleEmit.clear();
+	//emitdata.size.width = 10;
+	//emitdata.size.height = 10;
+	//if (!//bubbleEmit.empty()) //bubbleEmit.clear();
 
 	Init();
 
@@ -1056,5 +1056,4 @@ void Piece::Draw(int _scrollY)
 		}
 	}
 
-	BubbleUpdDraw();
 }

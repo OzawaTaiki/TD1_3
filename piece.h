@@ -67,8 +67,8 @@ public:
 	Sound* MoveSound;
 
 	/// ぱーちくる
-	EmitterData emitdata;
-	std::vector<BubbleEmitter*> bubbleEmit;
+	//EmitterData emitdata;
+	//std::vector<BubbleEmitter*> bubbleEmit;
 
 
 	void PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, std::vector<Box*> _box, std::vector<intVec2> _hindrancePos, const Vector2* _hindVertex, int _scrollY);
@@ -91,8 +91,8 @@ public:
 	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity);
 	void CollisionPieceWithPiece();
 
-	void AddBubbleEmitter(int _pieceNum, int _x, int _y);
-	void BubbleUpdDraw();
+	//void AddBubbleEmitter(int _pieceNum, int _x, int _y);
+	//void BubbleUpdDraw();
 
 	void PiecePosInit(int _x, int _y);
 	void Init();
