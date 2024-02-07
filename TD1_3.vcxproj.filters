@@ -101,6 +101,9 @@
     <Filter Include="シーンチェンジ\Playerで塗りつぶし">
       <UniqueIdentifier>{77416209-a0e2-496d-bb88-ead3f74c0284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="システム\Sound">
+      <UniqueIdentifier>{4d3774db-0786-4bc1-842f-7f2fa1c7ded4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -208,6 +211,15 @@
     </ClCompile>
     <ClCompile Include="FillWPlayer.cpp">
       <Filter>シーンチェンジ\Playerで塗りつぶし</Filter>
+    </ClCompile>
+    <ClCompile Include="backGround.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>システム\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_SP.cpp">
+      <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,6 +386,11 @@
     <ClInclude Include="FillWPlayer.h">
       <Filter>シーンチェンジ\Playerで塗りつぶし</Filter>
     </ClInclude>
+    <ClInclude Include="backGround.h" />
+    <ClInclude Include="sound.h">
+      <Filter>システム\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_SP.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

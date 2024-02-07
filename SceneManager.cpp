@@ -9,10 +9,14 @@ Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
 char*	SceneManager::preKeys;
 char*	SceneManager::keys;
+int		SceneManager::ableSceneChange;
+int		SceneManager::stageNum;
 
 int* SceneManager::title;
 StageSelect* SceneManager::stageSelect;
 Playground* SceneManager::game;
+
+TileChange* SceneManager::tileChange;
 
 void SceneManager::ChangeRequest(Scenes _nextScene)
 {
@@ -20,9 +24,16 @@ void SceneManager::ChangeRequest(Scenes _nextScene)
 	scene_next = _nextScene;
 }
 
+void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
+{
+	existChangeRequest = 1;
+	scene_next = _nextScene;
+	stageNum = _stage;
+}
+
 void SceneManager::Init()
 {
-	Scenes initialScene = SC_Game;
+	Scenes initialScene = SC_StageSelect;
 	existChangeRequest	= 0;
 	isEndDraw			= 0;
 	scene_current		= initialScene;
@@ -30,6 +41,11 @@ void SceneManager::Init()
 	title				= initialScene == SC_Title ? new int : nullptr;
 	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
 	game				= initialScene == SC_Game ? new Playground() : nullptr;
+	backGround = initialScene == SC_Title ? new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight) :
+					(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
+	ableSceneChange		= 0;
+	tileChange			= nullptr;
+	stageNum			= 0;
 	if (game) game->Init(0);
 }
 
@@ -38,11 +54,11 @@ void SceneManager::Update()
 	keys = KeyManager::GetKeysPtr();
 	preKeys = KeyManager::GetpreKeysPtr();
 
-
 	switch (scene_current)
 	{
 	case SC_Title:
 		//if (title) title->Update();
+		if (backGround)backGround->Update();
 		break;
 
 	case SC_StageSelect:
@@ -62,11 +78,34 @@ void SceneManager::Update()
 		if (KeyManager::GetKeys(DIK_8)) game->Init(7);
 		if (KeyManager::GetKeys(DIK_9)) game->Init(8);
 #endif // _DEBUG
+		if (backGround)backGround->Update();
 		if (game) game->Update(keys, preKeys);
 		break;
 
 	default:
 		break;
+	}
+
+	if (existChangeRequest || tileChange)
+	{
+		switch (scene_next)
+		{
+		case SC_Game:
+			if (!tileChange) tileChange = new TileChange();
+			if (tileChange) {
+				tileChange->Update();
+				if (tileChange->GetIsTileEnd())
+				{
+					ableSceneChange = 1;
+				}
+				if (tileChange->GetIsEnd())
+				{
+					delete tileChange;
+					tileChange = nullptr;
+				}
+			}
+			break;
+		}
 	}
 }
 
@@ -76,17 +115,21 @@ void SceneManager::Draw()
 	{
 	case SC_Title:
 		//if (title) title->Draw();
+		if (backGround)backGround->Draw();
 		break;
 	case SC_StageSelect:
 		if (stageSelect) stageSelect->Draw();
 		break;
 	case SC_Game:
+		if (backGround)backGround->Draw();
 		if (game) game->Draw();
 		break;
 
 	default:
 		break;
 	}
+
+	if (tileChange) tileChange->Draw();
 	isEndDraw = 1;
 }
 
@@ -95,46 +138,55 @@ void SceneManager::ChangeScene()
 	/// シーンチェンジ要求が存在する場合...
 	if (existChangeRequest)
 	{
-		/// 描画が終了しているなら...
-		if (isEndDraw)
+		if (ableSceneChange)
 		{
-			// シーンチェンジの演出があれば記述
-			switch (scene_current)
+			/// 描画が終了しているなら...
+			if (isEndDraw)
 			{
-			case SC_Title:
-				delete title;
-				title = nullptr;
-				break;
-			case SC_StageSelect:
-				delete stageSelect;
-				stageSelect = nullptr;
-				break;
-			case SC_Game:
-				delete game;
-				game = nullptr;
-				break;
-			default:
-				break;
-			}
+				// シーンチェンジの演出があれば記述
+				switch (scene_current)
+				{
+				case SC_Title:
+					delete title;
+					title = nullptr;
+					delete backGround;
+					backGround = nullptr;
+					break;
+				case SC_StageSelect:
+					delete stageSelect;
+					stageSelect = nullptr;
+					break;
+				case SC_Game:
+					delete game;
+					game = nullptr;
+					delete backGround;
+					backGround = nullptr;
+					break;
+				default:
+					break;
+				}
 
-			// インスタンスの作成
-			switch (scene_next)
-			{
-			case SC_Title:
-				//title = new Title();
-				break;
-			case SC_StageSelect:
-				stageSelect = new StageSelect();
-				break;
-			case SC_Game:
-				game = new Playground();
-				game->Init(0);
-				break;
-			default:
-				break;
+				// インスタンスの作成
+				switch (scene_next)
+				{
+				case SC_Title:
+					//title = new Title();
+					backGround = new BackGround(0xcadde9f0,kWindowWidth,kWindowHeight);
+					break;
+				case SC_StageSelect:
+					stageSelect = new StageSelect();
+					break;
+				case SC_Game:
+					backGround = new BackGround(0xcadde9f0);
+					game = new Playground();
+					game->Init(stageNum);
+					break;
+				default:
+					break;
+				}
 			}
+			scene_current = scene_next;
+			existChangeRequest = 0;
 		}
-		scene_current = scene_next;
-		existChangeRequest = 0;
 	}
 }

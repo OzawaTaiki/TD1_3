@@ -14,7 +14,8 @@ public:
 	Vector2 acceleratiion;
 	Vector2 moveDir;
 	intVec2 GHSize;
-
+	intVec2 drawSize;
+	int drawDir;
 
 	Vector2 vertex[4];
 
@@ -22,10 +23,19 @@ public:
 	const float kJumpVelocity = -12.0f;
 	const float kMaxVeloY = 15.0f;
 
+
+	int cntUp;
+	const int kGoNextCnt = 15;
+	int animationCurrentIndex;
+	const int kAnimationIndex = 4;
+	bool isAnimation;
+
 	bool isAlive;
 	bool isGround;
 	bool isOnBox;
 	bool isAddVelo;
+
+	unsigned int color;
 
 	intVec2 startPos[10] = {
 		{3,10},
@@ -45,8 +55,8 @@ public:
 	Sound* moveSound;
 	Sound* jumpSound;
 
-	void Move(const char* _keys , const char* _preKeys);
-	void Jump(const char* _keys, const char* _preKeys);
+	void Move(const char* _keys, const char* _preKeys, int _isHave);
+	void Jump(const char* _keys, const char* _preKeys, int _isHave);
 	void Gravity();
 	void PosUpdate();
 	void MoveDirUpdate();
@@ -56,6 +66,6 @@ public:
 	Player();
 
 	void Init(int _stageNo);
-	void Update(const char* _keys, const char* _preKeys,int _isHave);
-	void Draw();
+	void Update(const char* _keys, const char* _preKeys, int _isHave);
+	void Draw(bool _isOverlap);
 };

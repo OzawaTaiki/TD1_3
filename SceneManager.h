@@ -2,6 +2,9 @@
 // シーンクラス
 #include "StageSelect.h"
 #include "playground.h"
+#include "backGround.h"
+
+#include "TileChange.h"
 
 enum Scenes
 {
@@ -19,11 +22,16 @@ private:
     static	int		isEndDraw;				// 描画処理が終了したかどうか
     static	Scenes	scene_current;			// 現在のシーン
     static	Scenes	scene_next;				// リクエストが来たら代入
+    static  int     ableSceneChange;
 
     // TODO: 型を変更してください
     static	int*	title;					// タイトルシーン
     static	StageSelect*	stageSelect;	// ステージセレクトシーン
     static	Playground*	game;				// ゲームシーン
+    static BackGround* backGround;
+
+    static  TileChange* tileChange;
+    static  int     stageNum;
 
     static  char*   preKeys;
     static  char*   keys;
@@ -36,6 +44,7 @@ public:
     /// </summary>
     /// <param name="_nextScene">次のシーン</param>
     static  void	ChangeRequest(Scenes _nextScene);
+    static  void	ChangeRequest(Scenes _nextScene, int _stage);
 
     // 初期化処理
     static  void    Init();

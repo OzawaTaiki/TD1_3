@@ -11,6 +11,8 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 	Transform cursor;
 	CursorManager::GetCursorPos(&cursor);
 	warningIconVisible = 0;
+	isPlayerOverlap = false;
+	isPieceOverlap = -1;
 
 	if (Novice::IsTriggerMouse(0))
 	{
@@ -43,7 +45,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 					isHave = i;
 
 					//TODO : path確定後
-					//pickUpSound->SoundEnable();
+					pickUpSound->SoundEnable();
 				}
 			}
 		}
@@ -71,11 +73,15 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			{
 				warningIconVisible |= (int)powf(2.0f, (float)k);
 			}
+
+		if (IsOverlap(_playerPos, _playerVertex, isHave))
+			isPlayerOverlap = true;
+
+		isPieceOverlap = IsOverlap();
 	}
 
 	else
 	{
-
 		for (int i = 0; i < (*piece).size(); i++)
 		{
 			isPlayerOverlap = false;
@@ -112,10 +118,13 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 				}
 			}
 
-			if (isHave == i)
+			if (isHave == i && !Novice::IsPressMouse(0))
 			{
 				//TODO : path確定後 
-				//PutDownSound->SoundEnable();
+				PutDownSound->SoundEnable();
+
+				isPieceOverlap = IsOverlap();
+
 				isHave = -1;
 				emitCnt = 0;
 
@@ -139,13 +148,14 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 				if (IsOverlap(_playerPos, _playerVertex, i))
 					isPlayerOverlap = true;
+
 			}
 
 			if (scale[i] != kKeyScale[0])
 				piecePrePos = { kPieceStartKeyPos.x + i * kPieceStartMargin.x,kPieceStartKeyPos.y + i * kPieceStartMargin.y };
 
 			/// ピースを置けなかったとき
-			if (isPlayerOverlap || isHindranceBlockInside || isBoxOverlap != -1)
+			if (isPlayerOverlap || isHindranceBlockInside || isBoxOverlap != -1 || isPieceOverlap != -1)
 				pos[i] = piecePrePos;
 		}
 
@@ -714,8 +724,8 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 	if (o2pSub.x < 0 ||
 		o2pSub.y < 0 ||
 		o2pSub.x >= size[_pieceNum].x * kTileSize ||
-		o2pSub.y >= size[_pieceNum].y * kTileSize ||
-		(*piece)[_pieceNum][base.y][base.x] > 0)
+		o2pSub.y >= size[_pieceNum].y * kTileSize /*||
+		(*piece)[_pieceNum][base.y][base.x] > 0*/)
 		return false;
 
 	for (int dir = 0; dir < 4; dir++)
@@ -787,7 +797,6 @@ bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 
 bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum)
 {
-
 	for (int i = 0; i < 4; i++)
 	{
 		Vector2 o2pSub;
@@ -802,6 +811,25 @@ bool Piece::IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum
 			return true;
 	}
 	return false;
+}
+
+int Piece::IsOverlap()
+{
+	for (int i = 0; i < (*piece).size(); i++)
+	{
+		if (i == isHave)
+			continue;
+
+		if (
+			pos[isHave].x + vertex[isHave][0].x < pos[i].x + vertex[i][1].x &&
+			pos[isHave].x + vertex[isHave][1].x > pos[i].x + vertex[i][0].x &&
+			pos[isHave].y + vertex[isHave][0].y < pos[i].y + vertex[i][2].y &&
+			pos[isHave].y + vertex[isHave][2].y > pos[i].y + vertex[i][0].y
+			)
+			return i;
+	}
+
+	return -1;
 }
 
 
@@ -989,8 +1017,10 @@ void Piece::Init()
 	size.resize(piece->size());
 	scale.resize(piece->size());
 	adjacencyCheckVertex.resize(piece->size(), std::vector<Vector2>(4));
+	vertex.resize(piece->size(), std::vector<Vector2>(4));
 	velocity.resize(piece->size());
 	moveDir.resize(piece->size());
+	isLocked.resize(piece->size(), { 0,0 });
 
 
 	for (int i = 0; i < (*piece).size(); i++)
@@ -1011,12 +1041,16 @@ void Piece::Init()
 		adjacencyCheckVertex[i][1] = { size[i].x * kTileSize + kAdjacencyCheckSize.x,-kAdjacencyCheckSize.y };
 		adjacencyCheckVertex[i][2] = { -kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
 		adjacencyCheckVertex[i][3] = { size[i].x * kTileSize + kAdjacencyCheckSize.x, size[i].y * kTileSize + kAdjacencyCheckSize.y };
+
+		vertex[i][0] = { 0,0 };
+		vertex[i][1] = { size[i].x*kTileSize,0 };
+		vertex[i][2] = { 0,size[i].y * kTileSize };
+		vertex[i][3] = { size[i].x * kTileSize,size[i].y * kTileSize };
 	}
 
 	isHave = -1;
 	mapchipKeyPos = { 0,0 };
 	p2mSub = { 0,0 };
-	isLockedY = false;
 	isHave = -1;
 	runX = -1;
 	runY = -1;
@@ -1025,15 +1059,15 @@ void Piece::Init()
 	warningIconVisible = 0;
 	emitCnt = -1;
 
-	color[0] = 0xc08080d0;
-	color[1] = 0x80c080d0;
-	color[2] = 0x8080c0d0;
+	color[0] = 0xeea9a9d0;
+	color[1] = 0xe9f6b9d0;
+	color[2] = 0xb9f6bed0;
 	color[3] = 0xc0c080d0;
 	color[4] = 0xc080c0d0;
 
 	//TODO : パス確定後
-	//pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 0.5f);
-	//PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 0.5f);
+	pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 1.0f);
+	PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 1.0f);
 	//MoveSound = new Sound(ResourceManager::Handle("pieceMoveSound"), 0.5f);
 }
 
@@ -1041,7 +1075,7 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 {
 	canMoveX = true;
 	canMoveY = true;
-	isLockedY = false;
+	std::fill(isLocked.begin(), isLocked.end(), Vector2{ 0,0 });
 	std::fill(moveDir.begin(), moveDir.end(), Vector2{ 0,0 });
 	std::fill(velocity.begin(), velocity.end(), Vector2{ 0,0 });
 	adjacentPos.clear();
@@ -1053,9 +1087,12 @@ void Piece::Update(const Vector2& _playerPos, const Vector2* _playerVertex, std:
 
 void Piece::Draw(int _scrollY)
 {
-	if (pickUpSound != nullptr)			pickUpSound->PlayAudio();
-	if (PutDownSound != nullptr)		PutDownSound->PlayAudio();
-	if (MoveSound != nullptr)			MoveSound->PlayAudio();
+	if (pickUpSound != nullptr)
+		pickUpSound->PlayAudio();
+	if (PutDownSound != nullptr)
+		PutDownSound->PlayAudio();
+	if (MoveSound != nullptr)
+		MoveSound->PlayAudio();
 
 	for (int i = 0; i < (*piece).size(); i++)
 	{

@@ -20,6 +20,7 @@ public:
 	std::vector<float> scale;
 	std::vector<Vector2> velocity;
 	std::vector<Vector2> moveDir;
+	std::vector<std::vector<Vector2>> vertex;
 
 	const float kKeyScale[2] = {
 		1.0f,0.6f
@@ -30,6 +31,7 @@ public:
 	std::vector<std::vector<Vector2>> adjacencyCheckVertex;
 	std::vector<intVec2> adjacentPos;		//ピースが隣接してるときの左or上の座標
 	std::vector<char> adjacentDir;
+	std::vector<Vector2>isLocked;
 	const int kAdjacentNum = -1;
 
 	Vector2 p2mSub;							// マウスとpiecePosの差
@@ -46,7 +48,6 @@ public:
 	int runY;
 	bool canMoveX;
 	bool canMoveY;
-	bool isLockedY;
 
 	int emitCnt;
 	const int kEmitEnableFrame = 15;
@@ -54,6 +55,7 @@ public:
 	bool isPlayerOverlap = false;			// ピースにプレイヤーが重なってるか否か
 	bool isHindranceBlockInside = false;	// ピース内にお邪魔ブロックが入っているまたは重なっているか否か
 	int  isBoxOverlap = -1;				// ピースに箱が重なってるか否か
+	int isPieceOverlap = -1;
 
 	int warningIconVisible;
 
@@ -86,6 +88,7 @@ public:
 
 	bool IsInPiece(const Vector2& _pos, int _pieceNum);
 	bool IsOverlap(const Vector2& _pos, const Vector2* _vertex, int _pieceNum);
+	int IsOverlap();
 
 	void MoveOnCollision(const Vector2& _collisionDir, int _collidedNum, const Vector2& _velocity);
 	void CollisionPieceWithPiece();
