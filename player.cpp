@@ -129,7 +129,7 @@ void Player::Init(int _stageNo)
 	velocity = { 0,0 };
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
-
+	drawSize = GHSize;
 	isAlive = true;
 	isGround = false;
 	color = 0xffffffff;

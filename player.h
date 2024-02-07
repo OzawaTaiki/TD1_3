@@ -14,6 +14,7 @@ public:
 	Vector2 acceleratiion;
 	Vector2 moveDir;
 	intVec2 GHSize;
+	intVec2 drawSize;
 
 
 	Vector2 vertex[4];
