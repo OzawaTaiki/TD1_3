@@ -95,6 +95,7 @@ Player::Player()
 	acceleratiion = { 0,0.5f };
 	moveDir = { 0,0 };
 	GHSize = { 64, 80 };
+	drawSize = GHSize;
 	isAlive = true;
 	isGround = false;
 	isOnBox = false;
