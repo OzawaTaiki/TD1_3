@@ -79,7 +79,6 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 
 	else
 	{
-
 		for (int i = 0; i < (*piece).size(); i++)
 		{
 			isPlayerOverlap = false;
@@ -116,7 +115,7 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 				}
 			}
 
-			if (isHave == i)
+			if (isHave == i && !Novice::IsPressMouse(0))
 			{
 				//TODO : path確定後 
 				PutDownSound->SoundEnable();
@@ -980,8 +979,8 @@ void Piece::Init()
 	color[4] = 0xc080c0d0;
 
 	//TODO : パス確定後
-	pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 0.5f);
-	PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 0.5f);
+	pickUpSound = new Sound(ResourceManager::Handle("piecePickUpSound"), 1.0f);
+	PutDownSound = new Sound(ResourceManager::Handle("piecePutDownSound"), 1.0f);
 	//MoveSound = new Sound(ResourceManager::Handle("pieceMoveSound"), 0.5f);
 }
 

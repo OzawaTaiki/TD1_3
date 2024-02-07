@@ -71,7 +71,7 @@ void Sound::PlayAudio(bool _isFadeIn, int _fadeFrame)
 	}
 	else
 	{
-		if ((!Novice::IsPlayingAudio(voiceHandle) || voiceHandle == -1) && isSound)
+		if (/*(!Novice::IsPlayingAudio(voiceHandle) || voiceHandle == -1) && */isSound)
 		{
 			voiceHandle = Novice::PlayAudio(soundHandle, isLoop, volume);
 			isSound = false;
