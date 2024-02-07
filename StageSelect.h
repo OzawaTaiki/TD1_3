@@ -24,28 +24,35 @@ struct StageSelectElement
 class StageSelect
 {
 private:
+    // 
+
+    std::vector<std::vector<int>>* field;
+    int         blockHandle;
+    int         goalHandle;
+    int         togeHandle;
+    int         boxHandle;
+
+    //ファイル名一括管理 すべてここに入力
+    const char* stageFilePath[64] = {
+        "./data/stage1.csv",
+        "./data/stage2.csv",
+        "./data/stage3.csv",
+        "./data/stage4.csv",
+        "./data/stage5.csv",
+        "./data/stage6.csv",
+        "./data/stage7.csv",
+        "./data/stage8.csv",
+        "./data/stage9.csv",
+        "./data/stage10.csv"
+    };
+
+    //
+
+    static const int kMax = 10;
     const char* jsonName[3] = { 
         "stgSel-main", 
         "stgSel-scroll", 
         "stgSel-back"
-    };
-    const char* resourceName[15] = 
-    {
-        //"thmb_stg0",
-        //"thmb_stg1",
-        //"thmb_stg2",
-        //"thmb_stg3",
-        //"thmb_stg4",
-        //"thmb_stg5",
-        //"thmb_stg6",
-        //"thmb_stg7",
-        //"thmb_stg8",
-        //"thmb_stg9",
-        //"thmb_stg10",
-        //"thmb_stg11",
-        //"thmb_stg12",
-        //"thmb_stg13",
-        //"thmb_stg14"
     };
 
     JsonL*	json_main;
@@ -69,7 +76,7 @@ private:
     int		    IntervalFrame_jump;			    // 要素のジャンプ間隔(f)
     int         targetFrame_jump;               // 目標 要素のジャンプにかかるフレーム数
     int         isInterval;                     // インターバルかどうか
-    float       theta_jump[15];                 // ジャンプ角度
+    float       theta_jump[kMax];                 // ジャンプ角度
     
     // スクロール系
     SpriteData  scrSpr;                         // スクロールデータ
@@ -84,7 +91,7 @@ private:
     SpriteData  backSpr;                        // スクロールデータ
     Transform   backPos;                        // 戻るボタン座標
 
-    int         thumbHandle[15];                // テクスチャハンドル
+    int         thumbHandle[kMax];                // テクスチャハンドル
     Transform   thumbnailPos;                   // ステージサムネの座標
     Size        thumbnailSize;                  // ステージサムネのサイズ
 
@@ -93,30 +100,34 @@ private:
 
     unsigned int bgColor;                       // 背景色 (画像に差し替え予定)
 
-    StageSelectElement elements[15];
-    StageSelectElement screenElements[15];
-    StageSelectElement defaultElm[15];
+    StageSelectElement elements[kMax];
+    StageSelectElement screenElements[kMax];
+    StageSelectElement defaultElm[kMax];
 
     int         clickCnt;
 
     int		    ssElementHandle;
 
     int		    frameCount_current;             // フレームカウント 総合
-    int		    frameCount_turn[15];            // フレームカウント ホバー時
+    int		    frameCount_turn[kMax];            // フレームカウント ホバー時
     int         frameCount_jump;                // フレームカウント ジャンプ
 
     int         elmCnt_jump;                    // 現在どの要素がジャンプしているか
     int         frameBuffer_jump;               // フレームカウント一次保存用 要素ジャンプ
     int         frameOffset_jump;               // ジャンプまでのオフセット値(f)
     
-    float	    constantT_turn[15];             // 増加量一定 媒介変数_ホバー
+    float	    constantT_turn[kMax];             // 増加量一定 媒介変数_ホバー
     float       constantT_jump;                 // 増加量一定 媒介変数_要素ジャンプ
 
-    float	    easedT_turn[15];                // 増加量不定 媒介変数_ホバー
+    float	    easedT_turn[kMax];                // 増加量不定 媒介変数_ホバー
     float       easedT_jump;                    // 増加量不定 媒介変数_要素ジャンプ
 
     Transform   elementStandard = { 192,92 };   // 要素の基準座標
     Transform   cur;                            // カーソル座標
+
+    int         elm2barDiff;
+
+    int         whiteHnd;
 
     void	    EasingHover(int _index);
     void        LoadFromJSON();
