@@ -7,8 +7,8 @@ int		SceneManager::existChangeRequest;		// シーン変更の要求が存在す�
 int		SceneManager::isEndDraw;				// 描画処理が終了したかどうか
 Scenes	SceneManager::scene_current;			// 現在のシーン
 Scenes	SceneManager::scene_next;				// リクエストが来たら代入
-char*	SceneManager::preKeys;
-char*	SceneManager::keys;
+char* SceneManager::preKeys;
+char* SceneManager::keys;
 int		SceneManager::ableSceneChange;
 int		SceneManager::stageNum;
 
@@ -39,23 +39,23 @@ void SceneManager::ChangeRequest(Scenes _nextScene, int _stage)
 void SceneManager::Init()
 {
 	Scenes initialScene = SC_StageSelect;
-	existChangeRequest	= 0;
-	isEndDraw			= 0;
-	scene_current		= initialScene;
-	scene_next			= scene_current;
-	title				= initialScene == SC_Title ? new int : nullptr;
-	stageSelect			= initialScene == SC_StageSelect ? new StageSelect() : nullptr;
-	game				= initialScene == SC_Game ? new Playground() : nullptr;
+	existChangeRequest = 0;
+	isEndDraw = 0;
+	scene_current = initialScene;
+	scene_next = scene_current;
+	title = initialScene == SC_Title ? new int : nullptr;
+	stageSelect = initialScene == SC_StageSelect ? new StageSelect() : nullptr;
+	game = initialScene == SC_Game ? new Playground() : nullptr;
 	backGround = initialScene == SC_Title ? new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight) :
-					(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
-	ableSceneChange		= 0;
-	tileChange			= nullptr;
-	stageNum			= 0;
+		(initialScene == SC_Game ? new BackGround(0xcadde9f0) : nullptr);
+	ableSceneChange = 0;
+	tileChange = nullptr;
+	stageNum = 0;
 	if (game) game->Init(0);
 
-	titleBGM = new Sound(ResourceManager::Handle("titleBGM"), 0.5f);
-	selectBGM = new Sound(ResourceManager::Handle("selectBGM"), 0.5f);
-	gameBGM = new Sound(ResourceManager::Handle("gameBGM"), 0.5f);
+	titleBGM = new Sound(ResourceManager::Handle("titleBGM"), 0.5f, true);
+	selectBGM = new Sound(ResourceManager::Handle("selectBGM"), 0.5f, true);
+	gameBGM = new Sound(ResourceManager::Handle("gameBGM"), 0.5f, true);
 	switch (initialScene)
 	{
 	case SC_Title:
@@ -198,7 +198,7 @@ void SceneManager::ChangeScene()
 				{
 				case SC_Title:
 					//title = new Title();
-					backGround = new BackGround(0xcadde9f0,kWindowWidth,kWindowHeight);
+					backGround = new BackGround(0xcadde9f0, kWindowWidth, kWindowHeight);
 					if (titleBGM) titleBGM->SoundEnable();
 					break;
 				case SC_StageSelect:
