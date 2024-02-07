@@ -335,13 +335,13 @@ void Playground::CollisionPieceWithBox()
 						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + kTileSize + box[i]->vertex[1].x + 1;
 					if (collisionDir.x > 0)
 						box[i]->pos.x = piece->pos[collidedNum].x + piece->runX * kTileSize + box[i]->vertex[0].x;
-					nextPos.x = box[i]->pos.x;
 					if (isFill(box[i]->pos, box[i]->vertex))
 					{
 						box[i]->pos.x = prePos.x;
 						box[i]->isLockedX = true;
 						piece->isLocked[collidedNum].x = piece->moveDir[collidedNum].x;
 					}
+					nextPos.x = box[i]->pos.x;
 				}
 				if (!box[i]->isLockedY)
 				{
@@ -352,13 +352,13 @@ void Playground::CollisionPieceWithBox()
 						box[i]->pos.y = piece->pos[collidedNum].y + piece->runY * kTileSize + box[i]->vertex[0].y - 1;
 						box[i]->velocity.y = 0;
 					}
-					nextPos.y = box[i]->pos.y;
 					if (isFill(box[i]->pos, box[i]->vertex))
 					{
 						box[i]->pos.y = prePos.y;
 						box[i]->isLockedY = true;
 						piece->isLocked[collidedNum].y = piece->moveDir[collidedNum].y;
 					}
+					nextPos.y = box[i]->pos.y;
 				}
 				box[i]->pos = nextPos;
 				//box[i]->moveSound->SoundEnable();
