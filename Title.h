@@ -1,11 +1,19 @@
 ﻿#pragma once
+#include "JSON-Loader/JSON-Manager.h"
 
 class Title
 {
+private:
+	JsonL*	startup;
+	
+	int		targetFrame_startup;
+	int		framecount;
+
+	void	LoadFromJSON();
 public:
 	Title();
-	~Title();
 
-private:
+	void	Update();
+	void	Draw();
 
 };
