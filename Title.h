@@ -12,6 +12,7 @@ private:
 	// 初期化必要
 	int		framecount;
 	int		alpha_startup;
+	int		isReturn;
 
 	void	LoadFromJSON();
 public:

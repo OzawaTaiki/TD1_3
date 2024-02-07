@@ -88,11 +88,15 @@ void SceneManager::Update()
 		switch (scene_next)
 		{
 		case SC_StageSelect:
-
+			ableSceneChange = 1;
 			break;
 
 		case SC_Game:
-			if (!tileChange) tileChange = new TileChange();
+			if (!tileChange)
+			{
+				tileChange = new TileChange();
+				ableSceneChange = 0;
+			}
 			if (tileChange) {
 				tileChange->Update();
 				if (tileChange->GetIsTileEnd())
