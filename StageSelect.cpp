@@ -16,9 +16,6 @@ StageSelect::StageSelect()
 
     LoadFromJSON();
 
-    // DEBUG: 終わったら消す
-    fwp = nullptr;
-
     UI_Manager::Init();
 
     cursor = Transform(0,0);
@@ -126,16 +123,9 @@ void StageSelect::Init()
 
 void StageSelect::Update()
 {
-    // DEBUG 終わったら消す
     CursorManager::GetCursorPos(&cursor);
     ed.position = cursor;
     bubbleEmit->Update();
-
-    if (KeyManager::GetKeys(DIK_SPACE) && !KeyManager::GetPreKeys(DIK_SPACE))
-    {
-        fwp = new FillWithPlayer();
-    }
-    if (fwp) fwp->Update();
 
     CursorManager::GetCursorPos(&cur);
     scrollBar->UpdateStatus();
@@ -314,15 +304,9 @@ void StageSelect::Draw()
     // 戻るボタン
     GUI_Toolkit::Button("stgSel-back", backPos.x, backPos.y, &backSpr);
 
-    // !DEBUG
-    Novice::ScreenPrintf(cur.x - 30, cur.y-15, "(%4d,%4d)", cur.x, cur.y);
-    Novice::ScreenPrintf(15,35, "(%4d)", elmCnt_jump);
-
     scrollBar->Draw();
 
-    // DEBUG 終わったら消す
     bubbleEmit->Draw();
-    if (fwp) fwp->Draw();
 }
 
 void StageSelect::EasingHover(int _index)

@@ -87,8 +87,10 @@ void particle_SP::Draw()
 	}
 }
 
+#ifdef _DEBUG
 void particle_SP::a(int i)
 {
-	for (int j = 0; j < p.size(); j++)
-		Novice::ScreenPrintf(i * 100, 20 * j, "%x", p[j]->color);
+	//for (int j = 0; j < p.size(); j++)
+		//Novice::ScreenPrintf(i * 100, 20 * j, "%x", p[j]->color);
 }
+#endif //_DEBUG

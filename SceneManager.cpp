@@ -90,7 +90,6 @@ void SceneManager::Update()
 		break;
 
 	case SC_Game:
-		// DEBUG: ステージを数字キーで変更
 #ifdef _DEBUG
 		if (KeyManager::GetKeys(DIK_1)) game->Init(0);
 		if (KeyManager::GetKeys(DIK_2)) game->Init(1);

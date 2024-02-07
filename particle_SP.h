@@ -28,6 +28,9 @@ public:
 	bool Update(int _areaWidth);
 	void Draw();
 
+#ifdef DEBUG
 	void a(int i);
+#endif // DEBUG
+
 
 };

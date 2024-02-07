@@ -559,7 +559,6 @@ void Playground::ScrollCalculation()
 	// ナイトウが追加
 	float value = scrollBar->GetValue();
 	increaseY_scroll = int(value * (-512));
-	Novice::ScreenPrintf(1300, 15, "%4d", increaseY_scroll);
 }
 
 Playground::Playground()
@@ -749,7 +748,6 @@ void Playground::Draw()
 				//else if ((*field)[y][x] != 0)
 					//Novice::DrawBox(int(+x * kTileSize), int(+y * kTileSize), kTileSize - 1, kTileSize - 1, 0, kTileColor_[(*field)[y][x]], kFillModeSolid);
 			}
-			//Novice::ScreenPrintf(1000 + x * 20, y * 20, "%d", (*collision)[y][x]);
 		}
 	}
 
