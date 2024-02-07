@@ -10,6 +10,7 @@ BubbleEmitter::BubbleEmitter(EmitterData* _ed)
 	pEd = _ed;
 	framecount = 0;
 	spawnInterval = 3;
+	ableGenerate = 1;
 }
 
 void BubbleEmitter::Update()
@@ -25,8 +26,8 @@ void BubbleEmitter::Update()
 		pd.zeroGravity			= setting.gravity;
 		pd.zeroAirResistance	= 0.95f;
  		pd.sprd					= pEd->sprd;
-		
-		bubbles.push_back(new Bubble(pd));
+		if (ableGenerate)
+			bubbles.push_back(new Bubble(pd));
 	}
 
 	for (int i = 0; i < bubbles.size(); i++)
@@ -58,6 +59,11 @@ void BubbleEmitter::Draw()
 	}
 	// DEBUG: 削除する
 	Novice::ScreenPrintf(15, 70, "%d", bubbles.size());
+}
+
+void BubbleEmitter::ChangeIsGenerate(bool _isGenerate)
+{
+	ableGenerate = _isGenerate;
 }
 
 void BubbleEmitter::SetParticleSetting(BubbleSetting* _bSetting)
