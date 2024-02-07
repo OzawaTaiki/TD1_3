@@ -95,46 +95,49 @@ void SceneManager::ChangeScene()
 	/// シーンチェンジ要求が存在する場合...
 	if (existChangeRequest)
 	{
-		/// 描画が終了しているなら...
-		if (isEndDraw)
+		if (ableSceneChange)
 		{
-			// シーンチェンジの演出があれば記述
-			switch (scene_current)
+			/// 描画が終了しているなら...
+			if (isEndDraw)
 			{
-			case SC_Title:
-				delete title;
-				title = nullptr;
-				break;
-			case SC_StageSelect:
-				delete stageSelect;
-				stageSelect = nullptr;
-				break;
-			case SC_Game:
-				delete game;
-				game = nullptr;
-				break;
-			default:
-				break;
-			}
+				// シーンチェンジの演出があれば記述
+				switch (scene_current)
+				{
+				case SC_Title:
+					delete title;
+					title = nullptr;
+					break;
+				case SC_StageSelect:
+					delete stageSelect;
+					stageSelect = nullptr;
+					break;
+				case SC_Game:
+					delete game;
+					game = nullptr;
+					break;
+				default:
+					break;
+				}
 
-			// インスタンスの作成
-			switch (scene_next)
-			{
-			case SC_Title:
-				//title = new Title();
-				break;
-			case SC_StageSelect:
-				stageSelect = new StageSelect();
-				break;
-			case SC_Game:
-				game = new Playground();
-				game->Init(0);
-				break;
-			default:
-				break;
+				// インスタンスの作成
+				switch (scene_next)
+				{
+				case SC_Title:
+					//title = new Title();
+					break;
+				case SC_StageSelect:
+					stageSelect = new StageSelect();
+					break;
+				case SC_Game:
+					game = new Playground();
+					game->Init(0);
+					break;
+				default:
+					break;
+				}
 			}
+			scene_current = scene_next;
+			existChangeRequest = 0;
 		}
-		scene_current = scene_next;
-		existChangeRequest = 0;
 	}
 }

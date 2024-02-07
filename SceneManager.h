@@ -19,6 +19,7 @@ private:
     static	int		isEndDraw;				// 描画処理が終了したかどうか
     static	Scenes	scene_current;			// 現在のシーン
     static	Scenes	scene_next;				// リクエストが来たら代入
+    static  int     ableSceneChange;
 
     // TODO: 型を変更してください
     static	int*	title;					// タイトルシーン
