@@ -85,6 +85,11 @@ void SceneManager::Update()
 				{
 					ableSceneChange = 1;
 				}
+				if (tileChange->GetIsEnd())
+				{
+					delete tileChange;
+					tileChange = nullptr;
+				}
 			}
 			break;
 		}
