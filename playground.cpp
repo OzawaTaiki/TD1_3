@@ -714,22 +714,10 @@ void Playground::Update(const char* _keys, const char* _preKeys)
 			}
 		}
 	}
+	
 
-	if (_keys[DIK_R] && _preKeys[DIK_R] || !player->isAlive)
-	{
-		isClear = true;
-		selectStage--;
-	}
-
-	/// shift + enter で次のステージ
-	// DEBUG: 削除対象
-	if (_keys[DIK_RETURN] && !_preKeys[DIK_RETURN] && _keys[DIK_LSHIFT])
-	{
-		selectStage++;
-		if (selectStage >= kMaxStage)
-		{
-			selectStage = 0;
-		}
+	if (!player->isAlive)
+	{		
 		Init(selectStage);
 	}
 }
