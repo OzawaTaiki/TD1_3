@@ -109,4 +109,5 @@ public:
 	void Init(int _stageNo);
 	void Update(const char* _keys, const char* _preKeys);
 	void Draw();
+	static	int	allClear;
 };

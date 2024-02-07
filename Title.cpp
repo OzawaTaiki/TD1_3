@@ -4,6 +4,7 @@
 #include "KeyManager.h"
 #include "CursorManager.h"
 #include "SceneManager.h"
+#include "playground.h"
 
 void Title::LoadFromResMg()
 {
@@ -11,7 +12,7 @@ void Title::LoadFromResMg()
 	handle_player = RM::Handle("playerTex");
 	handle_soap = RM::Handle("soapTex");
 	handle_title = RM::Handle("title");
-	handle_click2start;
+	handle_tfp = RM::Handle("tfp");
 }
 
 void Title::LoadFromJSON()
@@ -72,6 +73,11 @@ void Title::Draw()
 		0xffffffff,
 		DrawMode_Center
 	);
+
+	if (Playground::allClear == 1)
+	{
+		;
+	}
 
 }
 
