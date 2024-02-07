@@ -120,8 +120,9 @@ void Piece::PieceMove(const Vector2& _playerPos, const Vector2* _playerVertex, s
 			{
 				//TODO : path確定後 
 				//PutDownSound->SoundEnable();
-
 				isHave = -1;
+				bubbleEmit.clear();
+				emitCnt = 0;
 
 				/*******************
 					ピース設置判定
@@ -199,32 +200,6 @@ void Piece::Adjacent(int _pieceNum)
 				isAdjacent = true;
 			}
 		}
-		/*/// ピースのｘ座標が重なっているか（ｙは除外
-		if (piecePosInMapchip[_pieceNum].x <= piecePosInMapchip[i].x + size[i].x - 1 &&
-			piecePosInMapchip[_pieceNum].x + size[_pieceNum].x - 1 >= piecePosInMapchip[i].x)
-		{
-			/// 上辺のー１または下辺の＋１に別のピースの下辺または上辺があるか
-			if (piecePosInMapchip[i].y - 1 == piecePosInMapchip[_pieceNum].y + size[_pieceNum].y - 1 ||
-				piecePosInMapchip[i].y + size[i].y - 1 == piecePosInMapchip[_pieceNum].y - 1)
-			{
-				/// 隣接している
-				AdjacentPos(_pieceNum, i, 'x');
-				isAdjacent = true;
-			}
-		}
-		/// ピースのｙ座標が重なっているか（ｘは除外
-		else if (piecePosInMapchip[_pieceNum].y <= piecePosInMapchip[i].y + size[i].y - 1 &&
-			piecePosInMapchip[_pieceNum].y + size[_pieceNum].y - 1 >= piecePosInMapchip[i].y)
-		{
-			/// 左辺ー１または右辺＋１に別のピースの右辺または左辺があるか
-			if (piecePosInMapchip[i].x - 1 == piecePosInMapchip[_pieceNum].x + size[_pieceNum].x - 1 ||
-				piecePosInMapchip[i].x + size[i].x - 1 == piecePosInMapchip[_pieceNum].x - 1)
-			{
-				/// 隣接している
-				AdjacentPos(_pieceNum, i, 'y');
-				isAdjacent = true;
-			}
-		}*/
 
 		/// 隣接してるとき
 		if (isAdjacent)
@@ -269,29 +244,6 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize,
 					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize - 1 });
 		}
-		/*/// 二つのピースのｘ座標を比較
-		if (piecePosInMapchip[_pieceNum1].x > piecePosInMapchip[_pieceNum2].x)
-		{
-			/// ｙ座標比較
-			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x,piecePosInMapchip[_pieceNum2].y - 1 });
-			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x,piecePosInMapchip[_pieceNum1].y - 1 });
-		}
-		else if (piecePosInMapchip[_pieceNum1].x < piecePosInMapchip[_pieceNum2].x)
-		{
-			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x,piecePosInMapchip[_pieceNum2].y - 1 });
-			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x,piecePosInMapchip[_pieceNum1].y - 1 });
-		}
-		else if (piecePosInMapchip[_pieceNum1].x == piecePosInMapchip[_pieceNum2].x)
-		{
-			if (piecePosInMapchip[_pieceNum1].y < piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x,piecePosInMapchip[_pieceNum2].y - 1 });
-			else if (piecePosInMapchip[_pieceNum1].y > piecePosInMapchip[_pieceNum2].y)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x,piecePosInMapchip[_pieceNum1].y - 1 });
-		}*/
 		break;
 	case 'y':
 		if (pos[_pieceNum1].y > pos[_pieceNum2].y)
@@ -321,27 +273,6 @@ void Piece::AdjacentPos(int _pieceNum1, int _pieceNum2, char _dir)
 				adjacentPos.push_back({ int(pos[_pieceNum1].x + mapchipKeyPos.x) / kTileSize - 1 ,
 					int(pos[_pieceNum1].y + mapchipKeyPos.y) / kTileSize });
 		}
-		/*if (pos[_pieceNum1].y > pos[_pieceNum2].y)
-		{
-			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum1].y });
-			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum1].y });
-		}
-		else if (pos[_pieceNum1].y < pos[_pieceNum2].y)
-		{
-			if (pos[_pieceNum1].x > pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum2].y });
-			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum2].y });
-		}
-		else if (pos[_pieceNum1].y == pos[_pieceNum2].y)
-		{
-			if (pos[_pieceNum1].x < pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum2].x - 1,piecePosInMapchip[_pieceNum2].y });
-			else if (pos[_pieceNum1].x > pos[_pieceNum2].x)
-				adjacentPos.push_back({ piecePosInMapchip[_pieceNum1].x - 1,piecePosInMapchip[_pieceNum1].y });
-		}*/
 		break;
 	default:
 		break;
@@ -382,8 +313,17 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][0].size() - 1)
 				{
-					(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1++] *= kAdjacentNum;
-					(*piece)[_pieceNum2][0][temp2 + count2++] *= kAdjacentNum;
+					if ((*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] > 0)
+					{
+						(*piece)[_pieceNum1][(*piece)[_pieceNum1].size() - 1][temp1 + count1] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum1, temp1 + count1++, int((*piece)[_pieceNum1].size() - 1));
+					}
+					if ((*piece)[_pieceNum2][0][temp2 + count2])
+					{
+						(*piece)[_pieceNum2][0][temp2 + count2] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum2, temp2 + count2++, 0);
+					}
+
 				}
 			}
 			else if (pos[_pieceNum1].y > pos[_pieceNum2].y)
@@ -392,8 +332,16 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 				while (temp1 + count1 < (*piece)[_pieceNum1][0].size() - 1 &&
 					temp2 + count2 < (*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1].size() - 1)
 				{
-					(*piece)[_pieceNum1][0][temp1 + count1++] *= kAdjacentNum;
-					(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2++] *= kAdjacentNum;
+					if ((*piece)[_pieceNum1][0][temp1 + count1])
+					{
+						(*piece)[_pieceNum1][0][temp1 + count1] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum1, temp1 + count1++, 0);
+					}
+					if ((*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2])
+					{
+						(*piece)[_pieceNum2][(*piece)[_pieceNum2].size() - 1][temp2 + count2] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum2, temp2 + count2++, int((*piece)[_pieceNum2].size() - 1));
+					}
 				}
 			}
 			break;
@@ -409,9 +357,15 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][0] > 0)
-						(*piece)[_pieceNum1][temp1 + count1++][0] *= kAdjacentNum;
+					{
+						(*piece)[_pieceNum1][temp1 + count1][0] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum1, 0, temp1 + count1++);
+					}
 					if ((*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] > 0)
-						(*piece)[_pieceNum2][temp2 + count2++][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
+					{
+						(*piece)[_pieceNum2][temp2 + count2][(*piece)[_pieceNum2][temp2 + count2].size() - 1] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum2, int((*piece)[_pieceNum2][temp2 + count2].size() - 1), temp2 + count2++);
+					}
 				}
 			}
 			else if (pos[_pieceNum1].x < pos[_pieceNum2].x)
@@ -421,9 +375,15 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 					temp2 + count2 < (*piece)[_pieceNum2].size() - 1)
 				{
 					if ((*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] > 0)
-						(*piece)[_pieceNum1][temp1 + count1++][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
+					{
+						(*piece)[_pieceNum1][temp1 + count1][(*piece)[_pieceNum1][temp1 + count1].size() - 1] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum1, int((*piece)[_pieceNum1][temp1 + count1++].size() - 1), temp1 + count1);
+					}
 					if ((*piece)[_pieceNum2][temp2 + count2][0] > 0)
-						(*piece)[_pieceNum2][temp2 + count2++][0] *= kAdjacentNum;
+					{
+						(*piece)[_pieceNum2][temp2 + count2][0] *= kAdjacentNum;
+						AddBubbleEmitter(_pieceNum2, 0, temp2 + count2++);
+					}
 				}
 			}
 			break;
@@ -432,8 +392,6 @@ void Piece::AdjacentPieceDelete(int _pieceNum1, int _pieceNum2)
 		}
 	}
 }
-
-
 
 int Piece::PixelCollisionWithObj(const Vector2& _pos, const Vector2* _vertex, Vector2& _collisionDir)
 {
@@ -742,9 +700,6 @@ int Piece::PixelCollisionWithObjOutSide(const Vector2& _pos, const Vector2* _ver
 	return hitPieceNum;
 }
 
-
-
-
 bool Piece::IsInPiece(const Vector2& _pos, int _pieceNum)
 {
 	if (isHave == _pieceNum)
@@ -934,9 +889,37 @@ void Piece::CollisionPieceWithPiece()
 		}
 	}
 }
+void Piece::AddBubbleEmitter(int _pieceNum, int _x, int _y)
+{
+	emitdata.position.x = pos[_pieceNum].x + _x + kTileSize;
+	emitdata.position.y = pos[_pieceNum].y + _y + kTileSize;
+
+	bubbleEmit.push_back(new BubbleEmitter(&emitdata));
+}
+
+void Piece::BubbleUpdDraw()
+{
+	if (emitCnt != -1)
+	{
+		emitCnt++;
+		if (emitCnt / kEmitEnableFrame)
+			emitCnt = -1;
+
+		for (int i = 0; i < bubbleEmit.size(); i++)
+		{
+			bubbleEmit[i]->Update();
+			bubbleEmit[i]->Draw();
+		}
+	}
+}
+
 Piece::Piece()
 {
 	pieceTexture = ResourceManager::Handle("pieceTex");
+
+	emitdata.size.width = 10;
+	emitdata.size.height = 10;
+	if (!bubbleEmit.empty()) bubbleEmit.clear();
 
 	Init();
 
@@ -987,8 +970,8 @@ void Piece::Init()
 	runY = -1;
 	canMoveX = true;
 	canMoveY = true;
-
 	warningIconVisible = 0;
+	emitCnt = -1;
 
 	color[0] = 0xc08080d0;
 	color[1] = 0x80c080d0;
@@ -1040,10 +1023,5 @@ void Piece::Draw(int _scrollY)
 		}
 	}
 
-	//for (int i = 0; i < adjacentPos.size(); i++)
-	//{
-	//	Novice::ScreenPrintf(1400, 720 + i * 20, "%d,%d", adjacentPos[i].x, adjacentPos[i].y);
-	//	Novice::DrawBox(int(adjacentPos[i].x * kTileSize), int(adjacentPos[i].y * kTileSize), kTileSize, kTileSize, 0, RED, kFillModeWireFrame);
-	//}
+	BubbleUpdDraw();
 }
-
