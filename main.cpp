@@ -97,10 +97,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		SceneManager::Draw();
 
 		if (tutorial) tutorial->Draw();
-
-		SceneManager::Draw();
 
 		Novice::DrawSpriteRect(mX, mY, CursorManager::GetClickFlag() ? 64 : 0, 0, 64, 64, mGH, 0.5f, 1, 0, WHITE);
 
