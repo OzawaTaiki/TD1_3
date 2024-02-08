@@ -49,7 +49,9 @@ void Tutorial::Update()
 	//{
 	//	this->Prev();
 	//}
-	if (KeyManager::GetKeys(DIK_D) && !KeyManager::GetPreKeys(DIK_D) && frameBuffer_next == 0)
+	if ((KeyManager::GetKeys(DIK_D) && !KeyManager::GetPreKeys(DIK_D) || 
+		KeyManager::GetKeys(DIK_RIGHTARROW) && !KeyManager::GetPreKeys(DIK_RIGHTARROW))
+		&& frameBuffer_next == 0)
 	{
 		this->Next();
 		frameBuffer_next = frameCount_current;

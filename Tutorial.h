@@ -51,8 +51,8 @@ private:
 	int		deletable;
 
 	// リソースデータ
-	const	int		srcWidth	= 900;
-	const	int		srcHeight	= 500;
+	const	int		srcWidth	= 1200;
+	const	int		srcHeight	= 650;
 
 	int		whiteHandle;
 	int		handle[ImgName_Count];

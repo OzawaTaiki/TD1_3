@@ -127,8 +127,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 void ResourceRegist()
 {
 	ResourceManager::Regist("white1x1", "white1x1.png");
-	ResourceManager::Regist("rule1", "./Resources/img/rule1.png");
-	ResourceManager::Regist("rule2", "./Resources/img/rule2.png");
+	ResourceManager::Regist("rule1", "./Resources/img/1304_rule1.png");
+	ResourceManager::Regist("rule2", "./Resources/img/1304_rule2.png");
 	ResourceManager::Regist("bubble", "./Resources/img/bubble.png");
 	ResourceManager::Regist("foam", "./Resources/img/foam.png");
 	ResourceManager::Regist("dekaP", "./Resources/img/dekaP.png");
