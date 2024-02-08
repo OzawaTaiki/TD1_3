@@ -568,6 +568,7 @@ Playground::Playground()
 	piece = new Piece;
 	player = new Player;
 
+	tabHandle = ResourceManager::Handle("tab");
 	blockTexture = ResourceManager::Handle("blockTex");
 	goalTexture = ResourceManager::Handle("goalTex");
 	//obstacleTexture = ResourceManager::Handle("");
@@ -762,5 +763,6 @@ void Playground::Draw()
 	Novice::DrawBox(kStageAreaWidth, 0, kWindowWidth, kWindowHeight, 0, 0xa0, kFillModeSolid);
 	// ナイトウが勝手に追加
 	if (fwp) fwp->Draw();
-
+	
+	Novice::DrawSprite(1920 - 400 - 15, 1080 - 200 - 15, tabHandle, 1.0f, 1.0f, 0.0f, 0xffffffff);
 }

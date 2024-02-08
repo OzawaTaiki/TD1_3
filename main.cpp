@@ -137,6 +137,7 @@ void ResourceRegist()
 	ResourceManager::Regist("title", "./Resources/img/gameTitle.png");
 	ResourceManager::Regist("scrollBar", "./Resources/img/scrollBar.png");
 	ResourceManager::Regist("tfp", "./Resources/img/Thank.png");
+	ResourceManager::Regist("tab", "./Resources/img/tab.png");
 
 	/// オザワ追加分
 	// テクスチャ

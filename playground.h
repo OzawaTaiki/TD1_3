@@ -69,6 +69,7 @@ class Playground
 	FillWithPlayer* fwp;
 	int			isChangetm;
 
+	int			tabHandle;
 	/// - - -  ナイトウが勝手に宣言 おわり - - - ///
 
 	int blockTexture;
